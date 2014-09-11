@@ -279,14 +279,14 @@ kclust
 ## ifault         1    -none- numeric
 </code></pre>
 
-<p>The output is a list of vectors, where each component has a different length. There&#39;s one of length 300: the same as our original dataset. There are a number of elements of length 3: <code>withinss</code>, <code>tot.withinss</code>, and <code>betweenss</code>- and <code>centers</code> is a matrix with 3 rows. And then there are the elements of length 1: .</p>
+<p>The output is a list of vectors, where each component has a different length. There&#39;s one of length 300: the same as our original dataset. There are a number of elements of length 3: <code>withinss</code>, <code>tot.withinss</code>, and <code>betweenss</code>- and <code>centers</code> is a matrix with 3 rows. And then there are the elements of length 1: <code>totss</code>, <code>tot.withinss</code>, <code>betweenss</code>, and <code>iter</code>.</p>
 
 <p>These differing lengths have a deeper meaning when we want to tidy our dataset: they signify that each type of component communicates a <em>different kind</em> of information.</p>
 
 <ul>
 <li><code>cluster</code> (300 values) contains information about each <em>point</em></li>
-<li><code>centers</code>, <code>withinss</code> and <code>size</code> (<code>r</code>) contain information about each <em>cluster</em></li>
-<li><code>totss</code>, <code>tot.withinss</code>, <code>betweenss</code>, and <code>iter</code> contain information about the <em>full clustering</em></li>
+<li><code>centers</code>, <code>withinss</code> and <code>size</code> (3 values) contain information about each <em>cluster</em></li>
+<li><code>totss</code>, <code>tot.withinss</code>, <code>betweenss</code>, and <code>iter</code> (1 value) contain information about the <em>full clustering</em></li>
 </ul>
 
 <p>Which of these do we want to extract? There is no right answer: each of them may be interesting to an analyst. Because they communicate entirely different information (not to mention there&#39;s no straightforward way to combine them), they are extracted by separate functions. <code>augment</code> adds the point classifications to the original dataset:</p>

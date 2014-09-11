@@ -1,7 +1,7 @@
 #' Tidying methods for mixed effects models
 #' 
 #' These methods tidy the coefficients of mixed effects models, particularly
-#' responses of the \code{merMod} class.
+#' responses of the \code{merMod} class
 #' 
 #' @param x An object of class \code{merMod}, such as those from \code{lmer},
 #' \code{glmer}, or \code{nlmer}
@@ -106,7 +106,8 @@ tidy.merMod <- function(x, effects = "random", ...) {
 #'   \item{.resid}{residuals}
 #'   \item{.fixed}{predicted values with no random effects}
 #' 
-#' Also added are values from the response object within the model (of type
+#' Also added for "merMod" objects, but not for "mer" objects,
+#' are values from the response object within the model (of type
 #' \code{lmResp}, \code{glmResp}, \code{nlsResp}, etc). These include \code{".mu",
 #' ".offset", ".sqrtXwt", ".sqrtrwt", ".eta"}.
 #'
@@ -154,10 +155,9 @@ augment.merMod <- function(x, data = model.frame(x), newdata, ...) {
 #'   \item{AIC}{the Akaike Information Criterion}
 #'   \item{BIC}{the Bayesian Information Criterion}
 #'   \item{deviance}{deviance}
-#'   \item{df.residual}{residual degrees of freedom}
 #' 
 #' @export
 glance.merMod <- function(x, ...) {
-    ret <- unrowname(data.frame(sigma=lme4::sigma(x)))
+    ret <- unrowname(data.frame(sigma = lme4::sigma(x)))
     finish_glance(ret, x)
 }
