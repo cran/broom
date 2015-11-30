@@ -64,7 +64,7 @@ glance.aareg <- function(x, ...) {
     chi <- s$chisq
     df <- length(s$test.statistic) - 1
     
-    data.frame(statistic = chi, p.value = 1 - pchisq(chi, df),
+    data.frame(statistic = chi, p.value = 1 - stats::pchisq(chi, df),
                df = df)
 }
 
@@ -107,7 +107,7 @@ glance.aareg <- function(x, ...) {
 #'     library(ggplot2)
 #'     ggplot(tidy(fit.ccP), aes(x = estimate, y = term)) + geom_point() +
 #'         geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0) +
-#'         geom_vline()
+#'         geom_vline(xintercept = 0)
 #'     
 #'     # compare between methods
 #'     library(dplyr)
@@ -120,7 +120,7 @@ glance.aareg <- function(x, ...) {
 #'     # coefficient plots comparing methods
 #'     ggplot(fits, aes(x = estimate, y = term, color = method)) + geom_point() +
 #'         geom_errorbarh(aes(xmin = conf.low, xmax = conf.high)) +
-#'         geom_vline()
+#'         geom_vline(xintercept = 0)
 #' }
 #' 
 #' @seealso \link{cch}
@@ -135,11 +135,11 @@ glance.aareg <- function(x, ...) {
 #' @export
 tidy.cch <- function(x, conf.level = .95, ...) {
     s <- summary(x)
-    co <- coefficients(s)
+    co <- stats::coefficients(s)
     ret <- fix_data_frame(co, newnames = c("estimate", "std.error", "statistic", "p.value"))
     
     # add confidence interval
-    CI <- unrowname(confint(x, level = conf.level))
+    CI <- unrowname(stats::confint(x, level = conf.level))
     colnames(CI) <- c("conf.low", "conf.high")
     cbind(ret, CI)
 }
@@ -228,9 +228,13 @@ glance.cch <- function(x, ...) {
 #' @export
 tidy.coxph <- function(x, exponentiate = FALSE, conf.int = .95, ...) {
     s <- summary(x, conf.int = conf.int)
-    co <- coef(s)
+    co <- stats::coef(s)
 
-    nn <- c("estimate", "std.error", "statistic", "p.value")
+    if (s$used.robust)
+        nn <- c("estimate", "std.error", "robust.se", "statistic", "p.value")
+    else
+        nn <- c("estimate", "std.error", "statistic", "p.value")
+
     ret <- fix_data_frame(co[, -2, drop=FALSE], nn)
     
     if (exponentiate) {
@@ -260,7 +264,7 @@ tidy.coxph <- function(x, exponentiate = FALSE, conf.int = .95, ...) {
 #'   \item{.resid}{residuals (not present if \code{newdata} is provided)}
 #' 
 #' @export
-augment.coxph <- function(x, data = model.frame(x), newdata,
+augment.coxph <- function(x, data = stats::model.frame(x), newdata,
                           type.predict = "lp", type.residuals = "martingale",
                           ...) {
     ret <- fix_data_frame(data, newcol = ".rownames")
@@ -288,6 +292,8 @@ glance.coxph <- function(x, ...) {
                 p.value.sc = s$sctest[3],
                 statistic.wald = s$waldtest[1],
                 p.value.wald = s$waldtest[3],
+                statistic.robust = s$robscore[1],
+                p.value.robust = s$robscore[3],
                 r.squared = s$rsq[1],
                 r.squared.max = s$rsq[2],
                 concordance = s$concordance[1],
@@ -585,7 +591,7 @@ glance.pyears <- function(x, ...) {
 #'     library(ggplot2)
 #'     ggplot(td, aes(estimate, term)) + geom_point() +
 #'         geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0) +
-#'         geom_vline()
+#'         geom_vline(xintercept = 0)
 #' }
 #' 
 #' @name survreg_tidiers
@@ -603,7 +609,7 @@ tidy.survreg <- function(x, conf.level = .95, ...) {
     ret
     
     # add confidence interval
-    CI <- unrowname(confint(x, level = conf.level))
+    CI <- unrowname(stats::confint(x, level = conf.level))
     colnames(CI) <- c("conf.low", "conf.high")
     cbind(ret, CI)
 }
@@ -626,7 +632,7 @@ tidy.survreg <- function(x, conf.level = .95, ...) {
 #'   \item{.resid}{Residuals}
 #' 
 #' @export
-augment.survreg <- function(x, data = model.frame(x), newdata,
+augment.survreg <- function(x, data = stats::model.frame(x), newdata,
                             type.predict = "response",
                             type.residuals = "response", ...) {
     ret <- fix_data_frame(data, newcol = ".rownames")
@@ -652,7 +658,7 @@ glance.survreg <- function(x, conf.level = .95, ...) {
     ret <- data.frame(iter = x$iter, df = sum(x$df))
 
     ret$chi <- 2 * diff(x$loglik)
-    ret$p.value <- 1 - pchisq(ret$chi, sum(x$df) - x$idf)
+    ret$p.value <- 1 - stats::pchisq(ret$chi, sum(x$df) - x$idf)
 
     finish_glance(ret, x)
 }

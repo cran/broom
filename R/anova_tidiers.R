@@ -42,10 +42,31 @@ NULL
 #' 
 #' @export
 tidy.anova <- function(x, ...) {
-    nn <- c("df", "sumsq", "meansq", "statistic", "p.value")
-    ret <- fix_data_frame(x, nn[1:ncol(x)])
-
-    if ("term" %in% colnames(ret)) {
+    # x is stats::anova
+    # there are many possible column names that need to be transformed
+    renamers <- c("Df" = "df",
+                  "Sum Sq" = "sumsq",
+                  "Mean Sq" = "meansq",
+                  "F value" = "statistic",
+                  "Pr(>F)" = "p.value",
+                  "Res.Df" = "res.df",
+                  "RSS" = "rss",
+                  "Sum of Sq" = "sumsq",
+                  "F" = "statistic",
+                  "Chisq" = "statistic",
+                  "P(>|Chi|)" = "p.value")
+    
+    names(renamers) <- make.names(names(renamers))
+    
+    x <- fix_data_frame(x)
+    unknown_cols <- setdiff(colnames(x), c("term", names(renamers)))
+    if (length(unknown_cols) > 0) {
+        warning("The following column names in ANOVA output were not ",
+                "recognized or transformed: ",
+                paste(unknown_cols, collapse = ", "))
+    }
+    ret <- plyr::rename(x, renamers, warn_missing = FALSE)
+    if (!is.null(ret$term)) {
         # if rows had names, strip whitespace in them
         ret <- ret %>% mutate(term = stringr::str_trim(term))
     }
@@ -72,7 +93,11 @@ tidy.aovlist <- function(x, ...) {
         x <- x[-1L]
     }
 
-    ret <- plyr::ldply(x, tidy, .id = "stratum")
+    # ret <- plyr::ldply(x, tidy, .id = "stratum")
+    ret <- lapply(x, function(a) tidy(stats::anova(a)))
+    ret <- lapply(names(ret), 
+                  function(a) dplyr::mutate(ret[[a]], stratum = a))
+    ret <- do.call("rbind", ret)
     # get rid of leading and trailing whitespace in term and stratum columns
     ret <- ret %>% mutate(term = stringr::str_trim(term),
                           stratum = stringr::str_trim(stratum))

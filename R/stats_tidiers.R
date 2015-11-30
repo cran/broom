@@ -218,7 +218,7 @@ tidy.pairwise.htest <- function(x, ...) {
     data.frame(group1 = rownames(x$p.value)) %>%
       cbind(as.data.frame(x$p.value)) %>%
       tidyr::gather(group2, p.value, -group1) %>%
-      na.omit()
+      stats::na.omit()
 }
 
 
@@ -243,7 +243,7 @@ tidy.pairwise.htest <- function(x, ...) {
 #' 
 #' @export
 tidy.power.htest <- function(x, ...) {
-    cols <- compact(x[c("n", "delta", "sd", "sig.level", "power")])
+    cols <- compact(x[c("n", "delta", "sd", "sig.level", "power", "p1", "p2")])
     as.data.frame(cols)
 }
 

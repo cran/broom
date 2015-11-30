@@ -36,7 +36,9 @@
 #' d <- tidy(mod) %>% mutate(low = estimate - std.error,
 #'                           high = estimate + std.error)
 #' ggplot(d, aes(estimate, term, xmin = low, xmax = high, height = 0)) +
-#'      geom_point() + geom_vline() + geom_errorbarh()
+#'      geom_point() +
+#'      geom_vline(xintercept = 0) +
+#'      geom_errorbarh()
 #' 
 #' head(augment(mod))
 #' head(augment(mod, mtcars))
@@ -66,8 +68,7 @@
 #' qplot(.fitted, sqrt(abs(.std.resid)), data = au) + geom_smooth(se = FALSE)
 #'
 #' plot(mod, which = 4)
-#' qplot(seq_along(.cooksd), .cooksd, data = au, geom = "bar",
-#'  stat="identity")
+#' qplot(seq_along(.cooksd), .cooksd, data = au)
 #'
 #' plot(mod, which = 5)
 #' qplot(.hat, .std.resid, data = au) + geom_smooth(se = FALSE)
@@ -102,6 +103,8 @@ NULL
 #' \code{conf.int=TRUE}
 #' @param exponentiate whether to exponentiate the coefficient estimates
 #' and confidence intervals (typical for logistic regression)
+#' @param quick whether to compute a smaller and faster version, containing
+#' only the \code{term} and \code{estimate} columns.
 #' 
 #' @details If \code{conf.int=TRUE}, the confidence interval is computed with
 #' the \code{\link{confint}} function.
@@ -126,11 +129,16 @@ NULL
 #' 
 #' @export
 tidy.lm <- function(x, conf.int = FALSE, conf.level = .95,
-                    exponentiate = FALSE, ...) {
-    co <- coef(summary(x))
+                    exponentiate = FALSE, quick = FALSE, ...) {
+    if (quick) {
+        co <- stats::coef(x)
+        ret <- data.frame(term = names(co), estimate = unname(co))
+        return(process_lm(ret, x, conf.int = FALSE, exponentiate = exponentiate))
+    }
+    co <- stats::coef(summary(x))
     
     nn <- c("estimate", "std.error", "statistic", "p.value")
-    if (is(co, "listof")) {
+    if (inherits(co, "listof")) {
         # multiple response variables
         ret <- plyr::ldply(co, fix_data_frame, nn[1:ncol(co[[1]])],
                            .id = "response")
@@ -173,8 +181,8 @@ tidy.lm <- function(x, conf.int = FALSE, conf.level = .95,
 #'   \item{.resid}{Residuals of fitted values on the new data}
 #' 
 #' @export
-augment.lm <- function(x, data = model.frame(x), newdata,
-                       type.predict, type.residuals, ...) {    
+augment.lm <- function(x, data = stats::model.frame(x), newdata,
+                       type.predict, type.residuals, ...) {   
     augment_columns(x, data, newdata, type.predict = type.predict,
                            type.residuals = type.residuals)
 }
@@ -202,7 +210,7 @@ augment.lm <- function(x, data = model.frame(x), newdata,
 glance.lm <- function(x, ...) {
     # use summary.lm explicity, so that c("aov", "lm") objects can be
     # summarized and glanced at
-    s <- summary.lm(x)
+    s <- stats::summary.lm(x)
     ret <- with(s, data.frame(r.squared=r.squared,
                               adj.r.squared=adj.r.squared,
                               sigma=sigma,
@@ -256,7 +264,7 @@ process_lm <- function(ret, x, conf.int = FALSE, conf.level = .95,
     
     if (conf.int) {
         # avoid "Waiting for profiling to be done..." message
-        CI <- suppressMessages(confint(x, level = conf.level))
+        CI <- suppressMessages(stats::confint(x, level = conf.level))
         colnames(CI) = c("conf.low", "conf.high")
         ret <- cbind(ret, trans(unrowname(CI)))
     }

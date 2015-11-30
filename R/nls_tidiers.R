@@ -40,6 +40,8 @@ NULL
 #' @param conf.int whether to include a confidence interval
 #' @param conf.level confidence level of the interval, used only if
 #' \code{conf.int=TRUE}
+#' @param quick whether to compute a smaller and faster version, containing
+#' only the \code{term} and \code{estimate} columns.
 #'
 #' @return \code{tidy} returns one row for each coefficient in the model,
 #' with five columns:
@@ -50,13 +52,20 @@ NULL
 #'   \item{p.value}{two-sided p-value}
 #' 
 #' @export
-tidy.nls <- function(x, conf.int=FALSE, conf.level=.95, ...) {
+tidy.nls <- function(x, conf.int = FALSE, conf.level = .95,
+                     quick = FALSE, ...) {
+    if (quick) {
+        co <- stats::coef(x)
+        ret <- data.frame(term = names(co), estimate = unname(co))
+        return(ret)
+    }
+    
     nn <- c("estimate", "std.error", "statistic", "p.value")
-    ret <- fix_data_frame(coef(summary(x)), nn)
+    ret <- fix_data_frame(stats::coef(summary(x)), nn)
 
     if (conf.int) {
         # avoid "Waiting for profiling to be done..." message
-        CI <- suppressMessages(confint(x, level = conf.level))
+        CI <- suppressMessages(stats::confint(x, level = conf.level))
         if (is.null(dim(CI))) {
             CI = matrix(CI, nrow=1)
         }
@@ -84,7 +93,7 @@ augment.nls <- function(x, data = NULL, newdata = NULL, ...) {
     if (!is.null(newdata)) {
         # use predictions on new data
         newdata <- fix_data_frame(newdata, newcol = ".rownames")
-        newdata$.fitted <- predict(x, newdata = newdata)
+        newdata$.fitted <- stats::predict(x, newdata = newdata)
         return(newdata)
     }
 
@@ -106,8 +115,8 @@ augment.nls <- function(x, data = NULL, newdata = NULL, ...) {
     # move rownames if necessary
     data <- fix_data_frame(data, newcol = ".rownames")
     
-    data$.fitted <- predict(x)
-    data$.resid <- resid(x)
+    data$.fitted <- stats::predict(x)
+    data$.resid <- stats::resid(x)
     data
 }
 

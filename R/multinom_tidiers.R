@@ -68,12 +68,12 @@ tidy.multinom <- function(x,
   s <- summary(x)
   
   coef <- matrix(coef(s), 
-                 byrow=TRUE, 
+                 byrow=FALSE, 
                  nrow=length(x$lev)-1,
                  dimnames=list(x$lev[-1], 
                                col_names))
   se <- matrix(s$standard.errors, 
-               byrow=TRUE, 
+               byrow=FALSE, 
                nrow=length(x$lev)-1,
                dimnames=list(x$lev[-1], 
                              col_names))
@@ -81,9 +81,10 @@ tidy.multinom <- function(x,
   #* Quick utility to convert each row of coef to a data frame
   multinomRowToDf <- function(r, coef, se, col_names){
     unrowname(data.frame(y.level = rep(r, length(col_names)),
-                                term = colnames(coef),
-                                estimate = coef[r, ],
-                                std.error = se[r, ]))
+                         term = colnames(coef),
+                         estimate = coef[r, ],
+                         std.error = se[r, ],
+                         stringsAsFactors=FALSE))
   }
     
   #* Convert to coefficients data frame
@@ -92,11 +93,11 @@ tidy.multinom <- function(x,
   
   #* Calculate Wald-type Z and p-value
   ret$statistic <- ret$estimate / ret$std.error
-  ret$p.value <- pnorm(abs(ret$statistic), 0, 1, lower.tail=FALSE) * 2
+  ret$p.value <- stats::pnorm(abs(ret$statistic), 0, 1, lower.tail=FALSE) * 2
   
   #* Confidence Interval
   if (conf.int){
-    ci <- apply(confint(x), 2, function(a) unlist(as.data.frame(a)))
+    ci <- apply(stats::confint(x), 2, function(a) unlist(as.data.frame(a)))
     ci <- as.data.frame(ci)
     names(ci) <- c("conf.low", "conf.high")
     ret <- cbind(ret, ci)

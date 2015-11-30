@@ -13,32 +13,6 @@ broom should be distinguished from packages like [reshape2](http://cran.r-projec
 
 Tidying model outputs is not an exact science, and it's based on a judgment of the kinds of values a data scientist typically wants out of a tidy analysis (for instance, estimates, test statistics, and p-values). You may lose some of the information in the original object that you wanted, or keep more information than you need. If you think the tidy output for a model should be changed, or if you're missing a tidying function for an S3 class that you'd like, I strongly encourage you to [open an issue](http://github.com/dgrtwo/broom/issues) or a pull request.
 
-### Available Tidiers
-
-Currently broom provides tidying methods for many S3 objects from the built-in stats package, including
-
-* `lm`
-* `glm`
-* `htest`
-* `anova`
-* `nls`
-* `kmeans`
-* `manova`
-* `TukeyHSD`
-* `arima`
-
-It also provides methods for S3 objects in popular third-party packages, including
-
-* `lme4`
-* `glmnet`
-* `gam`
-* `survival`
-* `lfe`
-* `zoo`
-* `multcomp`
-* `sp`
-* `maps`
-
 Installation and Documentation
 ------------
 
@@ -73,6 +47,7 @@ Note that some classes may have only one or two of these methods defined.
 Consider as an illustrative example a linear fit on the built-in `mtcars` dataset.
 
 
+
 ```r
 lmfit <- lm(mpg ~ wt, mtcars)
 lmfit
@@ -85,8 +60,9 @@ lmfit
 ## 
 ## Coefficients:
 ## (Intercept)           wt  
-##       37.29        -5.34
+##      37.285       -5.344
 ```
+
 
 ```r
 summary(lmfit)
@@ -98,24 +74,27 @@ summary(lmfit)
 ## lm(formula = mpg ~ wt, data = mtcars)
 ## 
 ## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -4.543 -2.365 -0.125  1.410  6.873 
+##     Min      1Q  Median      3Q     Max 
+## -4.5432 -2.3647 -0.1252  1.4096  6.8727 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)   37.285      1.878   19.86  < 2e-16 ***
-## wt            -5.344      0.559   -9.56  1.3e-10 ***
+## (Intercept)  37.2851     1.8776  19.858  < 2e-16 ***
+## wt           -5.3445     0.5591  -9.559 1.29e-10 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 3.05 on 30 degrees of freedom
-## Multiple R-squared:  0.753,	Adjusted R-squared:  0.745 
-## F-statistic: 91.4 on 1 and 30 DF,  p-value: 1.29e-10
+## Residual standard error: 3.046 on 30 degrees of freedom
+## Multiple R-squared:  0.7528,	Adjusted R-squared:  0.7446 
+## F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10
 ```
+
+
 
 This summary output is useful enough if you just want to read it. However, converting it to a data frame that contains all the same information, so that you can combine it with other models or do further analysis, is not trivial. You have to do `coef(summary(lmfit))` to get a matrix of coefficients, the terms are still stored in row names, and the column names are inconsistent with other packages (e.g. `Pr(>|t|)` compared to `p.value`).
 
 Instead, you can use the `tidy` function, from the broom package, on the fit:
+
 
 
 ```r
@@ -124,9 +103,9 @@ tidy(lmfit)
 ```
 
 ```
-##          term estimate std.error statistic   p.value
-## 1 (Intercept)   37.285   1.8776    19.858 8.242e-19
-## 2          wt   -5.344   0.5591    -9.559 1.294e-10
+##          term  estimate std.error statistic      p.value
+## 1 (Intercept) 37.285126  1.877627 19.857575 8.241799e-19
+## 2          wt -5.344472  0.559101 -9.559044 1.293959e-10
 ```
 
 This gives you a data.frame representation. Note that the row names have been moved into a column called `term`, and the column names are simple and consistent (and can be accessed using `$`).
@@ -134,25 +113,26 @@ This gives you a data.frame representation. Note that the row names have been mo
 Instead of viewing the coefficients, you might be interested in the fitted values and residuals for each of the original points in the regression. For this, use `augment`, which augments the original data with information from the model:
 
 
+
 ```r
 head(augment(lmfit))
 ```
 
 ```
-##           .rownames  mpg    wt    .hat .sigma   .cooksd .fitted  .resid
-## 1         Mazda RX4 21.0 2.620 0.04327  3.067 0.0132741   23.28 -2.2826
-## 2     Mazda RX4 Wag 21.0 2.875 0.03520  3.093 0.0017240   21.92 -0.9198
-## 3        Datsun 710 22.8 2.320 0.05838  3.072 0.0154394   24.89 -2.0860
-## 4    Hornet 4 Drive 21.4 3.215 0.03125  3.088 0.0030206   20.10  1.2973
-## 5 Hornet Sportabout 18.7 3.440 0.03292  3.098 0.0000760   18.90 -0.2001
-## 6           Valiant 18.1 3.460 0.03324  3.095 0.0009211   18.79 -0.6933
-##   .stdresid
-## 1  -0.76617
-## 2  -0.30743
-## 3  -0.70575
-## 4   0.43275
-## 5  -0.06682
-## 6  -0.23148
+##           .rownames  mpg    wt  .fitted   .se.fit     .resid       .hat
+## 1         Mazda RX4 21.0 2.620 23.28261 0.6335798 -2.2826106 0.04326896
+## 2     Mazda RX4 Wag 21.0 2.875 21.91977 0.5714319 -0.9197704 0.03519677
+## 3        Datsun 710 22.8 2.320 24.88595 0.7359177 -2.0859521 0.05837573
+## 4    Hornet 4 Drive 21.4 3.215 20.10265 0.5384424  1.2973499 0.03125017
+## 5 Hornet Sportabout 18.7 3.440 18.90014 0.5526562 -0.2001440 0.03292182
+## 6           Valiant 18.1 3.460 18.79325 0.5552829 -0.6932545 0.03323551
+##     .sigma      .cooksd  .std.resid
+## 1 3.067494 1.327407e-02 -0.76616765
+## 2 3.093068 1.723963e-03 -0.30743051
+## 3 3.072127 1.543937e-02 -0.70575249
+## 4 3.088268 3.020558e-03  0.43275114
+## 5 3.097722 7.599578e-05 -0.06681879
+## 6 3.095184 9.210650e-04 -0.23148309
 ```
 
 Note that each of the new columns begins with a `.` (to avoid overwriting any of the original columns).
@@ -160,13 +140,16 @@ Note that each of the new columns begins with a `.` (to avoid overwriting any of
 Finally, several summary statistics are computed for the entire regression, such as R^2 and the F-statistic. These can be accessed with the `glance` function:
 
 
+
 ```r
 glance(lmfit)
 ```
 
 ```
-##   r.squared adj.r.squared sigma statistic   p.value
-## 1    0.7528        0.7446 3.046     91.38 1.294e-10
+##   r.squared adj.r.squared    sigma statistic      p.value df    logLik
+## 1 0.7528328     0.7445939 3.045882  91.37533 1.293959e-10  2 -80.01471
+##        AIC      BIC deviance df.residual
+## 1 166.0294 170.4266 278.3219          30
 ```
 
 This distinction between the `tidy`, `augment` and `glance` functions is explored in a different context in the k-means vignette.
@@ -179,50 +162,54 @@ Other Examples
 These functions apply equally well to the output from `glm`:
 
 
+
 ```r
 glmfit <- glm(am ~ wt, mtcars, family="binomial")
 tidy(glmfit)
 ```
 
 ```
-##          term estimate std.error statistic  p.value
-## 1 (Intercept)   12.040    4.510     2.670 0.007588
-## 2          wt   -4.024    1.436    -2.801 0.005088
+##          term estimate std.error statistic     p.value
+## 1 (Intercept) 12.04037  4.509706  2.669879 0.007587858
+## 2          wt -4.02397  1.436416 -2.801396 0.005088198
 ```
+
 
 ```r
 head(augment(glmfit))
 ```
 
 ```
-##           .rownames am    wt    .hat .sigma  .cooksd .fitted  .resid
-## 1         Mazda RX4  1 2.620 0.12578 0.8033 0.018406  1.4976  0.6354
-## 2     Mazda RX4 Wag  1 2.875 0.10816 0.7898 0.042435  0.4715  0.9848
-## 3        Datsun 710  1 2.320 0.09628 0.8101 0.003943  2.7048  0.3598
-## 4    Hornet 4 Drive  0 3.215 0.07438 0.7973 0.017707 -0.8967 -0.8272
-## 5 Hornet Sportabout  0 3.440 0.06812 0.8062 0.006470 -1.8021 -0.5526
-## 6           Valiant  0 3.460 0.06744 0.8067 0.005901 -1.8826 -0.5323
-##   .stdresid
-## 1    0.6796
-## 2    1.0428
-## 3    0.3785
-## 4   -0.8598
-## 5   -0.5724
-## 6   -0.5512
+##           .rownames am    wt    .fitted   .se.fit     .resid       .hat
+## 1         Mazda RX4  1 2.620  1.4975684 0.9175750  0.6353854 0.12577908
+## 2     Mazda RX4 Wag  1 2.875  0.4714561 0.6761141  0.9848344 0.10816226
+## 3        Datsun 710  1 2.320  2.7047594 1.2799233  0.3598458 0.09628500
+## 4    Hornet 4 Drive  0 3.215 -0.8966937 0.6012064 -0.8271767 0.07438175
+## 5 Hornet Sportabout  0 3.440 -1.8020869 0.7486164 -0.5525972 0.06812194
+## 6           Valiant  0 3.460 -1.8825663 0.7669573 -0.5323012 0.06744101
+##      .sigma     .cooksd .std.resid
+## 1 0.8033182 0.018405616  0.6795582
+## 2 0.7897742 0.042434911  1.0428463
+## 3 0.8101256 0.003942789  0.3785304
+## 4 0.7973421 0.017706938 -0.8597702
+## 5 0.8061915 0.006469973 -0.5724389
+## 6 0.8067014 0.005901376 -0.5512128
 ```
+
 
 ```r
 glance(glmfit)
 ```
 
 ```
-##     aic deviance null.deviance df.residual df.null
-## 1 23.18    19.18         43.23          30      31
+##   null.deviance df.null    logLik      AIC      BIC deviance df.residual
+## 1      43.22973      31 -9.588042 23.17608 26.10756 19.17608          30
 ```
 
 Note that the statistics computed by `glance` are different for `glm` objects than for `lm` (e.g. deviance rather than R^2):
 
 These functions also work on other fits, such as nonlinear models (`nls`):
+
 
 
 ```r
@@ -231,10 +218,11 @@ tidy(nlsfit)
 ```
 
 ```
-##   term estimate std.error statistic   p.value
-## 1    k   45.829    4.249    10.786 7.639e-12
-## 2    b    4.386    1.536     2.855 7.737e-03
+##   term  estimate std.error statistic      p.value
+## 1    k 45.829488  4.249155 10.785554 7.639162e-12
+## 2    b  4.386254  1.536418  2.854858 7.737378e-03
 ```
+
 
 ```r
 head(augment(nlsfit, mtcars))
@@ -248,27 +236,31 @@ head(augment(nlsfit, mtcars))
 ## 4    Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
 ## 5 Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
 ## 6           Valiant 18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
-##   .fitted  .resid
-## 1   21.88 -0.8784
-## 2   20.33  0.6731
-## 3   24.14 -1.3403
-## 4   18.64  2.7589
-## 5   17.71  0.9912
-## 6   17.63  0.4682
+##    .fitted     .resid
+## 1 21.87843 -0.8784251
+## 2 20.32695  0.6730544
+## 3 24.14034 -1.3403437
+## 4 18.64115  2.7588507
+## 5 17.70878  0.9912203
+## 6 17.63177  0.4682291
 ```
+
 
 ```r
 glance(nlsfit)
 ```
 
 ```
-##   sigma isConv    finTol
-## 1 2.774   TRUE 2.877e-08
+##     sigma isConv      finTol    logLik      AIC      BIC deviance
+## 1 2.77405   TRUE 2.87694e-08 -77.02329 160.0466 164.4438 230.8606
+##   df.residual
+## 1          30
 ```
 
 ### Hypothesis testing
 
 The `tidy` function can also be applied to `htest` objects, such as those output by popular built-in functions like `t.test`, `cor.test`, and `wilcox.test`.
+
 
 
 ```r
@@ -277,13 +269,14 @@ tidy(tt)
 ```
 
 ```
-##   estimate estimate1 estimate2 statistic   p.value parameter conf.low
-## t    1.358     3.769     2.411     5.494 6.272e-06     29.23   0.8526
+##   estimate estimate1 estimate2 statistic     p.value parameter  conf.low
+## 1 1.357895  3.768895     2.411  5.493905 6.27202e-06  29.23352 0.8525632
 ##   conf.high
-## t     1.863
+## 1  1.863226
 ```
 
 Some cases might have fewer columns (for example, no confidence interval):
+
 
 
 ```r
@@ -292,11 +285,12 @@ tidy(wt)
 ```
 
 ```
-##   statistic   p.value
-## W     230.5 4.347e-05
+##   statistic      p.value
+## 1     230.5 4.347026e-05
 ```
 
 Since the `tidy` output is already only one row, `glance` returns the same output:
+
 
 
 ```r
@@ -304,22 +298,123 @@ glance(tt)
 ```
 
 ```
-##   estimate estimate1 estimate2 statistic   p.value parameter conf.low
-## t    1.358     3.769     2.411     5.494 6.272e-06     29.23   0.8526
+##   estimate estimate1 estimate2 statistic     p.value parameter  conf.low
+## 1 1.357895  3.768895     2.411  5.493905 6.27202e-06  29.23352 0.8525632
 ##   conf.high
-## t     1.863
+## 1  1.863226
 ```
+
 
 ```r
 glance(wt)
 ```
 
 ```
-##   statistic   p.value
-## W     230.5 4.347e-05
+##   statistic      p.value
+## 1     230.5 4.347026e-05
 ```
 
 There is no `augment` function for `htest` objects, since there is no meaningful sense in which a hypothesis test produces output about each initial data point.
+
+### Available Tidiers
+
+Currently broom provides tidying methods for many S3 objects from the built-in stats package, including
+
+* `lm`
+* `glm`
+* `htest`
+* `anova`
+* `nls`
+* `kmeans`
+* `manova`
+* `TukeyHSD`
+* `arima`
+
+It also provides methods for S3 objects in popular third-party packages, including
+
+* `lme4`
+* `glmnet`
+* `boot`
+* `gam`
+* `survival`
+* `lfe`
+* `zoo`
+* `multcomp`
+* `sp`
+* `maps`
+
+A full list of the `tidy`, `augment` and `glance` methods available for each class is as follows:
+
+
+|Class                    |`tidy` |`glance` |`augment` |
+|:------------------------|:------|:--------|:---------|
+|aareg                    |x      |x        |          |
+|anova                    |x      |         |          |
+|aov                      |x      |         |          |
+|aovlist                  |x      |         |          |
+|Arima                    |x      |x        |          |
+|biglm                    |x      |x        |          |
+|binDesign                |x      |x        |          |
+|binWidth                 |x      |         |          |
+|boot                     |x      |         |          |
+|btergm                   |x      |         |          |
+|cch                      |x      |x        |          |
+|cld                      |x      |         |          |
+|coeftest                 |x      |         |          |
+|confint.glht             |x      |         |          |
+|coxph                    |x      |x        |x         |
+|cv.glmnet                |x      |x        |          |
+|data.frame               |x      |x        |x         |
+|default                  |x      |x        |x         |
+|density                  |x      |         |          |
+|ergm                     |x      |x        |          |
+|felm                     |x      |x        |x         |
+|ftable                   |x      |         |          |
+|gam                      |x      |x        |          |
+|geeglm                   |x      |         |          |
+|glht                     |x      |         |          |
+|glmnet                   |x      |x        |          |
+|htest                    |x      |x        |          |
+|kappa                    |x      |         |          |
+|kmeans                   |x      |x        |x         |
+|Line                     |x      |         |          |
+|Lines                    |x      |         |          |
+|list                     |x      |x        |          |
+|lm                       |x      |x        |x         |
+|lme                      |x      |x        |x         |
+|manova                   |x      |         |          |
+|map                      |x      |         |          |
+|matrix                   |x      |x        |          |
+|merMod                   |x      |x        |x         |
+|multinom                 |x      |x        |          |
+|nlrq                     |x      |x        |x         |
+|nls                      |x      |x        |x         |
+|NULL                     |x      |x        |x         |
+|pairwise.htest           |x      |         |          |
+|plm                      |x      |x        |x         |
+|Polygon                  |x      |         |          |
+|Polygons                 |x      |         |          |
+|power.htest              |x      |         |          |
+|pyears                   |x      |x        |          |
+|ridgelm                  |x      |x        |          |
+|roc                      |x      |         |          |
+|rowwise_df               |x      |x        |x         |
+|rq                       |x      |x        |x         |
+|rqs                      |x      |x        |x         |
+|SpatialLinesDataFrame    |x      |         |          |
+|SpatialPolygons          |x      |         |          |
+|SpatialPolygonsDataFrame |x      |         |          |
+|spec                     |x      |         |          |
+|summary.glht             |x      |         |          |
+|summaryDefault           |x      |x        |          |
+|survexp                  |x      |x        |          |
+|survfit                  |x      |x        |          |
+|survreg                  |x      |x        |x         |
+|table                    |x      |         |          |
+|tbl_df                   |x      |x        |x         |
+|ts                       |x      |         |          |
+|TukeyHSD                 |x      |         |          |
+|zoo                      |x      |         |          |
 
 Conventions
 ------------
