@@ -1,6 +1,11 @@
 broom: let's tidy up a bit
 =====================
 
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/broom)](http://cran.r-project.org/package=broom)
+[![Travis-CI Build Status](https://travis-ci.org/dgrtwo/broom.svg?branch=master)](https://travis-ci.org/dgrtwo/broom)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/dgrtwo/broom?branch=master&svg=true)](https://ci.appveyor.com/project/dgrtwo/broom)
+[![Coverage Status](https://img.shields.io/codecov/c/github/dgrtwo/broom/master.svg)](https://codecov.io/github/dgrtwo/broom?branch=master)
+
 The broom package takes the messy output of built-in functions in R, such as `lm`, `nls`, or `t.test`, and turns them into tidy data frames.
 
 The concept of "tidy data", [as introduced by Hadley Wickham](http://www.jstatsoft.org/v59/i10), offers a powerful framework for data manipulation and analysis. That paper makes a convincing statement of the problem this package tries to solve (emphasis mine):
@@ -12,6 +17,8 @@ broom is an attempt to bridge the gap from untidy outputs of predictions and est
 broom should be distinguished from packages like [reshape2](http://cran.r-project.org/web/packages/reshape2/reshape2.pdf) and [tidyr](https://github.com/hadley/tidyr), which rearrange and reshape data frames into different forms. Those packages perform critical tasks in tidy data analysis but focus on manipulating data frames in one specific format into another. In contrast, broom is designed to take format that is *not* in a data frame (sometimes not anywhere close) and convert it to a tidy data frame.
 
 Tidying model outputs is not an exact science, and it's based on a judgment of the kinds of values a data scientist typically wants out of a tidy analysis (for instance, estimates, test statistics, and p-values). You may lose some of the information in the original object that you wanted, or keep more information than you need. If you think the tidy output for a model should be changed, or if you're missing a tidying function for an S3 class that you'd like, I strongly encourage you to [open an issue](http://github.com/dgrtwo/broom/issues) or a pull request.
+
+[![Travis-CI Build Status](https://travis-ci.org/dgrtwo/broom.svg?branch=master)](https://travis-ci.org/dgrtwo/broom)
 
 Installation and Documentation
 ------------
@@ -271,8 +278,8 @@ tidy(tt)
 ```
 ##   estimate estimate1 estimate2 statistic     p.value parameter  conf.low
 ## 1 1.357895  3.768895     2.411  5.493905 6.27202e-06  29.23352 0.8525632
-##   conf.high
-## 1  1.863226
+##   conf.high                  method alternative
+## 1  1.863226 Welch Two Sample t-test   two.sided
 ```
 
 Some cases might have fewer columns (for example, no confidence interval):
@@ -285,8 +292,10 @@ tidy(wt)
 ```
 
 ```
-##   statistic      p.value
-## 1     230.5 4.347026e-05
+##   statistic      p.value                                            method
+## 1     230.5 4.347026e-05 Wilcoxon rank sum test with continuity correction
+##   alternative
+## 1   two.sided
 ```
 
 Since the `tidy` output is already only one row, `glance` returns the same output:
@@ -300,8 +309,8 @@ glance(tt)
 ```
 ##   estimate estimate1 estimate2 statistic     p.value parameter  conf.low
 ## 1 1.357895  3.768895     2.411  5.493905 6.27202e-06  29.23352 0.8525632
-##   conf.high
-## 1  1.863226
+##   conf.high                  method alternative
+## 1  1.863226 Welch Two Sample t-test   two.sided
 ```
 
 
@@ -310,8 +319,10 @@ glance(wt)
 ```
 
 ```
-##   statistic      p.value
-## 1     230.5 4.347026e-05
+##   statistic      p.value                                            method
+## 1     230.5 4.347026e-05 Wilcoxon rank sum test with continuity correction
+##   alternative
+## 1   two.sided
 ```
 
 There is no `augment` function for `htest` objects, since there is no meaningful sense in which a hypothesis test produces output about each initial data point.
@@ -359,6 +370,7 @@ A full list of the `tidy`, `augment` and `glance` methods available for each cla
 |boot                     |x      |         |          |
 |btergm                   |x      |         |          |
 |cch                      |x      |x        |          |
+|character                |x      |         |          |
 |cld                      |x      |         |          |
 |coeftest                 |x      |         |          |
 |confint.glht             |x      |         |          |
@@ -367,45 +379,65 @@ A full list of the `tidy`, `augment` and `glance` methods available for each cla
 |data.frame               |x      |x        |x         |
 |default                  |x      |x        |x         |
 |density                  |x      |         |          |
+|dgCMatrix                |x      |         |          |
+|dgTMatrix                |x      |         |          |
+|dist                     |x      |         |          |
 |ergm                     |x      |x        |          |
 |felm                     |x      |x        |x         |
+|fitdistr                 |x      |x        |          |
 |ftable                   |x      |         |          |
 |gam                      |x      |x        |          |
+|gamlss                   |x      |         |          |
 |geeglm                   |x      |         |          |
 |glht                     |x      |         |          |
 |glmnet                   |x      |x        |          |
+|gmm                      |x      |x        |          |
 |htest                    |x      |x        |          |
 |kappa                    |x      |         |          |
+|kde                      |x      |         |          |
 |kmeans                   |x      |x        |x         |
 |Line                     |x      |         |          |
 |Lines                    |x      |         |          |
 |list                     |x      |x        |          |
 |lm                       |x      |x        |x         |
 |lme                      |x      |x        |x         |
+|lmodel2                  |x      |x        |          |
+|logical                  |x      |         |          |
 |manova                   |x      |         |          |
 |map                      |x      |         |          |
 |matrix                   |x      |x        |          |
+|Mclust                   |x      |x        |x         |
 |merMod                   |x      |x        |x         |
+|mle2                     |x      |         |          |
 |multinom                 |x      |x        |          |
 |nlrq                     |x      |x        |x         |
 |nls                      |x      |x        |x         |
 |NULL                     |x      |x        |x         |
+|numeric                  |x      |         |          |
 |pairwise.htest           |x      |         |          |
 |plm                      |x      |x        |x         |
+|poLCA                    |x      |x        |x         |
 |Polygon                  |x      |         |          |
 |Polygons                 |x      |         |          |
 |power.htest              |x      |         |          |
+|prcomp                   |x      |         |x         |
 |pyears                   |x      |x        |          |
+|rcorr                    |x      |         |          |
 |ridgelm                  |x      |x        |          |
+|rjags                    |x      |         |          |
 |roc                      |x      |         |          |
 |rowwise_df               |x      |x        |x         |
 |rq                       |x      |x        |x         |
 |rqs                      |x      |x        |x         |
+|sparseMatrix             |x      |         |          |
 |SpatialLinesDataFrame    |x      |         |          |
 |SpatialPolygons          |x      |         |          |
 |SpatialPolygonsDataFrame |x      |         |          |
 |spec                     |x      |         |          |
+|stanfit                  |x      |         |          |
+|stanreg                  |x      |x        |          |
 |summary.glht             |x      |         |          |
+|summary.lm               |x      |x        |          |
 |summaryDefault           |x      |x        |          |
 |survexp                  |x      |x        |          |
 |survfit                  |x      |x        |          |
@@ -461,3 +493,7 @@ In order to maintain consistency, we attempt to follow some conventions regardin
     * `r.squared` the fraction of variance explained by the model
     * `adj.r.squared` R^2 adjusted based on the degrees of freedom
     * `sigma` the square root of the estimated variance of the residuals
+
+### Code of Conduct
+
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.

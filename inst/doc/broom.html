@@ -415,8 +415,8 @@ tidy(tt)
 
 <pre><code>##   estimate estimate1 estimate2 statistic     p.value parameter  conf.low
 ## 1 1.357895  3.768895     2.411  5.493905 6.27202e-06  29.23352 0.8525632
-##   conf.high
-## 1  1.863226
+##   conf.high                  method alternative
+## 1  1.863226 Welch Two Sample t-test   two.sided
 </code></pre>
 
 <p>Some cases might have fewer columns (for example, no confidence interval):</p>
@@ -425,8 +425,10 @@ tidy(tt)
 tidy(wt)
 </code></pre>
 
-<pre><code>##   statistic      p.value
-## 1     230.5 4.347026e-05
+<pre><code>##   statistic      p.value                                            method
+## 1     230.5 4.347026e-05 Wilcoxon rank sum test with continuity correction
+##   alternative
+## 1   two.sided
 </code></pre>
 
 <p>Since the <code>tidy</code> output is already only one row, <code>glance</code> returns the same output:</p>
@@ -436,15 +438,17 @@ tidy(wt)
 
 <pre><code>##   estimate estimate1 estimate2 statistic     p.value parameter  conf.low
 ## 1 1.357895  3.768895     2.411  5.493905 6.27202e-06  29.23352 0.8525632
-##   conf.high
-## 1  1.863226
+##   conf.high                  method alternative
+## 1  1.863226 Welch Two Sample t-test   two.sided
 </code></pre>
 
 <pre><code class="r">glance(wt)
 </code></pre>
 
-<pre><code>##   statistic      p.value
-## 1     230.5 4.347026e-05
+<pre><code>##   statistic      p.value                                            method
+## 1     230.5 4.347026e-05 Wilcoxon rank sum test with continuity correction
+##   alternative
+## 1   two.sided
 </code></pre>
 
 <p>There is no <code>augment</code> function for <code>htest</code> objects, since there is no meaningful sense in which a hypothesis test produces output about each initial data point.</p>

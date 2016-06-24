@@ -3,8 +3,6 @@
 
 context("rowwise tidiers")
 
-library(dplyr)
-
 mods <- mtcars %>%
     group_by(cyl) %>%
     do(mod = lm(mpg ~ wt + qsec, .))
@@ -18,7 +16,7 @@ test_that("rowwise tidiers can be applied to sub-models", {
     
     expect_equal(nrow(augmented), nrow(mtcars))
     expect_equal(nrow(glanced), 3)
-    expect_true(is.null(augmented$disp))
+    expect_true(!("disp" %in% colnames(augmented)))
 })
 
 test_that("rowwise tidiers can be given additional arguments", {

@@ -8,7 +8,11 @@
 #' names assigned
 #' 
 #' @export
-fix_data_frame <- function(x, newnames=NULL, newcol="term") {
+fix_data_frame <- function(x, newnames = NULL, newcol = "term") {
+    if (!is.null(newnames) && length(newnames) != ncol(x)) {
+        stop("newnames must be NULL or have length equal to number of columns")
+    }
+    
     if (all(rownames(x) == seq_len(nrow(x)))) {
         # don't need to move rownames into a new column
         ret <- data.frame(x, stringsAsFactors = FALSE)
@@ -17,7 +21,8 @@ fix_data_frame <- function(x, newnames=NULL, newcol="term") {
         }
     }
     else {
-        ret <- data.frame(a = rownames(x), plyr::unrowname(x),
+        ret <- data.frame(...new.col... = rownames(x),
+                          unrowname(x),
                           stringsAsFactors = FALSE)
         colnames(ret)[1] <- newcol
         if (!is.null(newnames)) {
@@ -96,8 +101,18 @@ augment_columns <- function(x, data, newdata, type, type.predict = type,
     args$se.fit <- se.fit
     args <- c(args, list(...))
     
-    # suppress warning: geeglm objects complain about predict being used
-    pred <- suppressWarnings(do.call(predict0, args))
+
+
+    if ("panelmodel" %in% class(x)) {
+      # work around for panel models (plm)  
+      # stat::predict() returns wrong fitted values when applied to random or fixed effect panel models [plm(..., model="random"), plm(, ..., model="pooling")]
+      # It works only for pooled OLS models (plm( ..., model="pooling"))
+      pred <- model.frame(x)[, 1] - residuals(x)
+    } else {
+      # suppress warning: geeglm objects complain about predict being used
+      pred <- suppressWarnings(do.call(predict0, args))
+      
+    }
 
     if (is.null(pred)) {
         # try "fitted" instead- some objects don't have "predict" method
@@ -126,8 +141,13 @@ augment_columns <- function(x, data, newdata, type, type.predict = type,
         
         infl <- influence0(x, do.coef = FALSE)
         if (!is.null(infl)) {
+            if(is_mgcv(x)){
+                ret$.hat <- infl
+                ret$.sigma <- NA
+            }else{
             ret$.hat <- infl$hat
             ret$.sigma <- infl$sigma
+            }
         }
         
         # if cooksd and rstandard can be computed and aren't all NA
