@@ -1,6 +1,6 @@
+context("survdiff")
 
 if( require("survival", quietly = TRUE)) {
-    
     # Examples from survival::survdiff help page
     ex1 <- survdiff(Surv(futime, fustat) ~ rx,data=ovarian)
     ex2 <- survdiff(Surv(time, status) ~ pat.karno + strata(inst), data=lung)

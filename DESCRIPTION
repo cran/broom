@@ -1,8 +1,8 @@
 Package: broom
 Type: Package
 Title: Convert Statistical Analysis Objects into Tidy Data Frames
-Version: 0.4.3
-Date: 2017-11-20
+Version: 0.4.4
+Date: 2018-03-12
 Authors@R: c(
     person("David", "Robinson", email = "admiral.david@gmail.com", role = c("aut", "cre")),
     person("Matthieu", "Gomez", email = "mattg@princeton.edu", role = "ctb"),
@@ -18,8 +18,9 @@ Authors@R: c(
     person("Gavin", "Simpson", email = "ucfagls@gmail.com", role = "ctb"),
     person("Jens", "Preussner", email = " jens.preussner@mpi-bn.mpg.de", role = "ctb"),
     person("Jay", "Hesselberth", email = "jay.hesselberth@gmail.com", role = "ctb"),
-    person("Hadley", "Wickham", email = "hadley@rstudio.com", role = "ctb"),
-    person("Matthew", "Lincoln", email = "matthew.d.lincoln@gmail.com", role = "ctb"))
+    person("Matthew", "Lincoln", email = "matthew.d.lincoln@gmail.com", role = "ctb"),
+    person("Derek", "Chiu", role = "ctb"),
+    person("Hadley", "Wickham", email = "hadley@rstudio.com", role = "ctb"))
 Maintainer: David Robinson <admiral.david@gmail.com>
 Description: Convert statistical analysis objects from R into tidy data frames,
     so that they can more easily be combined, reshaped and otherwise processed
@@ -29,8 +30,8 @@ Description: Convert statistical analysis objects from R into tidy data frames,
     data such as predictions, residuals and cluster assignments; and glance, which
     provides a one-row summary of model-level statistics.
 Imports: plyr, dplyr, tidyr, psych, stringr, reshape2, nlme, methods
-Suggests: knitr, boot, survival, gam, glmnet, lfe, Lahman, MASS, sp,
-        maps, maptools, multcomp, testthat, lme4, zoo, lmtest, plm,
+Suggests: knitr, boot, survival, gam, glmnet, lfe, Lahman, MASS, rgeos,
+        sp, maps, maptools, multcomp, testthat, lme4, zoo, lmtest, plm,
         biglm, ggplot2, nnet, geepack, AUC, ergm, network,
         statnet.common, xergm, btergm, binGroup, Hmisc, bbmle, gamlss,
         rstan, rstanarm, brms, coda, gmm, Matrix, ks, purrr, orcutt,
@@ -42,7 +43,7 @@ VignetteBuilder: knitr
 License: MIT + file LICENSE
 RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2017-11-20 12:08:18 UTC; drobinson
+Packaged: 2018-03-28 22:56:14 UTC; drobinson
 Author: David Robinson [aut, cre],
   Matthieu Gomez [ctb],
   Boris Demeshev [ctb],
@@ -57,7 +58,8 @@ Author: David Robinson [aut, cre],
   Gavin Simpson [ctb],
   Jens Preussner [ctb],
   Jay Hesselberth [ctb],
-  Hadley Wickham [ctb],
-  Matthew Lincoln [ctb]
+  Matthew Lincoln [ctb],
+  Derek Chiu [ctb],
+  Hadley Wickham [ctb]
 Repository: CRAN
-Date/Publication: 2017-11-20 13:02:37 UTC
+Date/Publication: 2018-03-29 15:39:33 UTC
