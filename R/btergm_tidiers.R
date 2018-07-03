@@ -1,6 +1,6 @@
 #' Tidying method for a bootstrapped temporal exponential random graph model
 #'
-#' This method tidies the coefficients of a bootstrapped temporal exponential 
+#' This method tidies the coefficients of a bootstrapped temporal exponential
 #' random graph model estimated with the \pkg{xergm}. It simply returns the
 #' coefficients and their confidence intervals.
 #'
@@ -13,6 +13,7 @@
 #' @param x a \code{\link[btergm]{btergm}} object
 #' @examples
 #'
+#' \dontrun{
 #' if (require("xergm")) {
 #'     # Using the same simulated example as the xergm package
 #'     # Create 10 random networks with 10 actors
@@ -41,6 +42,7 @@
 #'     # Show coefficients as odds ratios with a 99% CI
 #'     tidy(btfit, exponentiate = TRUE, conf.level = 0.99)
 #' }
+#' }
 NULL
 
 #' @rdname btergm_tidiers
@@ -52,10 +54,10 @@ NULL
 #' only the \code{term} and \code{estimate} columns.
 #' @param ... extra arguments (currently not used)
 #'
-#' @details There is no \code{augment} or \code{glance} method 
+#' @details There is no \code{augment} or \code{glance} method
 #' for \pkg{ergm} objects.
 #'
-#' @return \code{tidy.btergm} returns one row for each coefficient, 
+#' @return \code{tidy.btergm} returns one row for each coefficient,
 #' with four columns:
 #'   \item{term}{The term in the model being estimated and tested}
 #'   \item{estimate}{The estimated coefficient}
@@ -70,7 +72,7 @@ tidy.btergm <- function(x, conf.level = .95,
     } else {
         trans <- identity
     }
-    
+
     if (quick) {
         co <- x@coef
         ret <- data.frame(term = names(co),
@@ -78,7 +80,7 @@ tidy.btergm <- function(x, conf.level = .95,
         return(ret)
     }
     co <- btergm::confint(x, level = conf.level)
-    
+
     nn <- c("estimate", "conf.low", "conf.high")
     if (inherits(co, "listof")) {
         # multiple response variables
@@ -88,7 +90,7 @@ tidy.btergm <- function(x, conf.level = .95,
     } else {
         ret <- fix_data_frame(co, nn[1:ncol(co)])
     }
-    
+
     ret$conf.low <- trans(ret$conf.low)
     ret$conf.high <- trans(ret$conf.high)
     ret$estimate <- trans(ret$estimate)

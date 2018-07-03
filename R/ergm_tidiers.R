@@ -10,12 +10,12 @@
 #' The structure depends on the method chosen.
 #'
 #' @references Hunter DR, Handcock MS, Butts CT, Goodreau SM, Morris M (2008b).
-#' \pkg{ergm}: A Package to Fit, Simulate and Diagnose Exponential-Family 
-#' Models for Networks. \emph{Journal of Statistical Software}, 24(3). 
+#' \pkg{ergm}: A Package to Fit, Simulate and Diagnose Exponential-Family
+#' Models for Networks. \emph{Journal of Statistical Software}, 24(3).
 #' \url{http://www.jstatsoft.org/v24/i03/}.
-#' 
-#' @seealso \code{\link[ergm]{ergm}}, 
-#' \code{\link[ergm]{control.ergm}}, 
+#'
+#' @seealso \code{\link[ergm]{ergm}},
+#' \code{\link[ergm]{control.ergm}},
 #' \code{\link[ergm]{summary.ergm}}
 #'
 #' @name ergm_tidiers
@@ -23,6 +23,7 @@
 #' @param x an \pkg{ergm} object
 #' @examples
 #'
+#' \dontrun{
 #' if (require("ergm")) {
 #'     # Using the same example as the ergm package
 #'     # Load the Florentine marriage network data
@@ -43,6 +44,7 @@
 #'     glance(gest)
 #'     glance(gest, deviance = TRUE)
 #'     glance(gest, mcmc = TRUE)
+#' }
 #' }
 NULL
 
@@ -77,7 +79,7 @@ tidy.ergm <- function(x, conf.int = FALSE, conf.level = .95,
         return(process_ergm(ret, conf.int = FALSE, exponentiate = exponentiate))
     }
     co <- ergm::summary.ergm(x, ...)$coefs
-    
+
     nn <- c("estimate", "std.error", "mcmc.error", "p.value")
     if (inherits(co, "listof")) {
         # multiple response variables
@@ -87,7 +89,7 @@ tidy.ergm <- function(x, conf.int = FALSE, conf.level = .95,
     } else {
         ret <- fix_data_frame(co, nn[1:ncol(co)])
     }
-    
+
     process_ergm(ret, x, conf.int = conf.int, conf.level = conf.level,
                  exponentiate = exponentiate)
 }
@@ -134,26 +136,26 @@ glance.ergm <- function(x, deviance = FALSE, mcmc = FALSE, ...) {
         dyads <- statnet.common::NVL(dyads, network::network.initialize(1))
         dyads <- network::network.edgecount(dyads)
         dyads <- network::network.dyadcount(x$network, FALSE) - dyads
-        
+
         ret$null.deviance <- ergm::logLikNull(x)
         ret$null.deviance <- ifelse(is.na(ret$null.deviance), 0, -2 * ret$null.deviance)
         ret$df.null <- dyads
-        
+
         ret$residual.deviance <- -2 * ret$logLik
         ret$df.residual <- dyads - length(x$coef)
     }
-    
+
     # AIC and BIC
     ret$AIC <- tryCatch(stats::AIC(x), error = function(e) NULL)
     ret$BIC <- tryCatch(stats::BIC(x), error = function(e) NULL)
-    
+
     if (mcmc) {
         ret <- cbind(ret, data.frame(
             MCMC.interval = x$control$MCMC.interval,
             MCMC.burnin = x$control$MCMC.burnin,
             MCMC.samplesize = x$control$MCMC.samplesize))
     }
-    
+
     ret <- unrowname(ret)
     ret
 }
@@ -183,7 +185,7 @@ process_ergm <- function(ret, x, conf.int = FALSE, conf.level = .95,
     } else {
         trans <- identity
     }
-    
+
     if (conf.int) {
         z <- stats::qnorm(1 - (1 - conf.level) / 2)
         CI <- cbind(conf.low = ret$estimate - z * ret$std.error,
@@ -191,6 +193,6 @@ process_ergm <- function(ret, x, conf.int = FALSE, conf.level = .95,
         ret <- cbind(ret, trans(unrowname(CI)))
     }
     ret$estimate <- trans(ret$estimate)
-    
+
     ret
 }

@@ -79,6 +79,7 @@ There is no \code{augment} method for \pkg{ergm} objects.
 }
 \examples{
 
+\dontrun{
 if (require("ergm")) {
     # Using the same example as the ergm package
     # Load the Florentine marriage network data
@@ -101,14 +102,15 @@ if (require("ergm")) {
     glance(gest, mcmc = TRUE)
 }
 }
+}
 \references{
 Hunter DR, Handcock MS, Butts CT, Goodreau SM, Morris M (2008b).
-\pkg{ergm}: A Package to Fit, Simulate and Diagnose Exponential-Family 
-Models for Networks. \emph{Journal of Statistical Software}, 24(3). 
+\pkg{ergm}: A Package to Fit, Simulate and Diagnose Exponential-Family
+Models for Networks. \emph{Journal of Statistical Software}, 24(3).
 \url{http://www.jstatsoft.org/v24/i03/}.
 }
 \seealso{
-\code{\link[ergm]{ergm}}, 
-\code{\link[ergm]{control.ergm}}, 
+\code{\link[ergm]{ergm}},
+\code{\link[ergm]{control.ergm}},
 \code{\link[ergm]{summary.ergm}}
 }

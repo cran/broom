@@ -3,7 +3,8 @@ context("gamlss tidiers")
 test_that("tidy.gamlss and quick tidying work", {
     skip_if_not_installed("gamlss")
     skip_if_not_installed("gamlss.data")
-    
+    skip_if_not_installed("gamlss.dist")
+
     data(abdom, package = "gamlss.data")
     mod <- gamlss::gamlss(
         y ~ gamlss::pb(x),

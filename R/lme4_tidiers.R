@@ -1,18 +1,19 @@
 #' Tidying methods for mixed effects models
-#' 
+#'
 #' These methods tidy the coefficients of mixed effects models, particularly
 #' responses of the \code{merMod} class
-#' 
+#'
 #' @param x An object of class \code{merMod}, such as those from \code{lmer},
 #' \code{glmer}, or \code{nlmer}
-#' 
+#'
 #' @return All tidying methods return a \code{data.frame} without rownames.
 #' The structure depends on the method chosen.
-#' 
+#'
 #' @name lme4_tidiers
 #'
 #' @examples
-#' 
+#'
+#' \dontrun{
 #' if (require("lme4")) {
 #'     # example regressions are from lme4 documentation
 #'     lmm1 <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
@@ -23,14 +24,14 @@
 #'     tidy(lmm1, effects = "ran_modes", conf.int=TRUE)
 #'     head(augment(lmm1, sleepstudy))
 #'     glance(lmm1)
-#'     
+#'
 #'     glmm1 <- glmer(cbind(incidence, size - incidence) ~ period + (1 | herd),
 #'                   data = cbpp, family = binomial)
 #'     tidy(glmm1)
 #'     tidy(glmm1, effects = "fixed")
 #'     head(augment(glmm1, cbpp))
 #'     glance(glmm1)
-#'     
+#'
 #'     startvec <- c(Asym = 200, xmid = 725, scal = 350)
 #'     nm1 <- nlmer(circumference ~ SSlogis(age, Asym, xmid, scal) ~ Asym|Tree,
 #'                   Orange, start = startvec)
@@ -39,11 +40,12 @@
 #'     head(augment(nm1, Orange))
 #'     glance(nm1)
 #' }
+#' }
 NULL
 
 
 #' @rdname lme4_tidiers
-#' 
+#'
 #' @param effects A character vector including one or more of "fixed" (fixed-effect parameters), "ran_pars" (variances and covariances or standard deviations and correlations of random effect terms) or "ran_modes" (conditional modes/BLUPs/latent variable estimates)
 #' @param conf.int whether to include a confidence interval
 #' @param conf.level confidence level for CI
@@ -51,7 +53,7 @@ NULL
 #' @param scales scales on which to report the variables: for random effects, the choices are \sQuote{"sdcor"} (standard deviations and correlations: the default if \code{scales} is \code{NULL}) or \sQuote{"vcov"} (variances and covariances). \code{NA} means no transformation, appropriate e.g. for fixed effects; inverse-link transformations (exponentiation
 #' or logistic) are not yet implemented, but may be in the future.
 #' @param ran_prefix a length-2 character vector specifying the strings to use as prefixes for self- (variance/standard deviation) and cross- (covariance/correlation) random effects terms
-#' 
+#'
 #' @return \code{tidy} returns one row for each estimated effect, either
 #' with groups depending on the \code{effects} parameter.
 #' It contains the columns
@@ -62,14 +64,14 @@ NULL
 #'   \item{std.error}{standard error}
 #'   \item{statistic}{t- or Z-statistic (\code{NA} for modes)}
 #'   \item{p.value}{P-value computed from t-statistic (may be missing/NA)}
-#' 
+#'
 #' @importFrom plyr ldply rbind.fill
 #' @import dplyr
 #' @importFrom tidyr gather spread
 #' @importFrom nlme VarCorr ranef
 ## FIXME: is it OK/sensible to import these from (priority='recommended')
 ## nlme rather than (priority=NA) lme4?
-#' 
+#'
 #' @export
 tidy.merMod <- function(x, effects = c("ran_pars","fixed"),
                         scales = NULL, ## c("sdcor",NA),
@@ -146,7 +148,7 @@ tidy.merMod <- function(x, effects = c("ran_pars","fixed"),
             nn <- c(nn,"conf.low","conf.high")
         }
 
-        
+
         ## replicate lme4:::tnames, more or less
         ret_list$ran_pars <- fix_data_frame(ret[c("grp", rscale)],
                                             newnames = c("group", "estimate"))
@@ -205,32 +207,32 @@ tidy.merMod <- function(x, effects = c("ran_pars","fixed"),
 
 
 #' @rdname lme4_tidiers
-#' 
+#'
 #' @param data original data this was fitted on; if not given this will
 #' attempt to be reconstructed
 #' @param newdata new data to be used for prediction; optional
-#' 
+#'
 #' @template augment_NAs
-#' 
+#'
 #' @return \code{augment} returns one row for each original observation,
 #' with columns (each prepended by a .) added. Included are the columns
 #'   \item{.fitted}{predicted values}
 #'   \item{.resid}{residuals}
 #'   \item{.fixed}{predicted values with no random effects}
-#' 
+#'
 #' Also added for "merMod" objects, but not for "mer" objects,
 #' are values from the response object within the model (of type
 #' \code{lmResp}, \code{glmResp}, \code{nlsResp}, etc). These include \code{".mu",
 #' ".offset", ".sqrtXwt", ".sqrtrwt", ".eta"}.
 #'
 #' @export
-augment.merMod <- function(x, data = stats::model.frame(x), newdata, ...) {    
+augment.merMod <- function(x, data = stats::model.frame(x), newdata, ...) {
     # move rownames if necessary
     if (missing(newdata)) {
         newdata <- NULL
     }
     ret <- augment_columns(x, data, newdata, se.fit = NULL)
-    
+
     # add predictions with no random effects (population means)
     predictions <- stats::predict(x, re.form = NA)
     # some cases, such as values returned from nlmer, return more than one
@@ -247,7 +249,7 @@ augment.merMod <- function(x, data = stats::model.frame(x), newdata, ...) {
     cols <- lapply(respCols, function(n) x@resp[[n]])
     names(cols) <- paste0(".", respCols)
     cols <- as.data.frame(compact(cols))  # remove missing fields
-    
+
     cols <- insert_NAs(cols, ret)
     if (length(cols) > 0) {
         ret <- cbind(ret, cols)
@@ -258,16 +260,16 @@ augment.merMod <- function(x, data = stats::model.frame(x), newdata, ...) {
 
 
 #' @rdname lme4_tidiers
-#' 
+#'
 #' @param ... extra arguments (not used)
-#' 
+#'
 #' @return \code{glance} returns one row with the columns
 #'   \item{sigma}{the square root of the estimated residual variance}
 #'   \item{logLik}{the data's log-likelihood under the model}
 #'   \item{AIC}{the Akaike Information Criterion}
 #'   \item{BIC}{the Bayesian Information Criterion}
 #'   \item{deviance}{deviance}
-#' 
+#'
 #' @export
 glance.merMod <- function(x, ...) {
     # We cannot use stats::sigma or lme4::sigma here, even in an
