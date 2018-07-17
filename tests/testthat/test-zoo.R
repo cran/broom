@@ -1,14 +1,18 @@
-context("zoo tidiers")
+context("zoo")
 
-test_that("tidy.zoo works", {
-    skip_if_not_installed("zoo")
-    
-    set.seed(1071)
-    Z.index <- zoo::as.Date(sample(12450:12500, 10))
-    Z.data <- matrix(rnorm(30), ncol = 3)
-    colnames(Z.data) <- c("Aa", "Bb", "Cc")
-    Z <- zoo::zoo(Z.data, Z.index)
+skip_if_not_installed("zoo")
 
-    td <- tidy(Z)
-    check_tidy(td, exp.row = 30, exp.col = 3)
+test_that("tidy.zoo", {
+  set.seed(1071)
+  z.index <- zoo::as.Date(sample(12450:12500, 10))
+  z.data <- matrix(rnorm(30), ncol = 3)
+  
+  colnames(z.data) <- c("Aa", "Bb", "Cc")
+  z <- zoo::zoo(z.data, z.index)
+  
+  check_arguments(tidy.zoo)
+
+  td <- tidy(z)
+  check_tidy_output(td)
+  check_dims(td, 30, 3)
 })
