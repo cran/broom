@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2018-07-16" />
+<meta name="date" content="2018-12-04" />
 
 <title>broom and dplyr</title>
 
@@ -19,46 +19,254 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
 
-<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 </head>
 
@@ -68,7 +276,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">broom and dplyr</h1>
-<h4 class="date"><em>2018-07-16</em></h4>
+<h4 class="date"><em>2018-12-04</em></h4>
 
 
 
@@ -76,13 +284,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1>broom and dplyr</h1>
 <p>While broom is useful for summarizing the result of a single analysis in a consistent format, it is really designed for high-throughput applications, where you must combine results from multiple analyses. These could be subgroups of data, analyses using different models, bootstrap replicates, permutations, and so on. In particular, it plays well with the <code>nest/unnest</code> functions in <code>tidyr</code> and the <code>map</code> function in <code>purrr</code>.</p>
 <p>Let’s try this on a simple dataset, the built-in <code>Orange</code>. We start by coercing <code>Orange</code> to a <code>tibble</code>. This gives a nicer print method that will especially useful later on when we start working with list-columns.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(broom)
-<span class="kw">library</span>(tibble)
-
-<span class="kw">data</span>(Orange)
-
-Orange &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(Orange)
-Orange</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(broom)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(tibble)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">data</span>(Orange)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">Orange &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(Orange)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">Orange</a></code></pre></div>
 <pre><code>## # A tibble: 35 x 3
 ##    Tree    age circumference
 ##  * &lt;ord&gt; &lt;dbl&gt;         &lt;dbl&gt;
@@ -98,19 +306,19 @@ Orange</code></pre></div>
 ## 10 2       664           111
 ## # ... with 25 more rows</code></pre>
 <p>This contains 35 observations of three variables: <code>Tree</code>, <code>age</code>, and <code>circumference</code>. <code>Tree</code> is a factor with five levels describing five trees. As might be expected, age and circumference are correlated:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(Orange<span class="op">$</span>age, Orange<span class="op">$</span>circumference)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">cor</span>(Orange<span class="op">$</span>age, Orange<span class="op">$</span>circumference)</a></code></pre></div>
 <pre><code>## [1] 0.9135189</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-
-<span class="kw">ggplot</span>(Orange, <span class="kw">aes</span>(age, circumference, <span class="dt">color =</span> Tree)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>()</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw">ggplot</span>(Orange, <span class="kw">aes</span>(age, circumference, <span class="dt">color =</span> Tree)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_line</span>()</a></code></pre></div>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
 <p>Suppose you want to test for correlations individually <em>within</em> each tree. You can do this with dplyr’s <code>group_by</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
-
-Orange <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">group_by</span>(Tree) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">correlation =</span> <span class="kw">cor</span>(age, circumference))</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">Orange <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="st">  </span><span class="kw">group_by</span>(Tree) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">correlation =</span> <span class="kw">cor</span>(age, circumference))</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 2
 ##   Tree  correlation
 ##   &lt;ord&gt;       &lt;dbl&gt;
@@ -121,10 +329,10 @@ Orange <span class="op">%&gt;%</span><span class="st"> </span>
 ## 5 4           0.984</code></pre>
 <p>(Note that the correlations are much higher than the aggregated one, and furthermore we can now see it is similar across trees).</p>
 <p>Suppose that instead of simply estimating a correlation, we want to perform a hypothesis test with <code>cor.test</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ct &lt;-<span class="st"> </span><span class="kw">cor.test</span>(Orange<span class="op">$</span>age, Orange<span class="op">$</span>circumference)
-ct</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">ct &lt;-<span class="st"> </span><span class="kw">cor.test</span>(Orange<span class="op">$</span>age, Orange<span class="op">$</span>circumference)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">ct</a></code></pre></div>
 <pre><code>## 
-##  Pearson's product-moment correlation
+##  Pearson&#39;s product-moment correlation
 ## 
 ## data:  Orange$age and Orange$circumference
 ## t = 12.9, df = 33, p-value = 1.931e-14
@@ -135,21 +343,21 @@ ct</code></pre></div>
 ##       cor 
 ## 0.9135189</code></pre>
 <p>This contains multiple values we could want in our output. Some are vectors of length 1, such as the p-value and the estimate, and some are longer, such as the confidence interval. We can get this into a nicely organized tibble using the <code>tidy</code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tidy</span>(ct)</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">tidy</span>(ct)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 8
-##   estimate statistic  p.value parameter conf.low conf.high method         
-##      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;          
-## 1    0.914      12.9 1.93e-14        33    0.834     0.956 Pearson's prod~
+##   estimate statistic  p.value parameter conf.low conf.high method
+##      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; 
+## 1    0.914      12.9 1.93e-14        33    0.834     0.956 Pears~
 ## # ... with 1 more variable: alternative &lt;chr&gt;</code></pre>
 <p>Often, we want to perform multiple tests or fit multiple models, each on a different part of the data. In this case, we recommend a <code>nest-map-unnest</code> workflow. For example, suppose we want to perform correlation tests for each different tree. We start by <code>nest</code>ing our data based on the group of interest:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
-<span class="kw">library</span>(purrr)
-
-nested &lt;-<span class="st"> </span>Orange <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>Tree)</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">library</span>(purrr)</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">nested &lt;-<span class="st"> </span>Orange <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>Tree)</a></code></pre></div>
 <p>Then we run a correlation test for each nested tibble using <code>purrr::map</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nested <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">test =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">cor.test</span>(.x<span class="op">$</span>age, .x<span class="op">$</span>circumference)))</code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">nested <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">test =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">cor.test</span>(.x<span class="op">$</span>age, .x<span class="op">$</span>circumference)))</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 3
 ##   Tree  data             test       
 ##   &lt;ord&gt; &lt;list&gt;           &lt;list&gt;     
@@ -159,11 +367,11 @@ nested &lt;-<span class="st"> </span>Orange <span class="op">%&gt;%</span><span 
 ## 4 4     &lt;tibble [7 x 2]&gt; &lt;S3: htest&gt;
 ## 5 5     &lt;tibble [7 x 2]&gt; &lt;S3: htest&gt;</code></pre>
 <p>This results in a list-column of S3 objects. We want to tidy each of the objects, which we can also do with <code>map</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nested <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(
-    <span class="dt">test =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">cor.test</span>(.x<span class="op">$</span>age, .x<span class="op">$</span>circumference)), <span class="co"># S3 list-col</span>
-    <span class="dt">tidied =</span> <span class="kw">map</span>(test, tidy)
-  ) </code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">nested <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">    <span class="dt">test =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">cor.test</span>(.x<span class="op">$</span>age, .x<span class="op">$</span>circumference)), <span class="co"># S3 list-col</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">    <span class="dt">tidied =</span> <span class="kw">map</span>(test, tidy)</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">  ) </a></code></pre></div>
 <pre><code>## # A tibble: 5 x 4
 ##   Tree  data             test        tidied          
 ##   &lt;ord&gt; &lt;list&gt;           &lt;list&gt;      &lt;list&gt;          
@@ -173,26 +381,26 @@ nested &lt;-<span class="st"> </span>Orange <span class="op">%&gt;%</span><span 
 ## 4 4     &lt;tibble [7 x 2]&gt; &lt;S3: htest&gt; &lt;tibble [1 x 8]&gt;
 ## 5 5     &lt;tibble [7 x 2]&gt; &lt;S3: htest&gt; &lt;tibble [1 x 8]&gt;</code></pre>
 <p>Finally, we want to unnest the tidied data frames so we can see the results in a flat tibble. All together, this looks like:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Orange <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>Tree) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(
-    <span class="dt">test =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">cor.test</span>(.x<span class="op">$</span>age, .x<span class="op">$</span>circumference)), <span class="co"># S3 list-col</span>
-    <span class="dt">tidied =</span> <span class="kw">map</span>(test, tidy)
-  ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">unnest</span>(tidied, <span class="dt">.drop =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">Orange <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>Tree) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">    <span class="dt">test =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">cor.test</span>(.x<span class="op">$</span>age, .x<span class="op">$</span>circumference)), <span class="co"># S3 list-col</span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5">    <span class="dt">tidied =</span> <span class="kw">map</span>(test, tidy)</a>
+<a class="sourceLine" id="cb17-6" data-line-number="6">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="st">  </span><span class="kw">unnest</span>(tidied, <span class="dt">.drop =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 9
-##   Tree  estimate statistic  p.value parameter conf.low conf.high method   
-##   &lt;ord&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;    
-## 1 1        0.985      13.0  4.85e-5         5    0.901     0.998 Pearson'~
-## 2 2        0.987      13.9  3.43e-5         5    0.914     0.998 Pearson'~
-## 3 3        0.988      14.4  2.90e-5         5    0.919     0.998 Pearson'~
-## 4 4        0.984      12.5  5.73e-5         5    0.895     0.998 Pearson'~
-## 5 5        0.988      14.1  3.18e-5         5    0.916     0.998 Pearson'~
+##   Tree  estimate statistic p.value parameter conf.low conf.high method
+##   &lt;ord&gt;    &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt; 
+## 1 1        0.985      13.0 4.85e-5         5    0.901     0.998 Pears~
+## 2 2        0.987      13.9 3.43e-5         5    0.914     0.998 Pears~
+## 3 3        0.988      14.4 2.90e-5         5    0.919     0.998 Pears~
+## 4 4        0.984      12.5 5.73e-5         5    0.895     0.998 Pears~
+## 5 5        0.988      14.1 3.18e-5         5    0.916     0.998 Pears~
 ## # ... with 1 more variable: alternative &lt;chr&gt;</code></pre>
 <p>Note that the <code>.drop</code> argument to <code>tidyr::unnest</code> is often useful.</p>
 <p>This workflow becomes even more useful when applied to regressions. Untidy ouput for a regression looks like:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lm_fit &lt;-<span class="st"> </span><span class="kw">lm</span>(age <span class="op">~</span><span class="st"> </span>circumference, <span class="dt">data =</span> Orange)
-<span class="kw">summary</span>(lm_fit)</code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">lm_fit &lt;-<span class="st"> </span><span class="kw">lm</span>(age <span class="op">~</span><span class="st"> </span>circumference, <span class="dt">data =</span> Orange)</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw">summary</span>(lm_fit)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = age ~ circumference, data = Orange)
@@ -206,26 +414,26 @@ nested &lt;-<span class="st"> </span>Orange <span class="op">%&gt;%</span><span 
 ## (Intercept)    16.6036    78.1406   0.212    0.833    
 ## circumference   7.8160     0.6059  12.900 1.93e-14 ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 203.1 on 33 degrees of freedom
 ## Multiple R-squared:  0.8345, Adjusted R-squared:  0.8295 
 ## F-statistic: 166.4 on 1 and 33 DF,  p-value: 1.931e-14</code></pre>
 <p>where we tidy these results, we get multiple rows of output for each model:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tidy</span>(lm_fit)</code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">tidy</span>(lm_fit)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 5
 ##   term          estimate std.error statistic  p.value
 ##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 (Intercept)      16.6     78.1       0.212 8.33e- 1
 ## 2 circumference     7.82     0.606    12.9   1.93e-14</code></pre>
 <p>Now we can handle multiple regressions at once using exactly the same workflow as before:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Orange <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>Tree) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(
-    <span class="dt">fit =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">lm</span>(age <span class="op">~</span><span class="st"> </span>circumference, <span class="dt">data =</span> .x)),
-    <span class="dt">tidied =</span> <span class="kw">map</span>(fit, tidy)
-  ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">unnest</span>(tidied)</code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">Orange <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>Tree) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb23-4" data-line-number="4">    <span class="dt">fit =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">lm</span>(age <span class="op">~</span><span class="st"> </span>circumference, <span class="dt">data =</span> .x)),</a>
+<a class="sourceLine" id="cb23-5" data-line-number="5">    <span class="dt">tidied =</span> <span class="kw">map</span>(fit, tidy)</a>
+<a class="sourceLine" id="cb23-6" data-line-number="6">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-7" data-line-number="7"><span class="st">  </span><span class="kw">unnest</span>(tidied)</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 6
 ##    Tree  term          estimate std.error statistic   p.value
 ##    &lt;ord&gt; &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
@@ -240,9 +448,9 @@ nested &lt;-<span class="st"> </span>Orange <span class="op">%&gt;%</span><span 
 ##  9 5     (Intercept)     -54.5     76.9      -0.709 0.510    
 ## 10 5     circumference     8.79     0.621    14.1   0.0000318</code></pre>
 <p>You can just as easily use multiple predictors in the regressions, as shown here on the <code>mtcars</code> dataset. We nest the data into automatic and manual cars (the <code>am</code> column), then perform the regression within each nested tibble.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(mtcars)
-mtcars &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mtcars)  <span class="co"># to play nicely with list-cols</span>
-mtcars</code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">data</span>(mtcars)</a>
+<a class="sourceLine" id="cb25-2" data-line-number="2">mtcars &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mtcars)  <span class="co"># to play nicely with list-cols</span></a>
+<a class="sourceLine" id="cb25-3" data-line-number="3">mtcars</a></code></pre></div>
 <pre><code>## # A tibble: 32 x 11
 ##      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
 ##  * &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -257,13 +465,13 @@ mtcars</code></pre></div>
 ##  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
 ## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
 ## # ... with 22 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>am) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(
-    <span class="dt">fit =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">lm</span>(wt <span class="op">~</span><span class="st"> </span>mpg <span class="op">+</span><span class="st"> </span>qsec <span class="op">+</span><span class="st"> </span>gear, <span class="dt">data =</span> .x)),  <span class="co"># S3 list-col</span>
-    <span class="dt">tidied =</span> <span class="kw">map</span>(fit, tidy)
-  ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">unnest</span>(tidied)</code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">mtcars <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>am) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb27-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb27-4" data-line-number="4">    <span class="dt">fit =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">lm</span>(wt <span class="op">~</span><span class="st"> </span>mpg <span class="op">+</span><span class="st"> </span>qsec <span class="op">+</span><span class="st"> </span>gear, <span class="dt">data =</span> .x)),  <span class="co"># S3 list-col</span></a>
+<a class="sourceLine" id="cb27-5" data-line-number="5">    <span class="dt">tidied =</span> <span class="kw">map</span>(fit, tidy)</a>
+<a class="sourceLine" id="cb27-6" data-line-number="6">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb27-7" data-line-number="7"><span class="st">  </span><span class="kw">unnest</span>(tidied)</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 6
 ##      am term        estimate std.error statistic  p.value
 ##   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
@@ -276,17 +484,17 @@ mtcars</code></pre></div>
 ## 7     0 qsec          0.0919    0.0983    0.935  0.365   
 ## 8     0 gear          0.147     0.368     0.398  0.696</code></pre>
 <p>What if you want not just the <code>tidy</code> output, but the <code>augment</code> and <code>glance</code> outputs as well, while still performing each regression only once? Since we’re using list-columns, we can just fit the model once and use multiple list-columns to store the tidied, glanced and augmented outputs.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">regressions &lt;-<span class="st"> </span>mtcars <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>am) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(
-    <span class="dt">fit =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">lm</span>(wt <span class="op">~</span><span class="st"> </span>mpg <span class="op">+</span><span class="st"> </span>qsec <span class="op">+</span><span class="st"> </span>gear, <span class="dt">data =</span> .x)),
-    <span class="dt">tidied =</span> <span class="kw">map</span>(fit, tidy),
-    <span class="dt">glanced =</span> <span class="kw">map</span>(fit, glance),
-    <span class="dt">augmented =</span> <span class="kw">map</span>(fit, augment)
-  )
-
-regressions <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">unnest</span>(tidied)</code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">regressions &lt;-<span class="st"> </span>mtcars <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>am) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb29-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb29-4" data-line-number="4">    <span class="dt">fit =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">lm</span>(wt <span class="op">~</span><span class="st"> </span>mpg <span class="op">+</span><span class="st"> </span>qsec <span class="op">+</span><span class="st"> </span>gear, <span class="dt">data =</span> .x)),</a>
+<a class="sourceLine" id="cb29-5" data-line-number="5">    <span class="dt">tidied =</span> <span class="kw">map</span>(fit, tidy),</a>
+<a class="sourceLine" id="cb29-6" data-line-number="6">    <span class="dt">glanced =</span> <span class="kw">map</span>(fit, glance),</a>
+<a class="sourceLine" id="cb29-7" data-line-number="7">    <span class="dt">augmented =</span> <span class="kw">map</span>(fit, augment)</a>
+<a class="sourceLine" id="cb29-8" data-line-number="8">  )</a>
+<a class="sourceLine" id="cb29-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb29-10" data-line-number="10">regressions <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb29-11" data-line-number="11"><span class="st">  </span><span class="kw">unnest</span>(tidied)</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 6
 ##      am term        estimate std.error statistic  p.value
 ##   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
@@ -298,17 +506,17 @@ regressions <span class="op">%&gt;%</span><span class="st"> </span>
 ## 6     0 mpg          -0.192     0.0443   -4.33   0.000591
 ## 7     0 qsec          0.0919    0.0983    0.935  0.365   
 ## 8     0 gear          0.147     0.368     0.398  0.696</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">regressions <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">unnest</span>(glanced, <span class="dt">.drop =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">regressions <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="st">  </span><span class="kw">unnest</span>(glanced, <span class="dt">.drop =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 12
-##      am r.squared adj.r.squared sigma statistic  p.value    df    logLik
-##   &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;     &lt;dbl&gt;
-## 1     1     0.833         0.778 0.291     15.0  0.000759     4  -0.00580
-## 2     0     0.625         0.550 0.522      8.32 0.00170      4 -12.4    
+##      am r.squared adj.r.squared sigma statistic p.value    df   logLik
+##   &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt;
+## 1     1     0.833         0.778 0.291     15.0  7.59e-4     4 -5.80e-3
+## 2     0     0.625         0.550 0.522      8.32 1.70e-3     4 -1.24e+1
 ## # ... with 4 more variables: AIC &lt;dbl&gt;, BIC &lt;dbl&gt;, deviance &lt;dbl&gt;,
 ## #   df.residual &lt;int&gt;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">regressions <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">unnest</span>(augmented)</code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">regressions <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="st">  </span><span class="kw">unnest</span>(augmented)</a></code></pre></div>
 <pre><code>## # A tibble: 32 x 12
 ##       am    wt   mpg  qsec  gear .fitted .se.fit  .resid  .hat .sigma
 ##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
