@@ -16,13 +16,13 @@ to \code{FALSE}.}
 \item{mcmc}{Logical indicating whether or not to report MCMC interval,
 burn-in and sample size used to estimate the model. Defaults to \code{FALSE}.}
 
-\item{...}{Additional arguments to pass to \code{\link[ergm:summary.ergm]{ergm::summary.ergm()}}.
+\item{...}{Additional arguments to pass to \code{\link[ergm:summary]{ergm::summary()}}.
 \strong{Cautionary note}: Mispecified arguments may be silently ignored.}
 }
 \value{
 \code{glance.ergm} returns a one-row data.frame with the columns
 \item{independence}{Whether the model assumed dyadic independence}
-\item{iterations}{The number of iterations performed before convergence}
+\item{iterations}{The number of MCMLE iterations performed before convergence}
 \item{logLik}{If applicable, the log-likelihood associated with the model}
 \item{AIC}{The Akaike Information Criterion}
 \item{BIC}{The Bayesian Information Criterion}
@@ -33,12 +33,6 @@ data frame will also contain the columns
 \item{df.null}{The degrees of freedom of the null deviance}
 \item{residual.deviance}{The residual deviance of the model}
 \item{df.residual}{The degrees of freedom of the residual deviance}
-
-Last, if \code{mcmc = TRUE}, the data frame will also contain
-the columns
-\item{MCMC.interval}{The interval used during MCMC estimation}
-\item{MCMC.burnin}{The burn-in period of the MCMC estimation}
-\item{MCMC.samplesize}{The sample size used during MCMC estimation}
 }
 \description{
 Glance accepts a model object and returns a \code{\link[tibble:tibble]{tibble::tibble()}}
