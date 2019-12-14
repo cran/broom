@@ -1,10 +1,10 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
-## ----echo = FALSE, message = FALSE---------------------------------------
+## ----echo = FALSE, message = FALSE--------------------------------------------
 library(broom)
 library(dplyr)
 library(stringr)

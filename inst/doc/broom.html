@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2019-04-07" />
+<meta name="date" content="2019-12-13" />
 
 <title>Introduction to broom</title>
 
@@ -36,7 +36,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -95,7 +95,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -301,7 +301,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 <h1 class="title toc-ignore">Introduction to broom</h1>
-<h4 class="date">2019-04-07</h4>
+<h4 class="date">2019-12-13</h4>
 
 
 
@@ -325,8 +325,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </ul>
 <p>Note that some classes may have only one or two of these methods defined.</p>
 <p>Consider as an illustrative example a linear fit on the built-in <code>mtcars</code> dataset.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">lmfit &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>wt, mtcars)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">lmfit</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">lmfit &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>wt, mtcars)</a>
+<a class="sourceLine" id="cb1-2" title="2">lmfit</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = mpg ~ wt, data = mtcars)
@@ -334,7 +334,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ## Coefficients:
 ## (Intercept)           wt  
 ##      37.285       -5.344</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">summary</span>(lmfit)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">summary</span>(lmfit)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = mpg ~ wt, data = mtcars)
@@ -353,10 +353,10 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ## Residual standard error: 3.046 on 30 degrees of freedom
 ## Multiple R-squared:  0.7528, Adjusted R-squared:  0.7446 
 ## F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
-<p>This summary output is useful enough if you just want to read it. However, converting it to a data frame that contains all the same information, so that you can combine it with other models or do further analysis, is not trivial. You have to do <code>coef(summary(lmfit))</code> to get a matrix of coefficients, the terms are still stored in row names, and the column names are inconsistent with other packages (e.g. <code>Pr(&gt;|t|)</code> compared to <code>p.value</code>).</p>
+<p>This summary output is useful enough if you just want to read it. However, converting it to a data frame that contains all the same information, so that you can combine it with other models or do further analysis, is not trivial. You have to do <code>coef(summary(lmfit))</code> to get a matrix of coefficients, the terms are still stored in row names, and the column names are inconsistent with other packages (e.g. <code>Pr(&gt;|t|)</code> compared to <code>p.value</code>).</p>
 <p>Instead, you can use the <code>tidy</code> function, from the broom package, on the fit:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(broom)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">tidy</span>(lmfit)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">library</span>(broom)</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="kw">tidy</span>(lmfit)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 5
 ##   term        estimate std.error statistic  p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
@@ -364,29 +364,29 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ## 2 wt             -5.34     0.559     -9.56 1.29e-10</code></pre>
 <p>This gives you a data.frame representation. Note that the row names have been moved into a column called <code>term</code>, and the column names are simple and consistent (and can be accessed using <code>$</code>).</p>
 <p>Instead of viewing the coefficients, you might be interested in the fitted values and residuals for each of the original points in the regression. For this, use <code>augment</code>, which augments the original data with information from the model:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">augment</span>(lmfit)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">augment</span>(lmfit)</a></code></pre></div>
 <pre><code>## # A tibble: 32 x 10
-##    .rownames   mpg    wt .fitted .se.fit .resid   .hat .sigma .cooksd
-##    &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
-##  1 Mazda RX4  21    2.62    23.3   0.634 -2.28  0.0433   3.07 1.33e-2
-##  2 Mazda RX~  21    2.88    21.9   0.571 -0.920 0.0352   3.09 1.72e-3
-##  3 Datsun 7~  22.8  2.32    24.9   0.736 -2.09  0.0584   3.07 1.54e-2
-##  4 Hornet 4~  21.4  3.22    20.1   0.538  1.30  0.0313   3.09 3.02e-3
-##  5 Hornet S~  18.7  3.44    18.9   0.553 -0.200 0.0329   3.10 7.60e-5
-##  6 Valiant    18.1  3.46    18.8   0.555 -0.693 0.0332   3.10 9.21e-4
-##  7 Duster 3~  14.3  3.57    18.2   0.573 -3.91  0.0354   3.01 3.13e-2
-##  8 Merc 240D  24.4  3.19    20.2   0.539  4.16  0.0313   3.00 3.11e-2
-##  9 Merc 230   22.8  3.15    20.5   0.540  2.35  0.0314   3.07 9.96e-3
-## 10 Merc 280   19.2  3.44    18.9   0.553  0.300 0.0329   3.10 1.71e-4
-## # ... with 22 more rows, and 1 more variable: .std.resid &lt;dbl&gt;</code></pre>
+##    .rownames   mpg    wt .fitted .se.fit .resid   .hat .sigma .cooksd .std.resid
+##    &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;
+##  1 Mazda RX4  21    2.62    23.3   0.634 -2.28  0.0433   3.07 1.33e-2    -0.766 
+##  2 Mazda RX…  21    2.88    21.9   0.571 -0.920 0.0352   3.09 1.72e-3    -0.307 
+##  3 Datsun 7…  22.8  2.32    24.9   0.736 -2.09  0.0584   3.07 1.54e-2    -0.706 
+##  4 Hornet 4…  21.4  3.22    20.1   0.538  1.30  0.0313   3.09 3.02e-3     0.433 
+##  5 Hornet S…  18.7  3.44    18.9   0.553 -0.200 0.0329   3.10 7.60e-5    -0.0668
+##  6 Valiant    18.1  3.46    18.8   0.555 -0.693 0.0332   3.10 9.21e-4    -0.231 
+##  7 Duster 3…  14.3  3.57    18.2   0.573 -3.91  0.0354   3.01 3.13e-2    -1.31  
+##  8 Merc 240D  24.4  3.19    20.2   0.539  4.16  0.0313   3.00 3.11e-2     1.39  
+##  9 Merc 230   22.8  3.15    20.5   0.540  2.35  0.0314   3.07 9.96e-3     0.784 
+## 10 Merc 280   19.2  3.44    18.9   0.553  0.300 0.0329   3.10 1.71e-4     0.100 
+## # … with 22 more rows</code></pre>
 <p>Note that each of the new columns begins with a <code>.</code> (to avoid overwriting any of the original columns).</p>
 <p>Finally, several summary statistics are computed for the entire regression, such as R^2 and the F-statistic. These can be accessed with the <code>glance</code> function:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">glance</span>(lmfit)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">glance</span>(lmfit)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 11
 ##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
 ##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1     0.753         0.745  3.05      91.4 1.29e-10     2  -80.0  166.  170.
-## # ... with 2 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;</code></pre>
+## # … with 2 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;</code></pre>
 <p>This distinction between the <code>tidy</code>, <code>augment</code> and <code>glance</code> functions is explored in a different context in the <a href="kmeans.html">k-means vignette</a>.</p>
 </div>
 <div id="other-examples" class="section level2">
@@ -394,59 +394,58 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="generalized-linear-and-non-linear-models" class="section level3">
 <h3>Generalized linear and non-linear models</h3>
 <p>These functions apply equally well to the output from <code>glm</code>:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">glmfit &lt;-<span class="st"> </span><span class="kw">glm</span>(am <span class="op">~</span><span class="st"> </span>wt, mtcars, <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>)</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw">tidy</span>(glmfit)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">glmfit &lt;-<span class="st"> </span><span class="kw">glm</span>(am <span class="op">~</span><span class="st"> </span>wt, mtcars, <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>)</a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="kw">tidy</span>(glmfit)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 5
 ##   term        estimate std.error statistic p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
 ## 1 (Intercept)    12.0       4.51      2.67 0.00759
 ## 2 wt             -4.02      1.44     -2.80 0.00509</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">augment</span>(glmfit)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">augment</span>(glmfit)</a></code></pre></div>
 <pre><code>## # A tibble: 32 x 10
-##    .rownames    am    wt .fitted .se.fit .resid   .hat .sigma .cooksd
-##    &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
-##  1 Mazda RX4     1  2.62   1.50    0.918  0.635 0.126   0.803 0.0184 
-##  2 Mazda RX~     1  2.88   0.471   0.676  0.985 0.108   0.790 0.0424 
-##  3 Datsun 7~     1  2.32   2.70    1.28   0.360 0.0963  0.810 0.00394
-##  4 Hornet 4~     0  3.22  -0.897   0.601 -0.827 0.0744  0.797 0.0177 
-##  5 Hornet S~     0  3.44  -1.80    0.749 -0.553 0.0681  0.806 0.00647
-##  6 Valiant       0  3.46  -1.88    0.767 -0.532 0.0674  0.807 0.00590
-##  7 Duster 3~     0  3.57  -2.33    0.878 -0.432 0.0625  0.809 0.00348
-##  8 Merc 240D     0  3.19  -0.796   0.593 -0.863 0.0755  0.796 0.0199 
-##  9 Merc 230      0  3.15  -0.635   0.586 -0.922 0.0776  0.793 0.0242 
-## 10 Merc 280      0  3.44  -1.80    0.749 -0.553 0.0681  0.806 0.00647
-## # ... with 22 more rows, and 1 more variable: .std.resid &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">glance</span>(glmfit)</a></code></pre></div>
+##    .rownames    am    wt .fitted .se.fit .resid   .hat .sigma .cooksd .std.resid
+##    &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;
+##  1 Mazda RX4     1  2.62   1.50    0.918  0.635 0.126   0.803 0.0184       0.680
+##  2 Mazda RX…     1  2.88   0.471   0.676  0.985 0.108   0.790 0.0424       1.04 
+##  3 Datsun 7…     1  2.32   2.70    1.28   0.360 0.0963  0.810 0.00394      0.379
+##  4 Hornet 4…     0  3.22  -0.897   0.601 -0.827 0.0744  0.797 0.0177      -0.860
+##  5 Hornet S…     0  3.44  -1.80    0.749 -0.553 0.0681  0.806 0.00647     -0.572
+##  6 Valiant       0  3.46  -1.88    0.767 -0.532 0.0674  0.807 0.00590     -0.551
+##  7 Duster 3…     0  3.57  -2.33    0.878 -0.432 0.0625  0.809 0.00348     -0.446
+##  8 Merc 240D     0  3.19  -0.796   0.593 -0.863 0.0755  0.796 0.0199      -0.897
+##  9 Merc 230      0  3.15  -0.635   0.586 -0.922 0.0776  0.793 0.0242      -0.960
+## 10 Merc 280      0  3.44  -1.80    0.749 -0.553 0.0681  0.806 0.00647     -0.572
+## # … with 22 more rows</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">glance</span>(glmfit)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 7
 ##   null.deviance df.null logLik   AIC   BIC deviance df.residual
 ##           &lt;dbl&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt;
 ## 1          43.2      31  -9.59  23.2  26.1     19.2          30</code></pre>
 <p>Note that the statistics computed by <code>glance</code> are different for <code>glm</code> objects than for <code>lm</code> (e.g. deviance rather than R^2):</p>
 <p>These functions also work on other fits, such as nonlinear models (<code>nls</code>):</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">nlsfit &lt;-<span class="st"> </span><span class="kw">nls</span>(mpg <span class="op">~</span><span class="st"> </span>k <span class="op">/</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>b, mtcars, <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">k=</span><span class="dv">1</span>, <span class="dt">b=</span><span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">tidy</span>(nlsfit)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">nlsfit &lt;-<span class="st"> </span><span class="kw">nls</span>(mpg <span class="op">~</span><span class="st"> </span>k <span class="op">/</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>b, mtcars, <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">k=</span><span class="dv">1</span>, <span class="dt">b=</span><span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb17-2" title="2"><span class="kw">tidy</span>(nlsfit)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 5
 ##   term  estimate std.error statistic  p.value
 ##   &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 k        45.8       4.25     10.8  7.64e-12
 ## 2 b         4.39      1.54      2.85 7.74e- 3</code></pre>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">augment</span>(nlsfit, mtcars)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">augment</span>(nlsfit, mtcars)</a></code></pre></div>
 <pre><code>## # A tibble: 32 x 14
-##    .rownames   mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear
-##    &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 Mazda RX4  21       6  160    110  3.9   2.62  16.5     0     1     4
-##  2 Mazda RX~  21       6  160    110  3.9   2.88  17.0     0     1     4
-##  3 Datsun 7~  22.8     4  108     93  3.85  2.32  18.6     1     1     4
-##  4 Hornet 4~  21.4     6  258    110  3.08  3.22  19.4     1     0     3
-##  5 Hornet S~  18.7     8  360    175  3.15  3.44  17.0     0     0     3
-##  6 Valiant    18.1     6  225    105  2.76  3.46  20.2     1     0     3
-##  7 Duster 3~  14.3     8  360    245  3.21  3.57  15.8     0     0     3
-##  8 Merc 240D  24.4     4  147.    62  3.69  3.19  20       1     0     4
-##  9 Merc 230   22.8     4  141.    95  3.92  3.15  22.9     1     0     4
-## 10 Merc 280   19.2     6  168.   123  3.92  3.44  18.3     1     0     4
-## # ... with 22 more rows, and 3 more variables: carb &lt;dbl&gt;, .fitted &lt;dbl&gt;,
-## #   .resid &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">glance</span>(nlsfit)</a></code></pre></div>
+##    .rownames   mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+##    &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 Mazda RX4  21       6  160    110  3.9   2.62  16.5     0     1     4     4
+##  2 Mazda RX…  21       6  160    110  3.9   2.88  17.0     0     1     4     4
+##  3 Datsun 7…  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1
+##  4 Hornet 4…  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1
+##  5 Hornet S…  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2
+##  6 Valiant    18.1     6  225    105  2.76  3.46  20.2     1     0     3     1
+##  7 Duster 3…  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4
+##  8 Merc 240D  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
+##  9 Merc 230   22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
+## 10 Merc 280   19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
+## # … with 22 more rows, and 2 more variables: .fitted &lt;dbl&gt;, .resid &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="kw">glance</span>(nlsfit)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 8
 ##   sigma isConv       finTol logLik   AIC   BIC deviance df.residual
 ##   &lt;dbl&gt; &lt;lgl&gt;         &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt;
@@ -455,54 +454,51 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="hypothesis-testing" class="section level3">
 <h3>Hypothesis testing</h3>
 <p>The <code>tidy</code> function can also be applied to <code>htest</code> objects, such as those output by popular built-in functions like <code>t.test</code>, <code>cor.test</code>, and <code>wilcox.test</code>.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">tt &lt;-<span class="st"> </span><span class="kw">t.test</span>(wt <span class="op">~</span><span class="st"> </span>am, mtcars)</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="kw">tidy</span>(tt)</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1">tt &lt;-<span class="st"> </span><span class="kw">t.test</span>(wt <span class="op">~</span><span class="st"> </span>am, mtcars)</a>
+<a class="sourceLine" id="cb23-2" title="2"><span class="kw">tidy</span>(tt)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 10
-##   estimate estimate1 estimate2 statistic p.value parameter conf.low
-##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1     1.36      3.77      2.41      5.49 6.27e-6      29.2    0.853
-## # ... with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-## #   alternative &lt;chr&gt;</code></pre>
+##   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1     1.36      3.77      2.41      5.49 6.27e-6      29.2    0.853      1.86
+## # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;</code></pre>
 <p>Some cases might have fewer columns (for example, no confidence interval):</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">wt &lt;-<span class="st"> </span><span class="kw">wilcox.test</span>(wt <span class="op">~</span><span class="st"> </span>am, mtcars)</a>
-<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw">tidy</span>(wt)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">wt &lt;-<span class="st"> </span><span class="kw">wilcox.test</span>(wt <span class="op">~</span><span class="st"> </span>am, mtcars)</a>
+<a class="sourceLine" id="cb25-2" title="2"><span class="kw">tidy</span>(wt)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
-##   statistic   p.value method                                    alternative
-##       &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                                     &lt;chr&gt;      
-## 1      230. 0.0000435 Wilcoxon rank sum test with continuity c~ two.sided</code></pre>
+##   statistic   p.value method                                         alternative
+##       &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                                          &lt;chr&gt;      
+## 1      230. 0.0000435 Wilcoxon rank sum test with continuity correc… two.sided</code></pre>
 <p>Since the <code>tidy</code> output is already only one row, <code>glance</code> returns the same output:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">glance</span>(tt)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw">glance</span>(tt)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 10
-##   estimate estimate1 estimate2 statistic p.value parameter conf.low
-##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1     1.36      3.77      2.41      5.49 6.27e-6      29.2    0.853
-## # ... with 3 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;,
-## #   alternative &lt;chr&gt;</code></pre>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">glance</span>(wt)</a></code></pre></div>
+##   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high
+##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1     1.36      3.77      2.41      5.49 6.27e-6      29.2    0.853      1.86
+## # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">glance</span>(wt)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
-##   statistic   p.value method                                    alternative
-##       &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                                     &lt;chr&gt;      
-## 1      230. 0.0000435 Wilcoxon rank sum test with continuity c~ two.sided</code></pre>
+##   statistic   p.value method                                         alternative
+##       &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                                          &lt;chr&gt;      
+## 1      230. 0.0000435 Wilcoxon rank sum test with continuity correc… two.sided</code></pre>
 <p><code>augment</code> method is defined only for chi-squared tests, since there is no meaningful sense, for other tests, in which a hypothesis test produces output about each initial data point.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">chit &lt;-<span class="st"> </span><span class="kw">chisq.test</span>(<span class="kw">xtabs</span>(Freq <span class="op">~</span><span class="st"> </span>Sex <span class="op">+</span><span class="st"> </span>Class, <span class="dt">data =</span> <span class="kw">as.data.frame</span>(Titanic)))</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="kw">tidy</span>(chit)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">chit &lt;-<span class="st"> </span><span class="kw">chisq.test</span>(<span class="kw">xtabs</span>(Freq <span class="op">~</span><span class="st"> </span>Sex <span class="op">+</span><span class="st"> </span>Class, <span class="dt">data =</span> <span class="kw">as.data.frame</span>(Titanic)))</a>
+<a class="sourceLine" id="cb31-2" title="2"><span class="kw">tidy</span>(chit)</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 4
 ##   statistic  p.value parameter method                    
 ##       &lt;dbl&gt;    &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;                     
 ## 1      350. 1.56e-75         3 Pearson&#39;s Chi-squared test</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">augment</span>(chit)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw">augment</span>(chit)</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 9
-##   Sex   Class .observed  .prop .row.prop .col.prop .expected .residuals
-##   &lt;fct&gt; &lt;fct&gt;     &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
-## 1 Male  1st         180 0.0818    0.104     0.554      256.       -4.73
-## 2 Fema~ 1st         145 0.0659    0.309     0.446       69.4       9.07
-## 3 Male  2nd         179 0.0813    0.103     0.628      224.       -3.02
-## 4 Fema~ 2nd         106 0.0482    0.226     0.372       60.9       5.79
-## 5 Male  3rd         510 0.232     0.295     0.722      555.       -1.92
-## 6 Fema~ 3rd         196 0.0891    0.417     0.278      151.        3.68
-## 7 Male  Crew        862 0.392     0.498     0.974      696.        6.29
-## 8 Fema~ Crew         23 0.0104    0.0489    0.0260     189.      -12.1 
-## # ... with 1 more variable: .stdres &lt;dbl&gt;</code></pre>
+##   Sex    Class .observed  .prop .row.prop .col.prop .expected .residuals .stdres
+##   &lt;fct&gt;  &lt;fct&gt;     &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Male   1st         180 0.0818    0.104     0.554      256.       -4.73  -11.1 
+## 2 Female 1st         145 0.0659    0.309     0.446       69.4       9.07   11.1 
+## 3 Male   2nd         179 0.0813    0.103     0.628      224.       -3.02   -6.99
+## 4 Female 2nd         106 0.0482    0.226     0.372       60.9       5.79    6.99
+## 5 Male   3rd         510 0.232     0.295     0.722      555.       -1.92   -5.04
+## 6 Female 3rd         196 0.0891    0.417     0.278      151.        3.68    5.04
+## 7 Male   Crew        862 0.392     0.498     0.974      696.        6.29   17.6 
+## 8 Female Crew         23 0.0104    0.0489    0.0260     189.      -12.1   -17.6</code></pre>
 </div>
 </div>
 <div id="conventions" class="section level2">
@@ -569,6 +565,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
