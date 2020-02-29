@@ -8,10 +8,10 @@
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2020-01-26" />
+<meta name="date" content="2020-02-29" />
 
 <title>kmeans with dplyr and broom</title>
 
@@ -116,9 +116,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -287,7 +284,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -301,7 +299,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 <h1 class="title toc-ignore">kmeans with dplyr and broom</h1>
-<h4 class="date">2020-01-26</h4>
+<h4 class="date">2020-02-29</h4>
 
 
 
@@ -403,7 +401,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ##  8  6.16 -1.68  3       
 ##  9  7.13 -2.17  3       
 ## 10  5.24 -2.42  3       
-## # … with 290 more rows</code></pre>
+## # ... with 290 more rows</code></pre>
 <p>The <code>tidy</code> function summarizes on a per-cluster level:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">tidy</span>(kclust)</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 5
@@ -434,15 +432,15 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <pre><code>## # A tibble: 9 x 5
 ##       k kclust   tidied           glanced          augmented         
 ##   &lt;int&gt; &lt;list&gt;   &lt;list&gt;           &lt;list&gt;           &lt;list&gt;            
-## 1     1 &lt;kmeans&gt; &lt;tibble [1 × 5]&gt; &lt;tibble [1 × 4]&gt; &lt;tibble [300 × 3]&gt;
-## 2     2 &lt;kmeans&gt; &lt;tibble [2 × 5]&gt; &lt;tibble [1 × 4]&gt; &lt;tibble [300 × 3]&gt;
-## 3     3 &lt;kmeans&gt; &lt;tibble [3 × 5]&gt; &lt;tibble [1 × 4]&gt; &lt;tibble [300 × 3]&gt;
-## 4     4 &lt;kmeans&gt; &lt;tibble [4 × 5]&gt; &lt;tibble [1 × 4]&gt; &lt;tibble [300 × 3]&gt;
-## 5     5 &lt;kmeans&gt; &lt;tibble [5 × 5]&gt; &lt;tibble [1 × 4]&gt; &lt;tibble [300 × 3]&gt;
-## 6     6 &lt;kmeans&gt; &lt;tibble [6 × 5]&gt; &lt;tibble [1 × 4]&gt; &lt;tibble [300 × 3]&gt;
-## 7     7 &lt;kmeans&gt; &lt;tibble [7 × 5]&gt; &lt;tibble [1 × 4]&gt; &lt;tibble [300 × 3]&gt;
-## 8     8 &lt;kmeans&gt; &lt;tibble [8 × 5]&gt; &lt;tibble [1 × 4]&gt; &lt;tibble [300 × 3]&gt;
-## 9     9 &lt;kmeans&gt; &lt;tibble [9 × 5]&gt; &lt;tibble [1 × 4]&gt; &lt;tibble [300 × 3]&gt;</code></pre>
+## 1     1 &lt;kmeans&gt; &lt;tibble [1 x 5]&gt; &lt;tibble [1 x 4]&gt; &lt;tibble [300 x 3]&gt;
+## 2     2 &lt;kmeans&gt; &lt;tibble [2 x 5]&gt; &lt;tibble [1 x 4]&gt; &lt;tibble [300 x 3]&gt;
+## 3     3 &lt;kmeans&gt; &lt;tibble [3 x 5]&gt; &lt;tibble [1 x 4]&gt; &lt;tibble [300 x 3]&gt;
+## 4     4 &lt;kmeans&gt; &lt;tibble [4 x 5]&gt; &lt;tibble [1 x 4]&gt; &lt;tibble [300 x 3]&gt;
+## 5     5 &lt;kmeans&gt; &lt;tibble [5 x 5]&gt; &lt;tibble [1 x 4]&gt; &lt;tibble [300 x 3]&gt;
+## 6     6 &lt;kmeans&gt; &lt;tibble [6 x 5]&gt; &lt;tibble [1 x 4]&gt; &lt;tibble [300 x 3]&gt;
+## 7     7 &lt;kmeans&gt; &lt;tibble [7 x 5]&gt; &lt;tibble [1 x 4]&gt; &lt;tibble [300 x 3]&gt;
+## 8     8 &lt;kmeans&gt; &lt;tibble [8 x 5]&gt; &lt;tibble [1 x 4]&gt; &lt;tibble [300 x 3]&gt;
+## 9     9 &lt;kmeans&gt; &lt;tibble [9 x 5]&gt; &lt;tibble [1 x 4]&gt; &lt;tibble [300 x 3]&gt;</code></pre>
 <p>We can turn these into three separate datasets each representing a different type of data: Then tidy the clusterings three ways: using <code>tidy</code>, using <code>augment</code>, and using <code>glance</code>. Each of these goes into a separate dataset as they represent different types of data.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">clusters &lt;-<span class="st"> </span>kclusts <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb14-2" title="2"><span class="st">  </span><span class="kw">unnest</span>(tidied)</a>

@@ -1,7 +1,7 @@
 Type: Package
 Package: broom
 Title: Convert Statistical Analysis Objects into Tidy Tibbles
-Version: 0.5.4
+Version: 0.5.5
 Authors@R: 
     c(person(given = "David",
              family = "Robinson",
@@ -139,14 +139,14 @@ Suggests: AER, akima, AUC, bbmle, betareg, biglm, binGroup, boot, brms,
         lfe, lme4, lmodel2, lmtest, lsmeans, maps, maptools, MASS,
         Matrix, mclust, mgcv, muhaz, multcomp, network, nnet, orcutt
         (>= 2.2), ordinal, plm, plyr, poLCA, psych, quantreg, rgeos,
-        rmarkdown, robust, rsample, rstan, rstanarm, sp, speedglm,
+        rmarkdown, rsample, rstan, rstanarm, sp, speedglm,
         statnet.common, survey, survival, testthat, tseries, xergm, zoo
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.0.2
 NeedsCompilation: no
-Packaged: 2020-01-26 20:13:33 UTC; alex
+Packaged: 2020-02-29 16:20:10 UTC; alex
 Author: David Robinson [aut],
   Alex Hayes [aut, cre] (<https://orcid.org/0000-0002-4985-5160>),
   Matthieu Gomez [ctb],
@@ -178,4 +178,4 @@ Author: David Robinson [aut],
   Karl Dunkle Werner [ctb]
 Maintainer: Alex Hayes <alexpghayes@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-01-27 06:30:17 UTC
+Date/Publication: 2020-02-29 17:30:02 UTC

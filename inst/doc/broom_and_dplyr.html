@@ -8,10 +8,10 @@
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2020-01-26" />
+<meta name="date" content="2020-02-29" />
 
 <title>broom and dplyr</title>
 
@@ -116,9 +116,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -287,7 +284,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -301,7 +299,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 <h1 class="title toc-ignore">broom and dplyr</h1>
-<h4 class="date">2020-01-26</h4>
+<h4 class="date">2020-02-29</h4>
 
 
 
@@ -329,7 +327,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ##  8 2       118            33
 ##  9 2       484            69
 ## 10 2       664           111
-## # … with 25 more rows</code></pre>
+## # ... with 25 more rows</code></pre>
 <p>This contains 35 observations of three variables: <code>Tree</code>, <code>age</code>, and <code>circumference</code>. <code>Tree</code> is a factor with five levels describing five trees. As might be expected, age and circumference are correlated:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">cor</span>(Orange<span class="op">$</span>age, Orange<span class="op">$</span>circumference)</a></code></pre></div>
 <pre><code>## [1] 0.9135189</code></pre>
@@ -372,7 +370,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <pre><code>## # A tibble: 1 x 8
 ##   estimate statistic  p.value parameter conf.low conf.high method    alternative
 ##      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;      
-## 1    0.914      12.9 1.93e-14        33    0.834     0.956 Pearson&#39;… two.sided</code></pre>
+## 1    0.914      12.9 1.93e-14        33    0.834     0.956 Pearson&#39;~ two.sided</code></pre>
 <p>Often, we want to perform multiple tests or fit multiple models, each on a different part of the data. In this case, we recommend a <code>nest-map-unnest</code> workflow. For example, suppose we want to perform correlation tests for each different tree. We start by <code>nest</code>ing our data based on the group of interest:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">library</span>(tidyr)</a>
 <a class="sourceLine" id="cb12-2" title="2"><span class="kw">library</span>(purrr)</a>
@@ -383,13 +381,13 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">nested <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb13-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">test =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="st"> </span><span class="kw">cor.test</span>(.x<span class="op">$</span>age, .x<span class="op">$</span>circumference)))</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 3
-##   Tree            data test   
-##   &lt;ord&gt; &lt;list&lt;df[,2]&gt;&gt; &lt;list&gt; 
-## 1 1            [7 × 2] &lt;htest&gt;
-## 2 2            [7 × 2] &lt;htest&gt;
-## 3 3            [7 × 2] &lt;htest&gt;
-## 4 4            [7 × 2] &lt;htest&gt;
-## 5 5            [7 × 2] &lt;htest&gt;</code></pre>
+##   Tree  data             test   
+##   &lt;ord&gt; &lt;list&gt;           &lt;list&gt; 
+## 1 1     &lt;tibble [7 x 2]&gt; &lt;htest&gt;
+## 2 2     &lt;tibble [7 x 2]&gt; &lt;htest&gt;
+## 3 3     &lt;tibble [7 x 2]&gt; &lt;htest&gt;
+## 4 4     &lt;tibble [7 x 2]&gt; &lt;htest&gt;
+## 5 5     &lt;tibble [7 x 2]&gt; &lt;htest&gt;</code></pre>
 <p>This results in a list-column of S3 objects. We want to tidy each of the objects, which we can also do with <code>map</code>.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">nested <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb15-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(</a>
@@ -397,13 +395,13 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb15-4" title="4">    <span class="dt">tidied =</span> <span class="kw">map</span>(test, tidy)</a>
 <a class="sourceLine" id="cb15-5" title="5">  ) </a></code></pre></div>
 <pre><code>## # A tibble: 5 x 4
-##   Tree            data test    tidied          
-##   &lt;ord&gt; &lt;list&lt;df[,2]&gt;&gt; &lt;list&gt;  &lt;list&gt;          
-## 1 1            [7 × 2] &lt;htest&gt; &lt;tibble [1 × 8]&gt;
-## 2 2            [7 × 2] &lt;htest&gt; &lt;tibble [1 × 8]&gt;
-## 3 3            [7 × 2] &lt;htest&gt; &lt;tibble [1 × 8]&gt;
-## 4 4            [7 × 2] &lt;htest&gt; &lt;tibble [1 × 8]&gt;
-## 5 5            [7 × 2] &lt;htest&gt; &lt;tibble [1 × 8]&gt;</code></pre>
+##   Tree  data             test    tidied          
+##   &lt;ord&gt; &lt;list&gt;           &lt;list&gt;  &lt;list&gt;          
+## 1 1     &lt;tibble [7 x 2]&gt; &lt;htest&gt; &lt;tibble [1 x 8]&gt;
+## 2 2     &lt;tibble [7 x 2]&gt; &lt;htest&gt; &lt;tibble [1 x 8]&gt;
+## 3 3     &lt;tibble [7 x 2]&gt; &lt;htest&gt; &lt;tibble [1 x 8]&gt;
+## 4 4     &lt;tibble [7 x 2]&gt; &lt;htest&gt; &lt;tibble [1 x 8]&gt;
+## 5 5     &lt;tibble [7 x 2]&gt; &lt;htest&gt; &lt;tibble [1 x 8]&gt;</code></pre>
 <p>Finally, we want to unnest the tidied data frames so we can see the results in a flat tibble. All together, this looks like:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">Orange <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb17-2" title="2"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>Tree) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -413,14 +411,14 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb17-6" title="6">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb17-7" title="7"><span class="st">  </span><span class="kw">unnest</span>(tidied, <span class="dt">.drop =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 11
-##   Tree     data test  estimate statistic p.value parameter conf.low conf.high
-##   &lt;ord&gt; &lt;list&lt;&gt; &lt;lis&gt;    &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1 1     [7 × 2] &lt;hte…    0.985      13.0 4.85e-5         5    0.901     0.998
-## 2 2     [7 × 2] &lt;hte…    0.987      13.9 3.43e-5         5    0.914     0.998
-## 3 3     [7 × 2] &lt;hte…    0.988      14.4 2.90e-5         5    0.919     0.998
-## 4 4     [7 × 2] &lt;hte…    0.984      12.5 5.73e-5         5    0.895     0.998
-## 5 5     [7 × 2] &lt;hte…    0.988      14.1 3.18e-5         5    0.916     0.998
-## # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;</code></pre>
+##   Tree  data  test  estimate statistic p.value parameter conf.low conf.high
+##   &lt;ord&gt; &lt;lis&gt; &lt;lis&gt;    &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 1     &lt;tib~ &lt;hte~    0.985      13.0 4.85e-5         5    0.901     0.998
+## 2 2     &lt;tib~ &lt;hte~    0.987      13.9 3.43e-5         5    0.914     0.998
+## 3 3     &lt;tib~ &lt;hte~    0.988      14.4 2.90e-5         5    0.919     0.998
+## 4 4     &lt;tib~ &lt;hte~    0.984      12.5 5.73e-5         5    0.895     0.998
+## 5 5     &lt;tib~ &lt;hte~    0.988      14.1 3.18e-5         5    0.916     0.998
+## # ... with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;</code></pre>
 <p>Note that the <code>.drop</code> argument to <code>tidyr::unnest</code> is often useful.</p>
 <p>This workflow becomes even more useful when applied to regressions. Untidy ouput for a regression looks like:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">lm_fit &lt;-<span class="st"> </span><span class="kw">lm</span>(age <span class="op">~</span><span class="st"> </span>circumference, <span class="dt">data =</span> Orange)</a>
@@ -459,18 +457,18 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb23-6" title="6">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb23-7" title="7"><span class="st">  </span><span class="kw">unnest</span>(tidied)</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 8
-##    Tree           data fit    term         estimate std.error statistic  p.value
-##    &lt;ord&gt; &lt;list&lt;df[,2]&gt; &lt;list&gt; &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-##  1 1           [7 × 2] &lt;lm&gt;   (Intercept)   -265.      98.6      -2.68   4.36e-2
-##  2 1           [7 × 2] &lt;lm&gt;   circumferen…    11.9      0.919    13.0    4.85e-5
-##  3 2           [7 × 2] &lt;lm&gt;   (Intercept)   -132.      83.1      -1.59   1.72e-1
-##  4 2           [7 × 2] &lt;lm&gt;   circumferen…     7.80     0.560    13.9    3.43e-5
-##  5 3           [7 × 2] &lt;lm&gt;   (Intercept)   -210.      85.3      -2.46   5.74e-2
-##  6 3           [7 × 2] &lt;lm&gt;   circumferen…    12.0      0.835    14.4    2.90e-5
-##  7 4           [7 × 2] &lt;lm&gt;   (Intercept)    -76.5     88.3      -0.867  4.26e-1
-##  8 4           [7 × 2] &lt;lm&gt;   circumferen…     7.17     0.572    12.5    5.73e-5
-##  9 5           [7 × 2] &lt;lm&gt;   (Intercept)    -54.5     76.9      -0.709  5.10e-1
-## 10 5           [7 × 2] &lt;lm&gt;   circumferen…     8.79     0.621    14.1    3.18e-5</code></pre>
+##    Tree  data           fit    term        estimate std.error statistic  p.value
+##    &lt;ord&gt; &lt;list&gt;         &lt;list&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+##  1 1     &lt;tibble [7 x ~ &lt;lm&gt;   (Intercept)  -265.      98.6      -2.68   4.36e-2
+##  2 1     &lt;tibble [7 x ~ &lt;lm&gt;   circumfere~    11.9      0.919    13.0    4.85e-5
+##  3 2     &lt;tibble [7 x ~ &lt;lm&gt;   (Intercept)  -132.      83.1      -1.59   1.72e-1
+##  4 2     &lt;tibble [7 x ~ &lt;lm&gt;   circumfere~     7.80     0.560    13.9    3.43e-5
+##  5 3     &lt;tibble [7 x ~ &lt;lm&gt;   (Intercept)  -210.      85.3      -2.46   5.74e-2
+##  6 3     &lt;tibble [7 x ~ &lt;lm&gt;   circumfere~    12.0      0.835    14.4    2.90e-5
+##  7 4     &lt;tibble [7 x ~ &lt;lm&gt;   (Intercept)   -76.5     88.3      -0.867  4.26e-1
+##  8 4     &lt;tibble [7 x ~ &lt;lm&gt;   circumfere~     7.17     0.572    12.5    5.73e-5
+##  9 5     &lt;tibble [7 x ~ &lt;lm&gt;   (Intercept)   -54.5     76.9      -0.709  5.10e-1
+## 10 5     &lt;tibble [7 x ~ &lt;lm&gt;   circumfere~     8.79     0.621    14.1    3.18e-5</code></pre>
 <p>You can just as easily use multiple predictors in the regressions, as shown here on the <code>mtcars</code> dataset. We nest the data into automatic and manual cars (the <code>am</code> column), then perform the regression within each nested tibble.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">data</span>(mtcars)</a>
 <a class="sourceLine" id="cb25-2" title="2">mtcars &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mtcars)  <span class="co"># to play nicely with list-cols</span></a>
@@ -488,7 +486,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ##  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
 ##  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
 ## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
-## # … with 22 more rows</code></pre>
+## # ... with 22 more rows</code></pre>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">mtcars <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb27-2" title="2"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>am) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb27-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(</a>
@@ -497,16 +495,16 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb27-6" title="6">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb27-7" title="7"><span class="st">  </span><span class="kw">unnest</span>(tidied)</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 8
-##      am            data fit    term        estimate std.error statistic  p.value
-##   &lt;dbl&gt; &lt;list&lt;df[,10]&gt;&gt; &lt;list&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1     1       [13 × 10] &lt;lm&gt;   (Intercept)   4.28      3.46      1.24   0.247   
-## 2     1       [13 × 10] &lt;lm&gt;   mpg          -0.101     0.0294   -3.43   0.00750 
-## 3     1       [13 × 10] &lt;lm&gt;   qsec          0.0398    0.151     0.264  0.798   
-## 4     1       [13 × 10] &lt;lm&gt;   gear         -0.0229    0.349    -0.0656 0.949   
-## 5     0       [19 × 10] &lt;lm&gt;   (Intercept)   4.92      1.40      3.52   0.00309 
-## 6     0       [19 × 10] &lt;lm&gt;   mpg          -0.192     0.0443   -4.33   0.000591
-## 7     0       [19 × 10] &lt;lm&gt;   qsec          0.0919    0.0983    0.935  0.365   
-## 8     0       [19 × 10] &lt;lm&gt;   gear          0.147     0.368     0.398  0.696</code></pre>
+##      am data              fit    term       estimate std.error statistic p.value
+##   &lt;dbl&gt; &lt;list&gt;            &lt;list&gt; &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1     1 &lt;tibble [13 x 10~ &lt;lm&gt;   (Intercep~   4.28      3.46      1.24   2.47e-1
+## 2     1 &lt;tibble [13 x 10~ &lt;lm&gt;   mpg         -0.101     0.0294   -3.43   7.50e-3
+## 3     1 &lt;tibble [13 x 10~ &lt;lm&gt;   qsec         0.0398    0.151     0.264  7.98e-1
+## 4     1 &lt;tibble [13 x 10~ &lt;lm&gt;   gear        -0.0229    0.349    -0.0656 9.49e-1
+## 5     0 &lt;tibble [19 x 10~ &lt;lm&gt;   (Intercep~   4.92      1.40      3.52   3.09e-3
+## 6     0 &lt;tibble [19 x 10~ &lt;lm&gt;   mpg         -0.192     0.0443   -4.33   5.91e-4
+## 7     0 &lt;tibble [19 x 10~ &lt;lm&gt;   qsec         0.0919    0.0983    0.935  3.65e-1
+## 8     0 &lt;tibble [19 x 10~ &lt;lm&gt;   gear         0.147     0.368     0.398  6.96e-1</code></pre>
 <p>What if you want not just the <code>tidy</code> output, but the <code>augment</code> and <code>glance</code> outputs as well, while still performing each regression only once? Since we’re using list-columns, we can just fit the model once and use multiple list-columns to store the tidied, glanced and augmented outputs.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">regressions &lt;-<span class="st"> </span>mtcars <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb29-2" title="2"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>am) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -520,42 +518,41 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb29-10" title="10">regressions <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb29-11" title="11"><span class="st">  </span><span class="kw">unnest</span>(tidied)</a></code></pre></div>
 <pre><code>## # A tibble: 8 x 10
-##      am      data fit   term  estimate std.error statistic p.value glanced
-##   &lt;dbl&gt; &lt;list&lt;df&gt; &lt;lis&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;list&gt; 
-## 1     1 [13 × 10] &lt;lm&gt;  (Int…   4.28      3.46      1.24   2.47e-1 &lt;tibbl…
-## 2     1 [13 × 10] &lt;lm&gt;  mpg    -0.101     0.0294   -3.43   7.50e-3 &lt;tibbl…
-## 3     1 [13 × 10] &lt;lm&gt;  qsec    0.0398    0.151     0.264  7.98e-1 &lt;tibbl…
-## 4     1 [13 × 10] &lt;lm&gt;  gear   -0.0229    0.349    -0.0656 9.49e-1 &lt;tibbl…
-## 5     0 [19 × 10] &lt;lm&gt;  (Int…   4.92      1.40      3.52   3.09e-3 &lt;tibbl…
-## 6     0 [19 × 10] &lt;lm&gt;  mpg    -0.192     0.0443   -4.33   5.91e-4 &lt;tibbl…
-## 7     0 [19 × 10] &lt;lm&gt;  qsec    0.0919    0.0983    0.935  3.65e-1 &lt;tibbl…
-## 8     0 [19 × 10] &lt;lm&gt;  gear    0.147     0.368     0.398  6.96e-1 &lt;tibbl…
-## # … with 1 more variable: augmented &lt;list&gt;</code></pre>
+##      am data  fit   term  estimate std.error statistic p.value glanced augmented
+##   &lt;dbl&gt; &lt;lis&gt; &lt;lis&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;list&gt;  &lt;list&gt;   
+## 1     1 &lt;tib~ &lt;lm&gt;  (Int~   4.28      3.46      1.24   2.47e-1 &lt;tibbl~ &lt;tibble ~
+## 2     1 &lt;tib~ &lt;lm&gt;  mpg    -0.101     0.0294   -3.43   7.50e-3 &lt;tibbl~ &lt;tibble ~
+## 3     1 &lt;tib~ &lt;lm&gt;  qsec    0.0398    0.151     0.264  7.98e-1 &lt;tibbl~ &lt;tibble ~
+## 4     1 &lt;tib~ &lt;lm&gt;  gear   -0.0229    0.349    -0.0656 9.49e-1 &lt;tibbl~ &lt;tibble ~
+## 5     0 &lt;tib~ &lt;lm&gt;  (Int~   4.92      1.40      3.52   3.09e-3 &lt;tibbl~ &lt;tibble ~
+## 6     0 &lt;tib~ &lt;lm&gt;  mpg    -0.192     0.0443   -4.33   5.91e-4 &lt;tibbl~ &lt;tibble ~
+## 7     0 &lt;tib~ &lt;lm&gt;  qsec    0.0919    0.0983    0.935  3.65e-1 &lt;tibbl~ &lt;tibble ~
+## 8     0 &lt;tib~ &lt;lm&gt;  gear    0.147     0.368     0.398  6.96e-1 &lt;tibbl~ &lt;tibble ~</code></pre>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">regressions <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb31-2" title="2"><span class="st">  </span><span class="kw">unnest</span>(glanced, <span class="dt">.drop =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 16
-##      am      data fit   tidied r.squared adj.r.squared sigma statistic p.value
-##   &lt;dbl&gt; &lt;list&lt;df&gt; &lt;lis&gt; &lt;list&gt;     &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1     1 [13 × 10] &lt;lm&gt;  &lt;tibb…     0.833         0.778 0.291     15.0  7.59e-4
-## 2     0 [19 × 10] &lt;lm&gt;  &lt;tibb…     0.625         0.550 0.522      8.32 1.70e-3
-## # … with 7 more variables: df &lt;int&gt;, logLik &lt;dbl&gt;, AIC &lt;dbl&gt;, BIC &lt;dbl&gt;,
+##      am data  fit   tidied r.squared adj.r.squared sigma statistic p.value    df
+##   &lt;dbl&gt; &lt;lis&gt; &lt;lis&gt; &lt;list&gt;     &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;
+## 1     1 &lt;tib~ &lt;lm&gt;  &lt;tibb~     0.833         0.778 0.291     15.0  7.59e-4     4
+## 2     0 &lt;tib~ &lt;lm&gt;  &lt;tibb~     0.625         0.550 0.522      8.32 1.70e-3     4
+## # ... with 6 more variables: logLik &lt;dbl&gt;, AIC &lt;dbl&gt;, BIC &lt;dbl&gt;,
 ## #   deviance &lt;dbl&gt;, df.residual &lt;int&gt;, augmented &lt;list&gt;</code></pre>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">regressions <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb33-2" title="2"><span class="st">  </span><span class="kw">unnest</span>(augmented)</a></code></pre></div>
 <pre><code>## # A tibble: 32 x 16
-##       am      data fit   tidied glanced    wt   mpg  qsec  gear .fitted .se.fit
-##    &lt;dbl&gt; &lt;list&lt;df&gt; &lt;lis&gt; &lt;list&gt; &lt;list&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-##  1     1 [13 × 10] &lt;lm&gt;  &lt;tibb… &lt;tibbl…  2.62  21    16.5     4    2.73   0.209
-##  2     1 [13 × 10] &lt;lm&gt;  &lt;tibb… &lt;tibbl…  2.88  21    17.0     4    2.75   0.152
-##  3     1 [13 × 10] &lt;lm&gt;  &lt;tibb… &lt;tibbl…  2.32  22.8  18.6     4    2.63   0.163
-##  4     1 [13 × 10] &lt;lm&gt;  &lt;tibb… &lt;tibbl…  2.2   32.4  19.5     4    1.70   0.137
-##  5     1 [13 × 10] &lt;lm&gt;  &lt;tibb… &lt;tibbl…  1.62  30.4  18.5     4    1.86   0.151
-##  6     1 [13 × 10] &lt;lm&gt;  &lt;tibb… &lt;tibbl…  1.84  33.9  19.9     4    1.56   0.156
-##  7     1 [13 × 10] &lt;lm&gt;  &lt;tibb… &lt;tibbl…  1.94  27.3  18.9     4    2.19   0.113
-##  8     1 [13 × 10] &lt;lm&gt;  &lt;tibb… &lt;tibbl…  2.14  26    16.7     5    2.21   0.153
-##  9     1 [13 × 10] &lt;lm&gt;  &lt;tibb… &lt;tibbl…  1.51  30.4  16.9     5    1.77   0.191
-## 10     1 [13 × 10] &lt;lm&gt;  &lt;tibb… &lt;tibbl…  3.17  15.8  14.5     5    3.15   0.157
-## # … with 22 more rows, and 5 more variables: .resid &lt;dbl&gt;, .hat &lt;dbl&gt;,
+##       am data  fit   tidied glanced    wt   mpg  qsec  gear .fitted .se.fit
+##    &lt;dbl&gt; &lt;lis&gt; &lt;lis&gt; &lt;list&gt; &lt;list&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1     1 &lt;tib~ &lt;lm&gt;  &lt;tibb~ &lt;tibbl~  2.62  21    16.5     4    2.73   0.209
+##  2     1 &lt;tib~ &lt;lm&gt;  &lt;tibb~ &lt;tibbl~  2.88  21    17.0     4    2.75   0.152
+##  3     1 &lt;tib~ &lt;lm&gt;  &lt;tibb~ &lt;tibbl~  2.32  22.8  18.6     4    2.63   0.163
+##  4     1 &lt;tib~ &lt;lm&gt;  &lt;tibb~ &lt;tibbl~  2.2   32.4  19.5     4    1.70   0.137
+##  5     1 &lt;tib~ &lt;lm&gt;  &lt;tibb~ &lt;tibbl~  1.62  30.4  18.5     4    1.86   0.151
+##  6     1 &lt;tib~ &lt;lm&gt;  &lt;tibb~ &lt;tibbl~  1.84  33.9  19.9     4    1.56   0.156
+##  7     1 &lt;tib~ &lt;lm&gt;  &lt;tibb~ &lt;tibbl~  1.94  27.3  18.9     4    2.19   0.113
+##  8     1 &lt;tib~ &lt;lm&gt;  &lt;tibb~ &lt;tibbl~  2.14  26    16.7     5    2.21   0.153
+##  9     1 &lt;tib~ &lt;lm&gt;  &lt;tibb~ &lt;tibbl~  1.51  30.4  16.9     5    1.77   0.191
+## 10     1 &lt;tib~ &lt;lm&gt;  &lt;tibb~ &lt;tibbl~  3.17  15.8  14.5     5    3.15   0.157
+## # ... with 22 more rows, and 5 more variables: .resid &lt;dbl&gt;, .hat &lt;dbl&gt;,
 ## #   .sigma &lt;dbl&gt;, .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;</code></pre>
 <p>By combining the estimates and p-values across all groups into the same tidy data frame (instead of a list of output model objects), a new class of analyses and visualizations becomes straightforward. This includes</p>
 <ul>
