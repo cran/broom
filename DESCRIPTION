@@ -1,7 +1,7 @@
 Type: Package
 Package: broom
 Title: Convert Statistical Analysis Objects into Tidy Tibbles
-Version: 0.5.5
+Version: 0.5.6
 Authors@R: 
     c(person(given = "David",
              family = "Robinson",
@@ -131,7 +131,7 @@ URL: http://github.com/tidyverse/broom
 BugReports: http://github.com/tidyverse/broom/issues
 Depends: R (>= 3.1)
 Imports: backports, dplyr, generics (>= 0.0.2), methods, nlme, purrr,
-        reshape2, stringr, tibble, tidyr
+        reshape2, stringr, tibble (>= 3.0.0), tidyr
 Suggests: AER, akima, AUC, bbmle, betareg, biglm, binGroup, boot, brms,
         btergm, car, caret, coda, covr, e1071, emmeans, ergm, gam (>=
         1.15), gamlss, gamlss.data, gamlss.dist, geepack, ggplot2,
@@ -140,13 +140,13 @@ Suggests: AER, akima, AUC, bbmle, betareg, biglm, binGroup, boot, brms,
         Matrix, mclust, mgcv, muhaz, multcomp, network, nnet, orcutt
         (>= 2.2), ordinal, plm, plyr, poLCA, psych, quantreg, rgeos,
         rmarkdown, rsample, rstan, rstanarm, sp, speedglm,
-        statnet.common, survey, survival, testthat, tseries, xergm, zoo
+        statnet.common, survey, survival, testthat, tseries, zoo
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 NeedsCompilation: no
-Packaged: 2020-02-29 16:20:10 UTC; alex
+Packaged: 2020-04-20 16:06:03 UTC; alex
 Author: David Robinson [aut],
   Alex Hayes [aut, cre] (<https://orcid.org/0000-0002-4985-5160>),
   Matthieu Gomez [ctb],
@@ -178,4 +178,4 @@ Author: David Robinson [aut],
   Karl Dunkle Werner [ctb]
 Maintainer: Alex Hayes <alexpghayes@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-02-29 17:30:02 UTC
+Date/Publication: 2020-04-20 17:10:02 UTC

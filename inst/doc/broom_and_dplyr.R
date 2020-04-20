@@ -15,6 +15,8 @@ cor(Orange$age, Orange$circumference)
 
 library(ggplot2)
 
+theme_set(theme_minimal())
+
 ggplot(Orange, aes(age, circumference, color = Tree)) +
   geom_line()
 
@@ -102,7 +104,7 @@ regressions %>%
   unnest(tidied)
 
 regressions %>% 
-  unnest(glanced, .drop = TRUE)
+  unnest(glanced)
 
 regressions %>% 
   unnest(augmented)

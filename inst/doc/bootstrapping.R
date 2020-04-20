@@ -8,6 +8,8 @@ knitr::opts_chunk$set(
 ## -----------------------------------------------------------------------------
 library(ggplot2)
 
+theme_set(theme_minimal())
+
 ggplot(mtcars, aes(mpg, wt)) + 
     geom_point()
 
@@ -24,6 +26,7 @@ library(dplyr)
 library(rsample)
 library(broom)
 library(purrr)
+library(tidyr)
 
 set.seed(27)
 

@@ -8,6 +8,8 @@ library(purrr)
 library(tibble)
 library(tidyr)
 
+theme_set(theme_minimal())
+
 set.seed(27)
 
 centers <- tibble(
@@ -23,7 +25,7 @@ labelled_points <- centers %>%
     x2 = map2(num_points, x2, rnorm)
   ) %>% 
   select(-num_points) %>% 
-  unnest(x1, x2)
+  unnest(c(x1, x2))
 
 ggplot(labelled_points, aes(x1, x2, color = cluster)) +
   geom_point()
@@ -66,7 +68,7 @@ assignments <- kclusts %>%
   unnest(augmented)
 
 clusterings <- kclusts %>%
-  unnest(glanced, .drop = TRUE)
+  unnest(glanced)
 
 ## -----------------------------------------------------------------------------
 p1 <- ggplot(assignments, aes(x1, x2)) +
