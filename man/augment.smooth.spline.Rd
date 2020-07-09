@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{A \code{smooth.spline} object returned from \code{\link[stats:smooth.spline]{stats::smooth.spline()}}.}
 
-\item{data}{A \code{\link[=data.frame]{data.frame()}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing the original
+\item{data}{A \link[base:data.frame]{base::data.frame} or \code{\link[tibble:tibble]{tibble::tibble()}} containing the original
 data that was used to produce the object \code{x}. Defaults to
 \code{stats::model.frame(x)} so that \code{augment(my_fit)} returns the augmented
 original data. \strong{Do not} pass new data to the \code{data} argument.
@@ -28,19 +28,11 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A \code{\link[tibble:tibble]{tibble::tibble()}} containing the data passed to \code{augment},
-and \strong{additional} columns:
-
-\item{.fitted}{The predicted response for that observation.}
-\item{.resid}{The residual for a particular point. Present only when
-data has been passed to \code{augment} via the \code{data} argument.}
-}
 \description{
 Tidy summarizes information about the components of a model.
 A model component might be a single term in a regression, a single
 hypothesis, a cluster, or a class. Exactly what tidy considers to be a
-model component varies cross models but is usually self-evident.
+model component varies across models but is usually self-evident.
 If a model has several distinct types of components, you will need to
 specify which components to return.
 }
@@ -48,12 +40,12 @@ specify which components to return.
 
 spl <- smooth.spline(mtcars$wt, mtcars$mpg, df = 4)
 augment(spl, mtcars)
-augment(spl)  # calls original columns x and y
+augment(spl) # calls original columns x and y
 
 library(ggplot2)
 ggplot(augment(spl, mtcars), aes(wt, mpg)) +
-    geom_point() + geom_line(aes(y = .fitted))
-
+  geom_point() +
+  geom_line(aes(y = .fitted))
 }
 \seealso{
 \code{\link[=augment]{augment()}}, \code{\link[stats:smooth.spline]{stats::smooth.spline()}},
@@ -63,3 +55,9 @@ Other smoothing spline tidiers:
 \code{\link{glance.smooth.spline}()}
 }
 \concept{smoothing spline tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{.fitted}{Fitted or predicted value.}
+  \item{.resid}{The difference between observed and fitted values.}
+
+}

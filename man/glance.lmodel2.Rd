@@ -19,29 +19,43 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A one-row \link[tibble:tibble]{tibble::tibble} with columns:
-\itemize{
-\item \code{r.squared}: OLS R-squared
-\item \code{p.value}: OLS parametric p-value
-\item \code{theta}: Angle between OLS lines \code{lm(y ~ x)} and \code{lm(x ~ y)}
-\item \code{H}: H statistic for computing confidence interval of major axis slope
-}
-}
 \description{
 Glance accepts a model object and returns a \code{\link[tibble:tibble]{tibble::tibble()}}
 with exactly one row of model summaries. The summaries are typically
 goodness of fit measures, p-values for hypothesis tests on residuals,
 or model convergence information.
 
-Glance never returns information from the original call to the modelling
-function. This includes the name of the modelling function or any
-arguments passed to the modelling function.
+Glance never returns information from the original call to the modeling
+function. This includes the name of the modeling function or any
+arguments passed to the modeling function.
 
 Glance does not calculate summary measures. Rather, it farms out these
 computations to appropriate methods and gathers the results together.
 Sometimes a goodness of fit measure will be undefined. In these cases
 the measure will be reported as \code{NA}.
+
+Glance returns the same number of columns regardless of whether the
+model matrix is rank-deficient or not. If so, entries in columns
+that no longer have a well-defined value are filled in with an \code{NA}
+of the appropriate type.
+}
+\examples{
+
+library(lmodel2)
+
+data(mod2ex2)
+Ex2.res <- lmodel2(Prey ~ Predators, data = mod2ex2, "relative", "relative", 99)
+Ex2.res
+
+tidy(Ex2.res)
+glance(Ex2.res)
+
+# this allows coefficient plots with ggplot2
+library(ggplot2)
+ggplot(tidy(Ex2.res), aes(estimate, term, color = method)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high)) +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high))
 }
 \seealso{
 \code{\link[=glance]{glance()}}, \code{\link[lmodel2:lmodel2]{lmodel2::lmodel2()}}
@@ -50,3 +64,12 @@ Other lmodel2 tidiers:
 \code{\link{tidy.lmodel2}()}
 }
 \concept{lmodel2 tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with exactly one row and columns:
+  \item{nobs}{Number of observations used.}
+  \item{p.value}{P-value corresponding to the test statistic.}
+  \item{r.squared}{R squared statistic, or the percent of variation explained by the model. Also known as the coefficient of determination.}
+  \item{theta}{Angle between OLS lines `lm(y ~ x)` and `lm(x ~ y)`}
+  \item{H}{H statistic for computing confidence interval of major axis slope}
+
+}

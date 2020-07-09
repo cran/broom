@@ -5,7 +5,7 @@
 \alias{btergm_tidiers}
 \title{Tidy a(n) btergm object}
 \usage{
-\method{tidy}{btergm}(x, conf.level = 0.95, exponentiate = FALSE, quick = FALSE, ...)
+\method{tidy}{btergm}(x, conf.level = 0.95, exponentiate = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{\link[btergm:btergm]{btergm::btergm()}} object.}
@@ -18,10 +18,6 @@ the coefficient estimates. This is typical for logistic and multinomial
 regressions, but a bad idea if there is no log or logit link. Defaults
 to \code{FALSE}.}
 
-\item{quick}{Logical indiciating if the only the \code{term} and \code{estimate}
-columns should be returned. Often useful to avoid time consuming
-covariance and standard error calculations. Defaults to \code{FALSE}.}
-
 \item{...}{Additional arguments. Not used. Needed to match generic
 signature only. \strong{Cautionary note:} Misspelled arguments will be
 absorbed in \code{...}, where they will be ignored. If the misspelled
@@ -32,19 +28,11 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A  \link[tibble:tibble]{tibble::tibble} with one row per term in the random graph
-model and columns:
-\item{term}{The term in the model being estimated and tested.}
-\item{estimate}{The estimated value of the coefficient.}
-\item{conf.low}{The lower bound of the confidence interval.}
-\item{conf.high}{The lower bound of the confidence interval.}
-}
 \description{
 Tidy summarizes information about the components of a model.
 A model component might be a single term in a regression, a single
 hypothesis, a cluster, or a class. Exactly what tidy considers to be a
-model component varies cross models but is usually self-evident.
+model component varies across models but is usually self-evident.
 If a model has several distinct types of components, you will need to
 specify which components to return.
 
@@ -61,11 +49,11 @@ set.seed(1)
 
 networks <- list()
 
-for(i in 1:10){
-    mat <- matrix(rbinom(100, 1, .25), nrow = 10, ncol = 10)
-    diag(mat) <- 0
-    nw <- network::network(mat)
-    networks[[i]] <- nw
+for (i in 1:10) {
+  mat <- matrix(rbinom(100, 1, .25), nrow = 10, ncol = 10)
+  diag(mat) <- 0
+  nw <- network::network(mat)
+  networks[[i]] <- nw
 }
 
 # Create 10 matrices as covariates
@@ -73,8 +61,8 @@ for(i in 1:10){
 covariates <- list()
 
 for (i in 1:10) {
-    mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
-    covariates[[i]] <- mat
+  mat <- matrix(rnorm(100), nrow = 10, ncol = 10)
+  covariates[[i]] <- mat
 }
 
 # Fit a model where the propensity to form ties depends
@@ -87,8 +75,15 @@ tidy(btfit)
 
 # Show coefficients as odds ratios with a 99\% CI
 tidy(btfit, exponentiate = TRUE, conf.level = 0.99)
-
 }
 \seealso{
 \code{\link[=tidy]{tidy()}}, \code{\link[btergm:btergm]{btergm::btergm()}}
+}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{conf.high}{Upper bound on the confidence interval for the estimate.}
+  \item{conf.low}{Lower bound on the confidence interval for the estimate.}
+  \item{estimate}{The estimated value of the regression term.}
+  \item{term}{The name of the regression term.}
+
 }

@@ -20,15 +20,11 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A data frame with one row per parameter passed in, with
-columns \code{n}, \code{delta}, \code{sd}, \code{sig.level}, and \code{power}.
-}
 \description{
 Tidy summarizes information about the components of a model.
 A model component might be a single term in a regression, a single
 hypothesis, a cluster, or a class. Exactly what tidy considers to be a
-model component varies cross models but is usually self-evident.
+model component varies across models but is usually self-evident.
 If a model has several distinct types of components, you will need to
 specify which components to return.
 }
@@ -41,7 +37,6 @@ library(ggplot2)
 
 ggplot(tidy(ptt), aes(n, power)) +
   geom_line()
-
 }
 \seealso{
 \code{\link[stats:power.t.test]{stats::power.t.test()}}
@@ -52,3 +47,12 @@ Other htest tidiers:
 \code{\link{tidy.pairwise.htest}()}
 }
 \concept{htest tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{delta}{True difference in means.}
+  \item{n}{Number of observations by component.}
+  \item{power}{Power achieved for given value of n.}
+  \item{sd}{Standard deviation.}
+  \item{sig.level}{Significance level (Type I error probability).}
+
+}

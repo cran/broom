@@ -19,14 +19,11 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A \link[tibble:tibble]{tibble::tibble} with two columns: \code{freq} and \code{spec}.
-}
 \description{
 Tidy summarizes information about the components of a model.
 A model component might be a single term in a regression, a single
 hypothesis, a cluster, or a class. Exactly what tidy considers to be a
-model component varies cross models but is usually self-evident.
+model component varies across models but is usually self-evident.
 If a model has several distinct types of components, you will need to
 specify which components to return.
 }
@@ -38,7 +35,6 @@ tidy(spc)
 library(ggplot2)
 ggplot(tidy(spc), aes(freq, spec)) +
   geom_line()
-
 }
 \seealso{
 \code{\link[=tidy]{tidy()}}, \code{\link[stats:spectrum]{stats::spectrum()}}
@@ -49,3 +45,9 @@ Other time series tidiers:
 \code{\link{tidy.zoo}()}
 }
 \concept{time series tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{freq}{Vector of frequencies at which the spectral density is estimated.}
+  \item{spec}{Vector (for univariate series) or matrix (for multivariate series) of estimates of the spectral density at frequencies corresponding to freq.}
+
+}

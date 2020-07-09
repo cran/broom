@@ -20,26 +20,11 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A \link[tibble:tibble]{tibble::tibble} with one row for each time point and columns:
-
-\item{time}{timepoint}
-\item{n.risk}{number of subjects at risk at time t0}
-\item{n.event}{number of events at time t}
-\item{n.censor}{number of censored events}
-\item{estimate}{estimate of survival or cumulative incidence rate when
-multistate}
-\item{std.error}{standard error of estimate}
-\item{conf.high}{upper end of confidence interval}
-\item{conf.low}{lower end of confidence interval}
-\item{state}{state if multistate survfit object inputted}
-\item{strata}{strata if stratified survfit object inputted}
-}
 \description{
 Tidy summarizes information about the components of a model.
 A model component might be a single term in a regression, a single
 hypothesis, a cluster, or a class. Exactly what tidy considers to be a
-model component varies cross models but is usually self-evident.
+model component varies across models but is usually self-evident.
 If a model has several distinct types of components, you will need to
 specify which components to return.
 }
@@ -53,19 +38,20 @@ tidy(sfit)
 glance(sfit)
 
 library(ggplot2)
-ggplot(tidy(sfit), aes(time, estimate)) + geom_line() +
-    geom_ribbon(aes(ymin=conf.low, ymax=conf.high), alpha=.25)
+ggplot(tidy(sfit), aes(time, estimate)) +
+  geom_line() +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = .25)
 
 # multi-state
 fitCI <- survfit(Surv(stop, status * as.numeric(event), type = "mstate") ~ 1,
-              data = mgus1, subset = (start == 0))
+  data = mgus1, subset = (start == 0)
+)
 td_multi <- tidy(fitCI)
 td_multi
 
 ggplot(td_multi, aes(time, estimate, group = state)) +
-    geom_line(aes(color = state)) +
-    geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = .25)
-
+  geom_line(aes(color = state)) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = .25)
 }
 \seealso{
 \code{\link[=tidy]{tidy()}}, \code{\link[survival:survfit]{survival::survfit()}}
@@ -91,3 +77,18 @@ Other survival tidiers:
 }
 \concept{survfit tidiers}
 \concept{survival tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{conf.high}{Upper bound on the confidence interval for the estimate.}
+  \item{conf.low}{Lower bound on the confidence interval for the estimate.}
+  \item{n.censor}{Number of censored events.}
+  \item{n.event}{Number of events at time t.}
+  \item{n.risk}{Number of individuals at risk at time zero.}
+  \item{std.error}{The standard error of the regression term.}
+  \item{time}{Point in time.}
+  \item{estimate}{estimate of survival or cumulative incidence rate when
+    multistate}
+  \item{state}{state if multistate survfit object input}
+  \item{strata}{strata if stratified survfit object input}
+
+}

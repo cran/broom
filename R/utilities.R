@@ -1,5 +1,5 @@
 # Rename only those columns in a data frame that are present. Example:
-# 
+#
 # rename2(
 #   tibble(dog = 1),
 #   cat = dog,
@@ -8,184 +8,169 @@
 #
 rename2 <- function(.data, ...) {
   dots <- quos(...)
-  present <- purrr::keep(dots, ~quo_name(.x) %in% colnames(.data))
+  present <- purrr::keep(dots, ~ quo_name(.x) %in% colnames(.data))
   rename(.data, !!!present)
 }
 
-validate_augment_input <- function(model, data = NULL, newdata = NULL) {
-  
-  # careful: `data` may be non-null due to default argument such as
-  # `data = stats::model.frame(x)`
-  # newdata argument default *should* always `NULL`
-  
-  data_passed <- !is.null(data)
-  newdata_passed <- !is.null(newdata)
-  
-  # TODO: the following is bad if someone maps over models to augment
-  
-  # if (data_passed && newdata_passed) {
-  #   warning(
-  #     "Both `data` and `newdata` have been specified. Ignoring `data`.",
-  #     call. = FALSE
-  #   )
-  # }
-  
-  # this test means that for `augment(fit)` to work, `augment.my_model`
-  # must have a non-null default value for either `data` or `newdata`.
-  
-  # if (!data_passed && !newdata_passed) {
-  #   message(
-  #     "Neither `data` nor `newdata` has been specified.\n",
-  #     "Attempting to reconstruct original data."
-  #   )
-  # }
-  
-  if (data_passed) {
-    
-    if (!inherits(data, "data.frame")) {
-      stop("`data` argument must be a tibble or dataframe.", call. = FALSE)
-    }
-    
-    tryCatch(
-      as_tibble(data),
-      error = function(e) {
-        stop(
-          "`data` is malformed: must be coercable to a tibble.\n",
-          "Did you pass `data` the data originally used to fit your model?")
-      }
-    )
+exponentiate <- function(data) {
+  data <- mutate_at(data, vars(estimate), exp)
 
-    # experimental checks that all columns in original data are present
-    # in `data`. only warns on failure.
-    
-    possible_mf <- purrr::possibly(model.frame, otherwise = NULL)
-    mf <- possible_mf(model)
-    
-    if (!is.null(mf)) {
-      
-      if (nrow(data) != nrow(mf)) {
-        warning(
-          "`data` must contain all rows passed to the original modelling ",
-          "function with no extras rows.",
-          call. = FALSE
-        )
-      }
-      
-      orig_cols <- all.vars(stats::terms(mf))
-      
-      if (!all(orig_cols %in% colnames(data))) {
-        warning(
-          "`data` might not contain columns present in original data.",
-          call. = FALSE
-        )
-      }
-    }
+  if ("conf.low" %in% colnames(data)) {
+    data <- mutate_at(data, vars(conf.low, conf.high), exp)
   }
-  
-  # TODO: check for predictor columns only when newdata is passed?
-  # only warn if not found
-  # if yes, be sure to add a test in `check_augment_function`
-  # to do this, need to be able to determine what the response is
-  # 
-  # max says to look into `recipes:::get_rhs_vars` as a way to do this
-  
-  if (newdata_passed) {
-    if (!inherits(newdata, "data.frame")) {
-      stop("`newdata` argument must be a tibble or dataframe.", call. = FALSE)
-    }
-  }
+
+  data
 }
 
-
-
-#' Coerce a data frame to a tibble, preserving rownames
-#' 
+#' Coerce a data frame to a tibble
+#'
 #' A thin wrapper around [tibble::as_tibble()], except checks for
 #' rownames and adds them to a new column `.rownames` if they are
-#' interesting (i.e. more than `1, 2, 3, ...`).
-#' 
-#' Replacement for `fix_data_frame()`.
+#' interesting (i.e. more than `1, 2, 3, ...`). This function is
+#' meant for use inside of `augment.*` methods.
 #'
-#' @param data A [data.frame()] or [tibble::tibble()].
+#' @param data A [base::data.frame()] or [tibble::tibble()].
 #'
 #' @return A `tibble` potentially with a `.rownames` column
 #' @noRd
-as_rw_tibble <- function(data) {
-  
-  # TODO: write a test for this
-  
-  row_nm <- rownames(data)
-  has_row_nms <- any(row_nm != as.character(seq_along(row_nm)))
-  
-  df <- as_tibble(data)
-  
-  if (has_row_nms) {
-    df <- tibble::rownames_to_column(df, var = ".rownames")
+#'
+as_augment_tibble <- function(data) {
+
+  if (inherits(data, "matrix") & is.null(colnames(data))) {
+    stop("The supplied `data`/`newdata` argument was an unnamed matrix. ",
+         "Please supply a matrix or dataframe with column names.")
   }
-  
+
+  tryCatch(
+    df <- as_tibble(data),
+    error = function(cnd) {
+      stop("Could not coerce data to `tibble`. Try explicitly passing a",
+        "dataset to either the `data` or `newdata` argument.",
+        call. = FALSE
+      )
+    }
+  )
+
+  if (has_rownames(data)) {
+    df <- tibble::add_column(df, 
+                             .rownames = rownames(data), 
+                             .before = TRUE)
+  }
   df
 }
 
-
-
-#' Ensure an object is a data frame, with rownames moved into a column
+#' Convert a data.frame or matrix to a tibble
+#' 
+#' This function is meant for use inside `tidy.*` methods.
 #'
 #' @param x a data.frame or matrix
-#' @param newnames new column names, not including the rownames
-#' @param newcol the name of the new rownames column
+#' @param new_names new column names, not including the rownames
+#' @param new_col the name of the new rownames column
 #'
-#' @return a data.frame, with rownames moved into a column and new column
+#' @return a tibble with rownames moved into a column and new column
 #' names assigned
-#'
-#' @export
-fix_data_frame <- function(x, newnames = NULL, newcol = "term") {
-  if (!is.null(newnames) && length(newnames) != ncol(x)) {
+#' @noRd
+as_tidy_tibble <- function(x, new_names = NULL, new_column = "term") {
+  
+  if (!is.null(new_names) && length(new_names) != ncol(x)) {
     stop("newnames must be NULL or have length equal to number of columns")
   }
 
+  ret <- x
+  
+  # matrices will take setNames by element, so rename conditionally
+  if (!is.null(new_names)) {
+    if (inherits(x, "data.frame")) {
+      ret <- setNames(x, new_names)
+    } else {
+      colnames(ret) <- new_names
+    }
+  }
+  
   if (all(rownames(x) == seq_len(nrow(x)))) {
     # don't need to move rownames into a new column
-    ret <- data.frame(x, stringsAsFactors = FALSE)
-    if (!is.null(newnames)) {
-      colnames(ret) <- newnames
-    }
+    tibble::as_tibble(ret)
+  } else {
+    # don't use tibble rownames to col because of name repairing
+    dplyr::bind_cols(!!new_column := rownames(x), 
+                     tibble::as_tibble(ret))
   }
-  else {
-    ret <- data.frame(
-      ...new.col... = rownames(x),
-      unrowname(x),
-      stringsAsFactors = FALSE
-    )
-    colnames(ret)[1] <- newcol
-    if (!is.null(newnames)) {
-      colnames(ret)[-1] <- newnames
-    }
-  }
-  as_tibble(ret)
 }
 
+#' @param x A list of data.frames or matrices
+#' @param ... Extra arguments to pass to as_tidy_tibble
+#' @param id_column The name of the column giving the name of each 
+#' element in `x`
+#' @noRd
+map_as_tidy_tibble <- function(x, 
+                                     ..., 
+                                     id_column = "component") {
+  
+  purrr::map_df(x, 
+                as_tidy_tibble, 
+                ...,
+                .id = id_column)
+  
+}
+
+# copied from modeltests. re-export if at some we Import modeltests rather
+# than suggest it
+has_rownames <- function(df) {
+  if (tibble::is_tibble(df)) {
+    return(FALSE)
+  }
+  any(rownames(df) != as.character(1:nrow(df)))
+}
+
+na_types_dict <- list("r" = NA_real_,
+                      "i" = rlang::na_int,
+                      "c" = NA_character_,
+                      "l" = rlang::na_lgl)
+
+# A function that converts a string to a vector of NA types.
+# e.g. "rri" -> c(NA_real_, NA_real_, rlang::na_int)
+parse_na_types <- function(s) {
+  
+  positions <- purrr::map(
+    stringr::str_split(s, pattern = ""), 
+    match,
+    table = names(na_types_dict)
+  ) %>%
+    unlist()
+  
+  na_types_dict[positions] %>%
+    unlist() %>%
+    unname()
+}
+
+# A function that, given named arguments, will make a one-row
+# tibble, switching out NULLs for the appropriate NA type.
+as_glance_tibble <- function(..., na_types) {
+  
+  cols <- list(...)
+  
+  if (length(cols) != stringr::str_length(na_types)) {
+    stop(
+      "The number of columns provided does not match the number of ",
+      "column types provided."
+    )
+  }
+  
+  na_types_long <- parse_na_types(na_types)
+  
+  entries <- purrr::map2(cols, 
+                         na_types_long, 
+                         function(.x, .y) {if (length(.x) == 0) .y else .x})
+  
+  tibble::as_tibble_row(entries)
+  
+}
 
 # strip rownames from a data frame
 unrowname <- function(x) {
   rownames(x) <- NULL
   x
 }
-
-
-# remove NULL items in a vector or list
-compact <- function(x) Filter(Negate(is.null), x)
-
-
-#' insert a row of NAs into a data frame wherever another data frame has NAs
-#'
-#' @param x data frame that has one row for each non-NA row in original
-#' @param original data frame with NAs
-insert_NAs <- function(x, original) {
-  indices <- rep(NA, nrow(original))
-  indices[which(stats::complete.cases(original))] <- seq_len(nrow(x))
-  x[indices, ]
-}
-
 
 #' add fitted values, residuals, and other common outputs to
 #' an augment call
@@ -209,12 +194,12 @@ insert_NAs <- function(x, original) {
 #' @param ... extra arguments (not used)
 #'
 #' @export
-augment_columns <- function(x, data, newdata, type, type.predict = type,
+augment_columns <- function(x, data, newdata = NULL, type, type.predict = type,
                             type.residuals = type, se.fit = TRUE, ...) {
   notNAs <- function(o) {
     if (is.null(o) || all(is.na(o))) NULL else o
   }
-  
+
   residuals0 <- purrr::possibly(stats::residuals, NULL)
   influence0 <- purrr::possibly(stats::influence, NULL)
   cooks.distance0 <- purrr::possibly(stats::cooks.distance, NULL)
@@ -223,7 +208,7 @@ augment_columns <- function(x, data, newdata, type, type.predict = type,
 
   # call predict with arguments
   args <- list(x)
-  if (!missing(newdata)) {
+  if (!is.null(newdata)) {
     args$newdata <- newdata
   }
   if (!missing(type.predict)) {
@@ -233,10 +218,10 @@ augment_columns <- function(x, data, newdata, type, type.predict = type,
   args <- c(args, list(...))
 
 
-
   if ("panelmodel" %in% class(x)) {
     # work around for panel models (plm)
-    # stat::predict() returns wrong fitted values when applied to random or fixed effect panel models [plm(..., model="random"), plm(, ..., model="pooling")]
+    # stat::predict() returns wrong fitted values when applied to random or
+    # fixed effect panel models [plm(..., model="random"), plm(, ..., model="pooling")]
     # It works only for pooled OLS models (plm( ..., model="pooling"))
     pred <- model.frame(x)[, 1] - residuals(x)
   } else {
@@ -275,8 +260,16 @@ augment_columns <- function(x, data, newdata, type, type.predict = type,
         ret$.hat <- infl
         ret$.sigma <- NA
       } else {
-        ret$.hat <- infl$hat
-        ret$.sigma <- infl$sigma
+        zero_weights <- "weights" %in% names(x) &&
+          any(zero_weight_inds <- abs(x$weights) < .Machine$double.eps^0.5)
+        if (zero_weights) {
+          ret[c(".hat", ".sigma")] <- 0
+          ret$.hat[!zero_weight_inds] <- infl$hat
+          ret$.sigma[!zero_weight_inds] <- infl$sigma
+        } else {
+          ret$.hat <- infl$hat
+          ret$.sigma <- infl$sigma
+        }
       }
     }
 
@@ -303,11 +296,11 @@ augment_columns <- function(x, data, newdata, type, type.predict = type,
 
   if (is.null(na_action) || nrow(original) == nrow(ret)) {
     # no NAs were left out; we can simply recombine
-    original <- fix_data_frame(original, newcol = ".rownames")
+    original <- as_augment_tibble(original)
     return(as_tibble(cbind(original, ret)))
   } else if (class(na_action) == "omit") {
     # if the option is "omit", drop those rows from the data
-    original <- fix_data_frame(original, newcol = ".rownames")
+    original <- as_augment_tibble(original)
     original <- original[-na_action, ]
     return(as_tibble(cbind(original, ret)))
   }
@@ -325,178 +318,222 @@ augment_columns <- function(x, data, newdata, type, type.predict = type,
   if (all(ret$.rownames == seq_along(ret$.rownames))) {
     ret$.rownames <- NULL
   }
-  
+
   as_tibble(ret)
 }
 
-
-#' Add logLik, AIC, BIC, and other common measurements to a glance of
-#' a prediction
-#'
-#' A helper function for several functions in the glance generic. Methods
-#' such as logLik, AIC, and BIC are defined for many prediction
-#' objects, such as lm, glm, and nls. This is a helper function that adds
-#' them to a glance data.frame can be performed. If any of them cannot be
-#' computed, it fails quietly.
-#'
-#' @details In one special case, deviance for objects of the
-#' `lmerMod` class from lme4 is computed with
-#' `deviance(x, REML=FALSE)`.
-#'
-#' @param ret a one-row data frame (a partially complete glance)
-#' @param x the prediction model
-#'
-#' @return a one-row data frame with additional columns added, such as
-#'   \item{logLik}{log likelihoods}
-#'   \item{AIC}{Akaike Information Criterion}
-#'   \item{BIC}{Bayesian Information Criterion}
-#'   \item{deviance}{deviance}
-#'   \item{df.residual}{residual degrees of freedom}
-#'
-#' Each of these are produced by the corresponding generics
-#'
-#' @export
-finish_glance <- function(ret, x) {
-  ret$logLik <- tryCatch(as.numeric(stats::logLik(x)), error = function(e) NULL)
-  ret$AIC <- tryCatch(stats::AIC(x), error = function(e) NULL)
-  ret$BIC <- tryCatch(stats::BIC(x), error = function(e) NULL)
-
-  # special case for REML objects (better way?)
-  if (inherits(x, "lmerMod")) {
-    ret$deviance <- tryCatch(stats::deviance(x, REML = FALSE),
-      error = function(e) NULL
-    )
-  } else {
-    ret$deviance <- tryCatch(stats::deviance(x), error = function(e) NULL)
-  }
-  ret$df.residual <- tryCatch(df.residual(x), error = function(e) NULL)
-  
-  as_tibble(ret, rownames = NULL)
+response <- function(object, newdata = NULL) {
+  model.response(model.frame(terms(object), data = newdata, na.action = na.pass))
 }
 
+data_error <- function(cnd) {
+  stop(
+    "Must specify either `data` or `newdata` argument.",
+    call. = FALSE
+  )
+}
 
-#' Calculate confidence interval as a tidy data frame
-#'
-#' Return a confidence interval as a tidy data frame. This directly wraps the
-#' [confint()] function, but ensures it follows broom conventions:
-#' column names of `conf.low` and `conf.high`, and no row names.
-#' 
-#' `confint_tidy`
-#'
-#' @param x a model object for which [confint()] can be calculated
-#' @param conf.level confidence level
-#' @param func A function to compute a confidence interval for `x`. Calling
-#'   `func(x, level = conf.level, ...)` must return an object coercable to a
-#'   tibble. This dataframe like object should have to columns corresponding
-#'   the lower and upper bounds on the confidence interval.
-#' @param ... extra arguments passed on to `confint`
-#'
-#' @return A tibble with two columns: `conf.low` and `conf.high`.
-#'
-#' @seealso \link{confint}
-#'
-#' @export
-confint_tidy <- function(x, conf.level = .95, func = stats::confint, ...) {
-  # avoid "Waiting for profiling to be done..." message for some models
-  ci <- suppressMessages(func(x, level = conf.level, ...))
+safe_response <- purrr::possibly(response, NULL)
+
+# in weighted regressions, influence measures should be zero for
+# data points with zero weight
+# helper for augment.lm and augment.glm
+add_hat_sigma_cols <- function(df, x, infl) {
+  df$.hat <- 0
+  df$.sigma <- 0
+
+  w <- x$weights
+  nonzero_idx <- if (is.null(w)) seq_along(df$.hat) else which(w != 0)
+
+  df$.hat[nonzero_idx] <- infl$hat %>% unname()
+  df$.sigma[nonzero_idx] <- infl$sigma %>% unname()
+  df
+}
+
+# adds only the information that can be defined for newdata. no influence
+# measure of anything fun like goes here.
+#
+# add .fitted column
+# add .resid column if response is present
+# deal with rownames and convert to tibble as necessary
+# add .se.fit column if present
+# be *incredibly* careful that the ... are passed correctly
+augment_newdata <- function(x, data, newdata, .se_fit, ...) {
+  passed_newdata <- !is.null(newdata)
+  df <- if (passed_newdata) newdata else data
+  df <- as_augment_tibble(df)
+
+  # NOTE: It is important use predict(x, newdata = newdata) rather than
+  # predict(x, newdata = df). This is to avoid an edge case breakage
+  # when augment is called with no data argument, so that data is
+  # model.frame(x). When data = model.frame(x) and the model formula
+  # contains a term like `log(x)`, the predict method will break. Luckily,
+  # predict(x, newdata = NULL) works perfectly well in this case.
+  #
+  # The current code relies on predict(x, newdata = NULL) functioning
+  # equivalently to predict(x, newdata = data). An alternative would be to use
+  # fitted(x) instead, although this may not play well with missing data,
+  # and may behave like na.action = na.omit rather than na.action = na.pass.
+
+  # This helper *should not* be used for predict methods that do not have
+  # an na.pass argument
   
-  # protect against confidence intervals returned as named vectors
+  if (.se_fit) {
+    pred_obj <- predict(x, newdata = newdata, na.action = na.pass, se.fit = TRUE, ...)
+    df$.fitted <- pred_obj$fit %>% unname()
+
+    # a couple possible names for the standard error element of the list
+    # se.fit: lm, glm
+    # se: loess
+    se_idx <- which(names(pred_obj) %in% c("se.fit", "se"))
+    df$.se.fit <- pred_obj[[se_idx]]
+  } else if (passed_newdata) {
+    df$.fitted <- predict(x, newdata = newdata, na.action = na.pass, ...) %>% 
+      unname()
+  } else {
+    df$.fitted <- predict(x, na.action = na.pass, ...) %>% 
+      unname()
+  }
+
+  resp <- safe_response(x, df)
+
+  if (!is.null(resp) && is.numeric(resp)) {
+    df$.resid <- (resp - df$.fitted) %>% unname() 
+  }
+
+  df
+}
+
+# this exists to avoid the single predictor gotcha
+# this version adds a terms column
+broom_confint <- function(x, ...) {
+
+  # warn on arguments silently being ignored
+  ellipsis::check_dots_used()
+  ci <- suppressMessages(confint(x, ...))
+
+  # confint called on models with a single predictor
+  # often returns a named vector rather than a matrix :(
+
   if (is.null(dim(ci))) {
     ci <- matrix(ci, nrow = 1)
   }
-  
-  # TODO: informative errors for non-vector, dataframe, tibble CI output
-  
-  # remove rows that are all NA. *not the same* as na.omit which checks
-  # for any NA.
-  all_na <- apply(ci, 1, function(x) all(is.na(x)))
-  ci <- ci[!all_na, , drop = FALSE]
-  colnames(ci) <- c("conf.low", "conf.high")
-  as_tibble(ci)
+
+  ci <- as_tibble(ci)
+  names(ci) <- c("term", "conf.low", "conf.high")
+  ci
 }
 
-# utility function from tidyr::col_name
-col_name <- function(x, default = stop("Please supply column name", call. = FALSE)) {
-  if (is.character(x)) {
-    return(x)
+# this version adds a terms column
+broom_confint_terms <- function(x, ...) {
+
+  # warn on arguments silently being ignored
+  ellipsis::check_dots_used()
+  ci <- suppressMessages(confint(x, ...))
+
+  # confint called on models with a single predictor
+  # often returns a named vector rather than a matrix :(
+
+  if (is.null(dim(ci))) {
+    ci <- matrix(ci, nrow = 1)
+    rownames(ci) <- names(coef(x))[1]
   }
-  if (identical(x, quote(expr = ))) {
-    return(default)
-  }
-  if (is.name(x)) {
-    return(as.character(x))
-  }
-  if (is.null(x)) {
-    return(x)
-  }
-  stop("Invalid column specification", call. = FALSE)
+
+  ci <- as_tibble(ci, rownames = "term")
+  names(ci) <- c("term", "conf.low", "conf.high")
+  ci
 }
 
-
+#' @importFrom utils globalVariables
 globalVariables(
   c(
+    ":=",
     ".",
+    ".fitted",
     ".id",
+    ".resid",
     ".rownames",
+    ".tau",
+    "aic",
+    "bic",
     "ci.lower",
     "ci.upper",
-    "column", 
+    "column",
     "column1",
     "column2",
     "comp",
     "comparison",
     "conf.high",
-    "conf.low", 
+    "conf.low",
+    "contrast",
+    "cook.d",
+    "cov.r",
+    "cutoffs",
     "data",
+    "dffits",
+    "dfbetas",
     "df.residual",
+    "distance",
     "effect",
     "est",
     "estimate",
-    "expCIWidth", 
+    "expCIWidth",
     "fit",
     "GCV",
     "group1",
     "group2",
+    "hat",
     "index",
     "Intercept",
-    "item1", 
+    "item1",
     "item2",
     "key",
+    "lavInspect",
     "lambda",
-    "level", 
+    "level",
     "lhs",
     "loading",
-    "method", 
+    "method",
     "Method",
-    "N", 
-    "nobs", 
+    "N",
+    "nobs",
     "norig",
+    "null.value",
     "objs",
     "obs",
     "op",
-    "p.value", 
+    "p.value",
     "PC",
     "percent",
+    "P-perm (1-tailed)",
+    "Pr(Chi)",
     "pvalue",
-    "rhs", 
+    "QE.del",
+    "rd_roclet",
+    "rhs",
     "rmsea.ci.upper",
-    "rowname", 
-    "se", 
+    "rowname",
+    "rstudent",
+    "se",
     "series",
     "Slope",
-    "statistic", 
+    "stat",
+    "statistic",
     "std.dev",
-    "std.error", 
+    "std.error",
     "step",
     "stratum",
     "surv",
+    "tau2.del",
     "term",
     "type",
     "value",
     "Var1",
-    "Var2", 
+    "Var2",
     "variable",
     "wald.test",
+    "weight",
+    "y",
     "z"
   )
 )

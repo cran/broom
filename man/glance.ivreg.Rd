@@ -9,9 +9,8 @@
 \arguments{
 \item{x}{An \code{ivreg} object created by a call to \code{\link[AER:ivreg]{AER::ivreg()}}.}
 
-\item{diagnostics}{Logical indicating whether to include statistics and
-p-values for Sargan, Wu-Hausman and weak instrument tests. Defaults to
-\code{FALSE}.}
+\item{diagnostics}{Logical indicating whether or not to return the
+Wu-Hausman and Sargan diagnostic information.}
 
 \item{...}{Additional arguments. Not used. Needed to match generic
 signature only. \strong{Cautionary note:} Misspelled arguments will be
@@ -23,44 +22,39 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A one-row tibble with columns
-\item{r.squared}{The percent of variance explained by the model}
-\item{adj.r.squared}{r.squared adjusted based on the degrees of freedom}
-\item{sigma}{The square root of the estimated residual variance}
-\item{statistic}{Wald test statistic}
-\item{p.value}{p-value from the Wald test}
-\item{df}{Degrees of freedom used by the coefficients}
-\item{df.residual}{residual degrees of freedom}
-
-If \code{diagnostics = TRUE}, will also return the following columns:
-\item{statistic.Sargan}{Statistic for Sargan test}
-\item{p.value.Sargan}{P-value for Sargan test}
-\item{statistic.Wu.Hausman}{Statistic for Wu-Hausman test}
-\item{p.value.Wu.Hausman}{P-value for Wu-Hausman test}
-\item{statistic.weakinst}{Statistic for Wu-Hausman test}
-\item{p.value.weakinst}{P-value for weak instruments test}
-}
 \description{
 Glance accepts a model object and returns a \code{\link[tibble:tibble]{tibble::tibble()}}
 with exactly one row of model summaries. The summaries are typically
 goodness of fit measures, p-values for hypothesis tests on residuals,
 or model convergence information.
 
-Glance never returns information from the original call to the modelling
-function. This includes the name of the modelling function or any
-arguments passed to the modelling function.
+Glance never returns information from the original call to the modeling
+function. This includes the name of the modeling function or any
+arguments passed to the modeling function.
 
 Glance does not calculate summary measures. Rather, it farms out these
 computations to appropriate methods and gathers the results together.
 Sometimes a goodness of fit measure will be undefined. In these cases
 the measure will be reported as \code{NA}.
+
+Glance returns the same number of columns regardless of whether the
+model matrix is rank-deficient or not. If so, entries in columns
+that no longer have a well-defined value are filled in with an \code{NA}
+of the appropriate type.
+}
+\note{
+Beginning 0.7.0, \code{glance.ivreg} returns statistics for the
+Wu-Hausman test for endogeneity and the Sargan test of
+overidentifying restrictions. Sargan test values are returned as \code{NA}
+if the number of instruments is not greater than the number of
+endogenous regressors.
 }
 \examples{
 
 library(AER)
 
 data("CigarettesSW", package = "AER")
+
 ivr <- ivreg(
   log(packs) ~ income | population,
   data = CigarettesSW,
@@ -71,12 +65,13 @@ summary(ivr)
 
 tidy(ivr)
 tidy(ivr, conf.int = TRUE)
-tidy(ivr, conf.int = TRUE, exponentiate = TRUE)
+tidy(ivr, conf.int = TRUE, instruments = TRUE)
 
 augment(ivr)
+augment(ivr, data = CigarettesSW)
+augment(ivr, newdata = CigarettesSW)
 
 glance(ivr)
-
 }
 \seealso{
 \code{\link[=glance]{glance()}}, \code{\link[AER:ivreg]{AER::ivreg()}}
@@ -86,3 +81,15 @@ Other ivreg tidiers:
 \code{\link{tidy.ivreg}()}
 }
 \concept{ivreg tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with exactly one row and columns:
+  \item{adj.r.squared}{Adjusted R squared statistic, which is like the R squared statistic except taking degrees of freedom into account.}
+  \item{df}{Degrees of freedom used by the model.}
+  \item{df.residual}{Residual degrees of freedom.}
+  \item{nobs}{Number of observations used.}
+  \item{r.squared}{R squared statistic, or the percent of variation explained by the model. Also known as the coefficient of determination.}
+  \item{sigma}{Estimated standard error of the residuals.}
+  \item{statistic}{Wald test statistic.}
+  \item{p.value}{P-value for the Wald test.}
+
+}

@@ -19,43 +19,40 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A one-row \link[tibble:tibble]{tibble::tibble} with columns:
-\item{power}{Power achieved by the analysis.}
-\item{n}{Sample size uzed to achieve this power.}
-\item{power.reached}{Whether the desired power was reached.}
-\item{maxit}{Number of iterations performed.}
-}
 \description{
 Glance accepts a model object and returns a \code{\link[tibble:tibble]{tibble::tibble()}}
 with exactly one row of model summaries. The summaries are typically
 goodness of fit measures, p-values for hypothesis tests on residuals,
 or model convergence information.
 
-Glance never returns information from the original call to the modelling
-function. This includes the name of the modelling function or any
-arguments passed to the modelling function.
+Glance never returns information from the original call to the modeling
+function. This includes the name of the modeling function or any
+arguments passed to the modeling function.
 
 Glance does not calculate summary measures. Rather, it farms out these
 computations to appropriate methods and gathers the results together.
 Sometimes a goodness of fit measure will be undefined. In these cases
 the measure will be reported as \code{NA}.
+
+Glance returns the same number of columns regardless of whether the
+model matrix is rank-deficient or not. If so, entries in columns
+that no longer have a well-defined value are filled in with an \code{NA}
+of the appropriate type.
 }
 \examples{
 
-if (require("binGroup", quietly = TRUE)) {
-    des <- binDesign(nmax = 300, delta = 0.06,
-                     p.hyp = 0.1, power = .8)
+library(binGroup)
+des <- binDesign(
+  nmax = 300, delta = 0.06,
+  p.hyp = 0.1, power = .8
+)
 
-    glance(des)
-    tidy(des)
+glance(des)
+tidy(des)
 
-    # the ggplot2 equivalent of plot(des)
-    library(ggplot2)
-    ggplot(tidy(des), aes(n, power)) +
-        geom_line()
-}
-
+library(ggplot2)
+ggplot(tidy(des), aes(n, power)) +
+  geom_line()
 }
 \seealso{
 \code{\link[=glance]{glance()}}, \code{\link[binGroup:binDesign]{binGroup::binDesign()}}
@@ -65,3 +62,11 @@ Other bingroup tidiers:
 \code{\link{tidy.binWidth}()}
 }
 \concept{bingroup tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with exactly one row and columns:
+  \item{power}{Power achieved by the analysis.}
+  \item{n}{Sample size uzed to achieve this power.}
+  \item{power.reached}{Whether the desired power was reached.}
+  \item{maxit}{Number of iterations performed.}
+
+}

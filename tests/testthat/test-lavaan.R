@@ -1,5 +1,10 @@
 context("lavaan")
 
+skip_on_cran()
+
+skip_if_not_installed("modeltests")
+library(modeltests)
+
 skip_if_not_installed("lavaan")
 library(lavaan)
 
@@ -13,22 +18,21 @@ test_that("lavaan tidier arguments", {
 })
 
 test_that("tidy.lavaan", {
-  
-  td <- tidy(fit)
-  td2 <- tidy(fit2)
-  tdc <- tidy(fit2, conf.level = .999)
+  td <- tidy(fit, conf.int = TRUE)
+  td2 <- tidy(fit2, conf.int = TRUE)
+  tdc <- tidy(fit2, conf.int = TRUE, conf.level = .999)
   tdr <- tidy(fit2, rsquare = TRUE)
-  
+
   check_tidy_output(td)
   check_tidy_output(td2)
   check_tidy_output(tdc)
   check_tidy_output(tdr)
-  
+
   check_dims(td, 3, 11)
   check_dims(td2, 19, 11)
-  
+
   expect_equal(td$term, c("mpg ~ wt", "mpg ~~ mpg", "wt ~~ wt"))
-  
+
   op_counts <- dplyr::count(td2, op)$n
   expect_true((all(9:10 %in% op_counts)))
 
@@ -40,11 +44,10 @@ test_that("tidy.lavaan", {
 })
 
 
-
 test_that("glance.lavaan", {
   gl <- glance(fit)
   check_glance_outputs(gl)
-  
+
   gl2 <- glance(fit2)
   check_glance_outputs(gl2)
 })

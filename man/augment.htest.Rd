@@ -20,18 +20,6 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-Errors unless \code{x} is a chi-squared test. If \code{x} is a chi-squared
-test, for each cell of the tested table returns columns:
-
-\item{.observed}{Observed count}
-\item{.prop}{Proportion of the total}
-\item{.row.prop}{Row proportion (2 dimensions table only)}
-\item{.col.prop}{Column proportion (2 dimensions table only)}
-\item{.expected}{Expected count under the null hypothesis}
-\item{.residuals}{Pearson residual}
-\item{.stdres}{Standardized residual}
-}
 \description{
 Augment accepts a model object and a dataset and adds
 information about each observation in the dataset. Most commonly, this
@@ -47,15 +35,15 @@ object. Pass datasets to \code{newdata} to augment data that was not used
 during model fitting. This still requires that all columns used to fit
 the model are present.
 
-Augment will often behavior different depending on whether \code{data} or
-\code{newdata} is specified. This is because there is often information
+Augment will often behave differently depending on whether \code{data} or
+\code{newdata} is given. This is because there is often information
 associated with training observations (such as influences or related)
 measures that is not meaningfully defined for new observations.
 
 For convenience, many augment methods provide default \code{data} arguments,
 so that \code{augment(fit)} will return the augmented training data. In these
-cases augment tries to reconstruct the original data based on the model
-object, with some varying degrees of success.
+cases, augment tries to reconstruct the original data based on the model
+object with varying degrees of success.
 
 The augmented dataset is always returned as a \link[tibble:tibble]{tibble::tibble} with the
 \strong{same number of rows} as the passed dataset. This means that the
@@ -68,12 +56,31 @@ encounter errors, try explicitly passing a tibble, or fitting the original
 model on data in a tibble.
 
 We are in the process of defining behaviors for models fit with various
-\link{na.action} arguments, but make no guarantees about behavior when data is
+\code{na.action} arguments, but make no guarantees about behavior when data is
 missing at this time.
 }
 \details{
 See \code{\link[stats:chisq.test]{stats::chisq.test()}} for more details on
 how residuals are computed.
+}
+\examples{
+
+tt <- t.test(rnorm(10))
+tidy(tt)
+glance(tt) # same output for all htests
+
+tt <- t.test(mpg ~ am, data = mtcars)
+tidy(tt)
+
+wt <- wilcox.test(mpg ~ am, data = mtcars, conf.int = TRUE, exact = FALSE)
+tidy(wt)
+
+ct <- cor.test(mtcars$wt, mtcars$mpg)
+tidy(ct)
+
+chit <- chisq.test(xtabs(Freq ~ Sex + Class, data = as.data.frame(Titanic)))
+tidy(chit)
+augment(chit)
 }
 \seealso{
 \code{\link[=augment]{augment()}}, \code{\link[stats:chisq.test]{stats::chisq.test()}}
@@ -84,3 +91,14 @@ Other htest tidiers:
 \code{\link{tidy.power.htest}()}
 }
 \concept{htest tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with exactly one row and columns:
+  \item{.observed}{Observed count.}
+  \item{.prop}{Proportion of the total.}
+  \item{.row.prop}{Row proportion (2 dimensions table only).}
+  \item{.col.prop}{Column proportion (2 dimensions table only).}
+  \item{.expected}{Expected count under the null hypothesis.}
+  \item{.resid}{Pearson residuals.}
+  \item{.std.resid}{Standardized residual.}
+
+}

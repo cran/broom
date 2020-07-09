@@ -5,7 +5,7 @@
 \alias{rqs_tidiers}
 \title{Tidy a(n) rqs object}
 \usage{
-\method{tidy}{rqs}(x, se.type = "rank", conf.int = TRUE, conf.level = 0.95, ...)
+\method{tidy}{rqs}(x, se.type = "rank", conf.int = FALSE, conf.level = 0.95, ...)
 }
 \arguments{
 \item{x}{An \code{rqs} object returned from \code{\link[quantreg:rq]{quantreg::rq()}}.}
@@ -21,32 +21,13 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 if \code{conf.int = TRUE}. Must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
-\item{...}{Additional arguments passed to \code{\link[quantreg:summary.rqs]{quantreg::summary.rqs()}}}
-}
-\value{
-A \code{\link[tibble:tibble]{tibble::tibble()}} with one row for each term in the
-regression. The tibble has columns:
-
-\item{term}{The name of the regression term.}
-\item{estimate}{The estimated value of the regression term.}
-\item{std.error}{The standard error of the regression term.}
-\item{statistic}{The value of a statistic, almost always a T-statistic,
-to use in a hypothesis that the regression term is non-zero.}
-\item{p.value}{The two-sided p-value associated with the observed
-statistic.}
-\item{conf.low}{The low end of a confidence interval for the regression
-term. Included only if \code{conf.int = TRUE}.}
-\item{conf.high}{The high end of a confidence interval for the regression
-term. Included only if \code{conf.int = TRUE}.}
-
-An additional \code{quantile} column indicating with quantile the
-coefficient corresponds to.
+\item{...}{Additional arguments passed to \code{\link[quantreg:summary.rq]{quantreg::summary.rqs()}}}
 }
 \description{
 Tidy summarizes information about the components of a model.
 A model component might be a single term in a regression, a single
 hypothesis, a cluster, or a class. Exactly what tidy considers to be a
-model component varies cross models but is usually self-evident.
+model component varies across models but is usually self-evident.
 If a model has several distinct types of components, you will need to
 specify which components to return.
 }
@@ -69,3 +50,15 @@ Other quantreg tidiers:
 \code{\link{tidy.rq}()}
 }
 \concept{quantreg tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{conf.high}{Upper bound on the confidence interval for the estimate.}
+  \item{conf.low}{Lower bound on the confidence interval for the estimate.}
+  \item{estimate}{The estimated value of the regression term.}
+  \item{p.value}{The two-sided p-value associated with the observed statistic.}
+  \item{statistic}{The value of a T-statistic to use in a hypothesis that the regression term is non-zero.}
+  \item{std.error}{The standard error of the regression term.}
+  \item{term}{The name of the regression term.}
+  \item{quantile}{Linear conditional quantile.}
+
+}

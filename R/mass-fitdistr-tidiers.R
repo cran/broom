@@ -4,13 +4,8 @@
 #' @param x A `fitdistr` object returned by [MASS::fitdistr()].
 #' @template param_unused_dots
 #'
-#' @return A [tibble::tibble] with one row for estimated parameter, with
-#'   columns:
-#'   
-#'   \item{term}{The term that was estimated}
-#'   \item{estimate}{Estimated value}
-#'   \item{std.error}{Standard error of estimate}
-#'   
+#' @evalRd return_tidy("term", "estimate", "std.error")
+#'
 #' @examples
 #'
 #' set.seed(2015)
@@ -21,7 +16,6 @@
 #'
 #' tidy(fit)
 #' glance(fit)
-#'
 #' @export
 #' @family fitdistr tidiers
 #' @aliases fitdistr_tidiers
@@ -37,18 +31,21 @@ tidy.fitdistr <- function(x, ...) {
 
 #' @templateVar class fitdistr
 #' @template title_desc_glance
-#' 
-#' @inheritParams tidy.fitdistr
 #'
-#' @return A one-row [tibble::tibble] with columns:
-#'   \item{n}{Number of observations used in estimation}
-#'   \item{logLik}{log-likelihood of estimated data}
-#'   \item{AIC}{Akaike Information Criterion}
-#'   \item{BIC}{Bayesian Information Criterion}
+#' @inherit tidy.fitdistr params examples
+#'
+#' @evalRd return_glance("logLik", "AIC", "BIC", "nobs")
 #'
 #' @export
 #' @family fitdistr tidiers
 #' @seealso [tidy()], [MASS::fitdistr()]
 glance.fitdistr <- function(x, ...) {
-  finish_glance(data.frame(n = x$n), x)
+  as_glance_tibble(
+    logLik = stats::logLik(x),
+    AIC = stats::AIC(x),
+    BIC = stats::BIC(x),
+    nobs = stats::nobs(x),
+    na_types = "rrri"
+  )
+  
 }

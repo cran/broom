@@ -22,27 +22,11 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A \code{\link[tibble:tibble]{tibble::tibble()}} with one row for each term in the
-regression. The tibble has columns:
-
-\item{term}{The name of the regression term.}
-\item{estimate}{The estimated value of the regression term.}
-\item{std.error}{The standard error of the regression term.}
-\item{statistic}{The value of a statistic, almost always a T-statistic,
-to use in a hypothesis that the regression term is non-zero.}
-\item{p.value}{The two-sided p-value associated with the observed
-statistic.}
-\item{conf.low}{The low end of a confidence interval for the regression
-term. Included only if \code{conf.int = TRUE}.}
-\item{conf.high}{The high end of a confidence interval for the regression
-term. Included only if \code{conf.int = TRUE}.}
-}
 \description{
 Tidy summarizes information about the components of a model.
 A model component might be a single term in a regression, a single
 hypothesis, a cluster, or a class. Exactly what tidy considers to be a
-model component varies cross models but is usually self-evident.
+model component varies across models but is usually self-evident.
 If a model has several distinct types of components, you will need to
 specify which components to return.
 }
@@ -52,17 +36,19 @@ library(survival)
 
 # examples come from cch documentation
 subcoh <- nwtco$in.subcohort
-selccoh <- with(nwtco, rel==1|subcoh==1)
-ccoh.data <- nwtco[selccoh,]
+selccoh <- with(nwtco, rel == 1 | subcoh == 1)
+ccoh.data <- nwtco[selccoh, ]
 ccoh.data$subcohort <- subcoh[selccoh]
 ## central-lab histology
-ccoh.data$histol <- factor(ccoh.data$histol,labels=c("FH","UH"))
+ccoh.data$histol <- factor(ccoh.data$histol, labels = c("FH", "UH"))
 ## tumour stage
-ccoh.data$stage <- factor(ccoh.data$stage,labels=c("I","II","III" ,"IV"))
-ccoh.data$age <- ccoh.data$age/12 # Age in years
+ccoh.data$stage <- factor(ccoh.data$stage, labels = c("I", "II", "III", "IV"))
+ccoh.data$age <- ccoh.data$age / 12 # Age in years
 
-fit.ccP <- cch(Surv(edrel, rel) ~ stage + histol + age, data = ccoh.data,
-               subcoh = ~subcohort, id= ~seqno, cohort.size = 4028)
+fit.ccP <- cch(Surv(edrel, rel) ~ stage + histol + age,
+  data = ccoh.data,
+  subcoh = ~subcohort, id = ~seqno, cohort.size = 4028
+)
 
 tidy(fit.ccP)
 
@@ -72,7 +58,6 @@ ggplot(tidy(fit.ccP), aes(x = estimate, y = term)) +
   geom_point() +
   geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0) +
   geom_vline(xintercept = 0)
-
 }
 \seealso{
 \code{\link[=tidy]{tidy()}}, \code{\link[survival:cch]{survival::cch()}}
@@ -102,3 +87,14 @@ Other survival tidiers:
 }
 \concept{cch tidiers}
 \concept{survival tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{conf.high}{Upper bound on the confidence interval for the estimate.}
+  \item{conf.low}{Lower bound on the confidence interval for the estimate.}
+  \item{estimate}{The estimated value of the regression term.}
+  \item{p.value}{The two-sided p-value associated with the observed statistic.}
+  \item{statistic}{The value of a T-statistic to use in a hypothesis that the regression term is non-zero.}
+  \item{std.error}{The standard error of the regression term.}
+  \item{term}{The name of the regression term.}
+
+}

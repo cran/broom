@@ -1,32 +1,38 @@
 #' @templateVar class coeftest
 #' @template title_desc_tidy
-#' 
+#'
 #' @param x A `coeftest` object returned from [lmtest::coeftest()].
+#' @template param_confint
 #' @template param_unused_dots
-#' 
-#' @return A [tibble::tibble] with one row for each coefficient and columns:
-#'   \item{term}{The term in the linear model being estimated and tested}
-#'   \item{estimate}{The estimated coefficient}
-#'   \item{std.error}{The standard error}
-#'   \item{statistic}{test statistic}
-#'   \item{p.value}{p-value}
+#'
+#' @evalRd return_tidy(regression = TRUE)
 #'
 #' @examples
 #'
-#' if (require("lmtest", quietly = TRUE)) {
-#'     data(Mandible)
-#'     fm <- lm(length ~ age, data=Mandible, subset=(age <= 28))
+#' library(lmtest)
 #'
-#'     lmtest::coeftest(fm)
-#'     tidy(coeftest(fm))
-#' }
+#' data(Mandible)
+#' fm <- lm(length ~ age, data = Mandible, subset = (age <= 28))
 #'
+#' lmtest::coeftest(fm)
+#' tidy(coeftest(fm))
 #' @export
 #' @seealso [tidy()], [lmtest::coeftest()]
 #' @aliases lmtest_tidiers coeftest_tidiers
-tidy.coeftest <- function(x, ...) {
+tidy.coeftest <- function(x, conf.int = FALSE, conf.level = .95, ...) {
   co <- as.data.frame(unclass(x))
-  nn <- c("estimate", "std.error", "statistic", "p.value")[1:ncol(co)]
-  ret <- fix_data_frame(co, nn)
+  ret <- as_tidy_tibble(
+    co, 
+    new_names = c("estimate", "std.error", "statistic", "p.value")[1:ncol(co)]
+  )
+  
+  if (conf.int) {
+    if (utils::packageVersion("lmtest") < "0.9.37") {
+      warning("Needs lmtest version >=0.9.37 for conf.int = TRUE")
+      return(ret)
+    }
+    ci <- broom_confint_terms(x, level = conf.level)
+    ret <- dplyr::left_join(ret, ci, by = "term")
+  }
   ret
 }

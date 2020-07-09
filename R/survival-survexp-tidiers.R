@@ -3,12 +3,10 @@
 #'
 #' @param x An `survexp` object returned from [survival::survexp()].
 #' @template param_unused_dots
-#' 
-#' @return A [tibble::tibble] with one row for each time point and columns:
-#' 
-#'   \item{time}{time point}
-#'   \item{estimate}{estimated survival}
-#'   \item{n.risk}{number of individuals at risk}
+#'
+#' @evalRd return_tidy("time", "n.risk",
+#'   estimate = "Estimate survival"
+#' )
 #'
 #' @examples
 #'
@@ -20,13 +18,12 @@
 #'     year = accept.dt,
 #'     age = (accept.dt - birth.dt)
 #'   ),
-#'   method = 'conditional',
+#'   method = "conditional",
 #'   data = jasa
 #' )
 #'
 #' tidy(sexpfit)
 #' glance(sexpfit)
-#'
 #' @aliases sexpfit_tidiers survexp_tidiers
 #' @export
 #' @seealso [tidy()], [survival::survexp()]
@@ -40,22 +37,20 @@ tidy.survexp <- function(x, ...) {
 
 #' @templateVar class survexp
 #' @template title_desc_glance
-#' 
-#' @inheritParams tidy.survexp
-#' 
-#' @return A one-row [tibble::tibble] with columns:
-#' 
-#'   \item{n.max}{maximum number of subjects at risk}
-#'   \item{n.start}{starting number of subjects at risk}
-#'   \item{timepoints}{number of timepoints}
+#'
+#' @inherit tidy.survexp params examples
+#'
+#' @evalRd return_glance("n.max", "n.start", "timepoints")
 #'
 #' @export
 #' @seealso [glance()], [survival::survexp()]
 #' @family survexp tidiers
 #' @family survival tidiers
 glance.survexp <- function(x, ...) {
-  tibble(
-    n.max = max(x$n.risk), n.start = x$n.risk[1],
-    timepoints = length(x$n.risk)
+  as_glance_tibble(
+    n.max = max(x$n.risk),
+    n.start = x$n.risk[1],
+    timepoints = length(x$n.risk),
+    na_types = "iii"
   )
 }

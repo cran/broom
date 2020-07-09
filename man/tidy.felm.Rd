@@ -6,7 +6,7 @@
 \alias{lfe_tidiers}
 \title{Tidy a(n) felm object}
 \usage{
-\method{tidy}{felm}(x, conf.int = FALSE, conf.level = 0.95, fe = FALSE, ...)
+\method{tidy}{felm}(x, conf.int = FALSE, conf.level = 0.95, fe = FALSE, robust = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{felm} object returned from \code{\link[lfe:felm]{lfe::felm()}}.}
@@ -21,6 +21,9 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 \item{fe}{Logical indicating whether or not to include estimates of
 fixed effects. Defaults to \code{FALSE}.}
 
+\item{robust}{Logical indicating robust or clustered standard errors should
+be used. See lfe::summary.felm for details. Defaults to \code{FALSE}.}
+
 \item{...}{Additional arguments. Not used. Needed to match generic
 signature only. \strong{Cautionary note:} Misspelled arguments will be
 absorbed in \code{...}, where they will be ignored. If the misspelled
@@ -31,63 +34,45 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A \code{\link[tibble:tibble]{tibble::tibble()}} with one row for each term in the
-regression. The tibble has columns:
-
-\item{term}{The name of the regression term.}
-\item{estimate}{The estimated value of the regression term.}
-\item{std.error}{The standard error of the regression term.}
-\item{statistic}{The value of a statistic, almost always a T-statistic,
-to use in a hypothesis that the regression term is non-zero.}
-\item{p.value}{The two-sided p-value associated with the observed
-statistic.}
-\item{conf.low}{The low end of a confidence interval for the regression
-term. Included only if \code{conf.int = TRUE}.}
-\item{conf.high}{The high end of a confidence interval for the regression
-term. Included only if \code{conf.int = TRUE}.}
-
-If \code{fe = TRUE}, also includes rows for for fixed effects estimates.
-}
 \description{
 Tidy summarizes information about the components of a model.
 A model component might be a single term in a regression, a single
 hypothesis, a cluster, or a class. Exactly what tidy considers to be a
-model component varies cross models but is usually self-evident.
+model component varies across models but is usually self-evident.
 If a model has several distinct types of components, you will need to
 specify which components to return.
 }
 \examples{
 
-if (require("lfe", quietly = TRUE)) {
+library(lfe)
 
-    library(lfe)
-    
-    N=1e2
-    DT <- data.frame(
-      id = sample(5, N, TRUE),
-      v1 =  sample(5, N, TRUE),
-      v2 =  sample(1e6, N, TRUE),
-      v3 =  sample(round(runif(100,max=100),4), N, TRUE),
-      v4 =  sample(round(runif(100,max=100),4), N, TRUE)
-    )
+N <- 1e2
+DT <- data.frame(
+  id = sample(5, N, TRUE),
+  v1 = sample(5, N, TRUE),
+  v2 = sample(1e6, N, TRUE),
+  v3 = sample(round(runif(100, max = 100), 4), N, TRUE),
+  v4 = sample(round(runif(100, max = 100), 4), N, TRUE)
+)
 
-    result_felm <- felm(v2~v3, DT)
-    tidy(result_felm)
-    augment(result_felm)
-    result_felm <- felm(v2~v3|id+v1, DT)
-    tidy(result_felm, fe = TRUE)
-    augment(result_felm)
-    v1<-DT$v1
-    v2 <- DT$v2
-    v3 <- DT$v3
-    id <- DT$id
-    result_felm <- felm(v2~v3|id+v1)
-    tidy(result_felm)
-    augment(result_felm)
-    glance(result_felm)
-}
+result_felm <- felm(v2 ~ v3, DT)
+tidy(result_felm)
+augment(result_felm)
 
+result_felm <- felm(v2 ~ v3 | id + v1, DT)
+tidy(result_felm, fe = TRUE)
+tidy(result_felm, robust = TRUE)
+augment(result_felm)
+
+v1 <- DT$v1
+v2 <- DT$v2
+v3 <- DT$v3
+id <- DT$id
+result_felm <- felm(v2 ~ v3 | id + v1)
+
+tidy(result_felm)
+augment(result_felm)
+glance(result_felm)
 }
 \seealso{
 \code{\link[=tidy]{tidy()}}, \code{\link[lfe:felm]{lfe::felm()}}
@@ -96,3 +81,14 @@ Other felm tidiers:
 \code{\link{augment.felm}()}
 }
 \concept{felm tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{conf.high}{Upper bound on the confidence interval for the estimate.}
+  \item{conf.low}{Lower bound on the confidence interval for the estimate.}
+  \item{estimate}{The estimated value of the regression term.}
+  \item{p.value}{The two-sided p-value associated with the observed statistic.}
+  \item{statistic}{The value of a T-statistic to use in a hypothesis that the regression term is non-zero.}
+  \item{std.error}{The standard error of the regression term.}
+  \item{term}{The name of the regression term.}
+
+}

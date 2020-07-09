@@ -1,7 +1,4 @@
 #' Tidy a sparseMatrix object from the Matrix package
-#' 
-#' sparseMatrix tidiers are deprecated and will be removed from an upcoming
-#' version of broom.
 #'
 #' Tidy a sparseMatrix object from the Matrix package into
 #' a three-column data frame, row, column, and value (with
@@ -9,13 +6,19 @@
 #' use those, otherwise use indices
 #'
 #' @param x A Matrix object
-#' @param ... Extra arguments, not used
+#' @template param_unused_dots
 #'
 #' @name sparse_tidiers
 #'
+#' @evalRd return_tidy(
+#'   "row",
+#'   column = "Column name in the original matrix.",
+#'   "value"
+#' )
+#'
+#'
 #' @export
 tidy.dgTMatrix <- function(x, ...) {
-  
   .Deprecated()
   s <- Matrix::summary(x)
 

@@ -20,45 +20,40 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A \link[tibble:tibble]{tibble::tibble} with one row for each time point and columns:
-
-\item{pyears}{person-years of exposure}
-\item{n}{number of subjects contributing time}
-\item{event}{observed number of events}
-\item{expected}{expected number of events (present only if a
-\code{ratetable} term is present)}
-
-If the \code{data.frame = TRUE} argument is supplied to \code{pyears},
-this is simply the contents of \code{x$data}.
-}
 \description{
 Tidy summarizes information about the components of a model.
 A model component might be a single term in a regression, a single
 hypothesis, a cluster, or a class. Exactly what tidy considers to be a
-model component varies cross models but is usually self-evident.
+model component varies across models but is usually self-evident.
 If a model has several distinct types of components, you will need to
 specify which components to return.
+}
+\details{
+\code{expected} is only present in the output when if a \code{ratetable}
+term is present.
+
+If the \code{data.frame = TRUE} argument is supplied to \code{pyears},
+this is simply the contents of \code{x$data}.
 }
 \examples{
 
 library(survival)
 
-temp.yr  <- tcut(mgus$dxyr, 55:92, labels=as.character(55:91))
-temp.age <- tcut(mgus$age, 34:101, labels=as.character(34:100))
+temp.yr <- tcut(mgus$dxyr, 55:92, labels = as.character(55:91))
+temp.age <- tcut(mgus$age, 34:101, labels = as.character(34:100))
 ptime <- ifelse(is.na(mgus$pctime), mgus$futime, mgus$pctime)
 pstat <- ifelse(is.na(mgus$pctime), 0, 1)
-pfit <- pyears(Surv(ptime/365.25, pstat) ~ temp.yr + temp.age + sex,  mgus,
-               data.frame=TRUE)
+pfit <- pyears(Surv(ptime / 365.25, pstat) ~ temp.yr + temp.age + sex, mgus,
+  data.frame = TRUE
+)
 tidy(pfit)
 glance(pfit)
 
 # if data.frame argument is not given, different information is present in
 # output
-pfit2 <- pyears(Surv(ptime/365.25, pstat) ~ temp.yr + temp.age + sex,  mgus)
+pfit2 <- pyears(Surv(ptime / 365.25, pstat) ~ temp.yr + temp.age + sex, mgus)
 tidy(pfit2)
 glance(pfit2)
-
 }
 \seealso{
 \code{\link[=tidy]{tidy()}}, \code{\link[survival:pyears]{survival::pyears()}}
@@ -87,3 +82,11 @@ Other survival tidiers:
 }
 \concept{pyears tidiers}
 \concept{survival tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{expected}{Expected number of events.}
+  \item{pyears}{Person-years of exposure.}
+  \item{n}{number of subjects contributing time}
+  \item{event}{observed number of events}
+
+}

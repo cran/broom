@@ -22,7 +22,7 @@ the coefficient estimates. This is typical for logistic and multinomial
 regressions, but a bad idea if there is no log or logit link. Defaults
 to \code{FALSE}.}
 
-\item{...}{Additional arguments to pass to \code{\link[ergm:summary]{ergm::summary()}}.
+\item{...}{Additional arguments to pass to \code{\link[ergm:summary.formula]{ergm::summary()}}.
 \strong{Cautionary note}: Mispecified arguments may be silently ignored.}
 }
 \value{
@@ -38,7 +38,7 @@ exponential random graph model, with columns:
 Tidy summarizes information about the components of a model.
 A model component might be a single term in a regression, a single
 hypothesis, a cluster, or a class. Exactly what tidy considers to be a
-model component varies cross models but is usually self-evident.
+model component varies across models but is usually self-evident.
 If a model has several distinct types of components, you will need to
 specify which components to return.
 
@@ -68,7 +68,6 @@ tidy(gest, exponentiate = TRUE, conf.int = TRUE, conf.level = 0.99)
 glance(gest)
 glance(gest, deviance = TRUE)
 glance(gest, mcmc = TRUE)
-
 }
 \references{
 Hunter DR, Handcock MS, Butts CT, Goodreau SM, Morris M (2008b).
@@ -78,7 +77,7 @@ Models for Networks. \emph{Journal of Statistical Software}, 24(3).
 }
 \seealso{
 \code{\link[=tidy]{tidy()}}, \code{\link[ergm:ergm]{ergm::ergm()}}, \code{\link[ergm:control.ergm]{ergm::control.ergm()}},
-\code{\link[ergm:summary]{ergm::summary()}}
+\code{\link[ergm:summary.formula]{ergm::summary()}}
 
 Other ergm tidiers: 
 \code{\link{glance.ergm}()}

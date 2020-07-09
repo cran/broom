@@ -4,40 +4,41 @@
 #' @param x A `muhaz` object returned by [muhaz::muhaz()].
 #' @template param_unused_dots
 #'
-#' @return A [tibble::tibble] with two columns:
-#' 
-#'   \item{time}{The time at which the hazard rate was estimated.}
-#'   \item{estimate}{The estimated hazard rate.}
+#' @evalRd return_tidy(
+#'   "time",
+#'   estimate = "Estimated hazard rate."
+#' )
 #'
 #' @examples
-#' if (require("muhaz", quietly = TRUE)) {
-#'   data(ovarian, package="survival")
-#'   x <- muhaz::muhaz(ovarian$futime, ovarian$fustat)
-#'   tidy(x)
-#'   glance(x)
-#' }
 #'
+#' library(muhaz)
+#'
+#' data(ovarian, package = "survival")
+#' x <- muhaz::muhaz(ovarian$futime, ovarian$fustat)
+#' tidy(x)
+#' glance(x)
 #' @aliases muhaz_tidiers
 #' @export
 #' @seealso [tidy()], [muhaz::muhaz()]
 #' @family muhaz tidiers
 tidy.muhaz <- function(x, ...) {
   bind_cols(x[c("est.grid", "haz.est")]) %>%
-    rename("time" = "est.grid", "estimate" = "haz.est")
+    rename("time" = "est.grid", "estimate" = "haz.est") %>%
+    as_tibble()
 }
 
 #' @templateVar class muhaz
 #' @template title_desc_glance
 #'
-#' @inheritParams tidy.muhaz
+#' @inherit tidy.muhaz params examples
 #'
-#' @return A one-row [tibble::tibble] with columns:
-#' 
-#'   \item{nobs}{Number of observations used for estimation}
-#'   \item{min.time}{The minimum observed event or censoring time}
-#'   \item{max.time}{The maximum observed event or censoring time}
-#'   \item{min.harzard}{Minimal estimated hazard}
-#'   \item{max.hazard}{Maximal estimated hazard}
+#' @evalRd return_glance(
+#'   "nobs",
+#'   "min.time",
+#'   "max.time",
+#'   "min.hazard",
+#'   "max.hazard"
+#' )
 #'
 #' @export
 #' @seealso [glance()], [muhaz::muhaz()]
@@ -47,5 +48,6 @@ glance.muhaz <- function(x, ...) {
     mutate(
       min.hazard = min(x$haz.est),
       max.hazard = max(x$haz.est)
-    )
+    ) %>%
+    as_tibble()
 }

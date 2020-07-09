@@ -21,19 +21,12 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A \link[tibble:tibble]{tibble::tibble} with one row per parameter estimated by \code{optim}
-and columns:
-
-\item{parameter}{name of the parameter, or \code{parameter1},
-\code{parameter2}... if the input vector is not named}
-\item{value}{parameter value that minimizes or maximizes the output}
-}
 \description{
 Broom tidies a number of lists that are effectively S3
 objects without a class attribute. For example, \code{\link[stats:optim]{stats::optim()}},
-\code{\link[=svd]{svd()}} and \code{\link[akima:interp]{akima::interp()}} produce consistent output, but because
-they do not have a class attribute, they cannot be handled by S3 dispatch.
+\link[base:svd]{svd()} and \code{\link[akima:interp]{akima::interp()}} produce consistent output, but
+because they do not have a class attribute, they cannot be handled by S3
+dispatch.
 
 These functions look at the elements of a list and determine if there is
 an appropriate tidying method to apply to the list. Those tidiers are
@@ -42,16 +35,18 @@ or \verb{glance_<function>} and are not exported (but they are documented!).
 
 If no appropriate tidying method is found, throws an error.
 }
-\examples{
-
-func <- function(x) {
-    (x[1] - 2)^2 + (x[2] - 3)^2 + (x[3] - 8)^2
-}
-
-o <- optim(c(1, 1, 1), func)
+\note{
+This function assumes that the provided objective function is a negative
+log-likelihood function. Results will be invalid if an incorrect
+function is supplied.
 
 tidy(o)
 glance(o)
+}
+\examples{
+
+f <- function(x) (x[1] - 2)^2 + (x[2] - 3)^2 + (x[3] - 8)^2
+o <- optim(c(1, 1, 1), f)
 
 }
 \seealso{
@@ -65,3 +60,10 @@ Other list tidiers:
 \code{\link{tidy_xyz}()}
 }
 \concept{list tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{parameter}{The parameter being modeled.}
+  \item{std.error}{The standard error of the regression term.}
+  \item{value}{The value/estimate of the component. Results from data reshaping.}
+\code{std.error} is only provided as a column if the Hessian is calculated.
+}

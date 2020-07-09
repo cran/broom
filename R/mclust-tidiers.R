@@ -3,51 +3,50 @@
 #'
 #' @param x An `Mclust` object return from [mclust::Mclust()].
 #' @template param_unused_dots
-#' 
-#' @return A [tibble::tibble] with one row per component:
-#'   \item{component}{Cluster id as a factor. For a model `k` clusters, these
-#'     will be `as.factor(1:k)`, or `as.factor(0:k)` if there's a noise term.}
-#'   \item{size}{Number of observations assigned to component}
-#'   \item{proportion}{The mixing proportion of each component}
-#'   \item{variance}{In case of one-dimensional and spherical models,
-#'     the variance for each component, omitted otherwise. NA for noise
-#'     component}
-#'   \item{mean}{The mean for each component. In case of 2+ dimensional models,
+#'
+#' @evalRd return_tidy(
+#'   "size",
+#'   "proportion",
+#'   mean = "The mean for each component. In case of 2+ dimensional models,
 #'     a column with the mean is added for each dimension. NA for noise
-#'     component}
+#'     component",
+#'   variance = "In case of one-dimensional and spherical models,
+#'     the variance for each component, omitted otherwise. NA for noise
+#'     component",
+#'   component = "Cluster id as a factor."
+#' )
 #'
 #' @examples
 #'
-#' library(dplyr) 
+#' library(dplyr)
 #' library(mclust)
 #' set.seed(27)
-#' 
+#'
 #' centers <- tibble::tibble(
-#'   cluster = factor(1:3), 
-#'   num_points = c(100, 150, 50),  # number points in each cluster
-#'   x1 = c(5, 0, -3),              # x1 coordinate of cluster center
-#'   x2 = c(-1, 1, -2)              # x2 coordinate of cluster center
+#'   cluster = factor(1:3),
+#'   num_points = c(100, 150, 50), # number points in each cluster
+#'   x1 = c(5, 0, -3), # x1 coordinate of cluster center
+#'   x2 = c(-1, 1, -2) # x2 coordinate of cluster center
 #' )
-#' 
+#'
 #' points <- centers %>%
 #'   mutate(
 #'     x1 = purrr::map2(num_points, x1, rnorm),
 #'     x2 = purrr::map2(num_points, x2, rnorm)
-#'   ) %>% 
-#'   select(-num_points, -cluster) %>%
-#'   tidyr::unnest(x1, x2)
+#'   ) %>%
+#'   dplyr::select(-num_points, -cluster) %>%
+#'   tidyr::unnest(c(x1, x2))
 #'
 #' m <- mclust::Mclust(points)
 #'
 #' tidy(m)
 #' augment(m, points)
 #' glance(m)
-#' 
 #' @export
 #' @aliases mclust_tidiers
 #' @seealso [tidy()], [mclust::Mclust()]
 #' @family mclust tidiers
-#' 
+#'
 tidy.Mclust <- function(x, ...) {
   np <- max(x$G, length(table(x$classification)))
   ret <- data.frame(seq_len(np))
@@ -62,6 +61,8 @@ tidy.Mclust <- function(x, ...) {
   }
   if (dim(as.matrix(x$parameters$mean))[2] > 1) {
     mean <- t(x$parameters$mean)
+  } else if (is.null(dim(x$parameters$mean))) {
+    mean <- as.matrix(x$parameters$mean)
   } else {
     mean <- t(as.matrix(x$parameters$mean))
   }
@@ -72,57 +73,61 @@ tidy.Mclust <- function(x, ...) {
 
 #' @templateVar class Mclust
 #' @template title_desc_augment
-#' 
-#' @inheritParams tidy.Mclust
+#'
+#' @inherit tidy.Mclust params examples
 #' @template param_data
 #'
-#' @return A [tibble::tibble] of the original data with two extra columns:
-#'   \item{.class}{The class assigned by the Mclust algorithm}
-#'   \item{.uncertainty}{The uncertainty associated with the classification.
-#'     If a point has a probability of 0.9 of being in its assigned class
-#'     under the model, then the uncertainty is 0.1.}
+#' @evalRd return_augment(
+#'   .fitted = FALSE,
+#'   .resid = FALSE,
+#'   ".class",
+#'   ".uncertainty"
+#' )
 #'
 #' @export
 #' @seealso [augment()], [mclust::Mclust()]
 #' @family mclust tidiers
-#' 
-augment.Mclust <- function(x, data, ...) {
-  fix_data_frame(data, newcol = ".rownames") %>% 
+#'
+augment.Mclust <- function(x, data = NULL, ...) {
+  if (is.null(data)) {
+    data <- x$data
+  } else if (!(is.data.frame(data) || is.matrix(data))) {
+    stop("`data` must be a data frame or matrix.", call. = FALSE)
+  }
+
+  as_augment_tibble(data) %>%
     mutate(
-      .class = factor(x$classification),
-      .uncertainty = x$uncertainty
+      .class = as.factor(!!x$classification),
+      .uncertainty = !!x$uncertainty
     )
 }
 
-
 #' @templateVar class Mclust
 #' @template title_desc_glance
-#' 
-#' @inheritParams tidy.Mclust
 #'
-#' @return A one-row [tibble::tibble] with columns:
-#'   \item{model}{A character string denoting the model at which the optimal
-#'     BIC occurs}
-#'   \item{n}{The number of observations in the data}
-#'   \item{G}{The optimal number of mixture components}
-#'   \item{BIC}{The optimal BIC value}
-#'   \item{logLik}{The log-likelihood corresponding to the optimal BIC}
-#'   \item{df}{The number of estimated parameters}
-#'   \item{hypvol}{If the other model contains a noise component, the 
-#'     value of the hypervolume parameter. Otherwise `NA`.}
+#' @inherit tidy.Mclust params examples
+#'
+#' @evalRd return_glance(
+#'   "BIC",
+#'   "logLik",
+#'   "df",
+#'   model = "A string denoting the model type with optimal BIC",
+#'   G = "Number mixture components in optimal model",
+#'   hypvol = "If the other model contains a noise component, the
+#'     value of the hypervolume parameter. Otherwise `NA`.",
+#'   "nobs"
+#' )
 #'
 #' @export
 glance.Mclust <- function(x, ...) {
-  with(
-    x,
-    tibble(
-      model = modelName,
-      n,
-      G,
-      BIC = bic, 
-      logLik = loglik,
-      df,
-      hypvol
-    )
+  as_glance_tibble(
+    model = unname(x$modelName),
+    G = unname(x$G),
+    BIC = unname(x$bic),
+    logLik = unname(x$loglik),
+    df = unname(x$df),
+    hypvol = unname(x$hypvol),
+    nobs = stats::nobs(x),
+    na_types = "cirriri"
   )
 }

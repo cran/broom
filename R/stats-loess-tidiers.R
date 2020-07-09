@@ -1,30 +1,30 @@
 #' @templateVar class loess
 #' @template title_desc_tidy
-#' 
+#'
 #' @param x A `loess` objects returned by [stats::loess()].
 #' @template param_data
 #' @template param_newdata
-#' @param ... Arguments passed on the loess predict method.
+#' @template param_se_fit
+#' @template param_unused_dots
 #'
 #' @template augment_NAs
 #'
-#' @return When `newdata` is not supplied `augment.loess`
-#' returns one row for each observation with three columns added
-#' to the original data:
-#' 
-#'    \item{.fitted}{Fitted values of model}
-#'    \item{.se.fit}{Standard errors of the fitted values}
-#'    \item{.resid}{Residuals of the fitted values}
+#' @evalRd return_augment(".se.fit")
 #'
-#' When `newdata` is supplied `augment.loess` returns
-#'    one row for each observation with one additional column:
-#'    
-#'    \item{.fitted}{Fitted values of model}
-#'    \item{.se.fit}{Standard errors of the fitted values}
+#' @details  Note that `loess` objects by default will not predict on data
+#'   outside of a bounding hypercube defined by the training data unless the
+#'   original `loess` object was fit with
+#'   `control = loess.control(surface = \"direct\"))`. See
+#'   [stats::predict.loess()] for details.
 #'
 #' @examples
 #'
-#' lo <- loess(mpg ~ wt, mtcars)
+#' lo <- loess(
+#'   mpg ~ hp + wt,
+#'   mtcars,
+#'   control = loess.control(surface = "direct")
+#' )
+#'
 #' augment(lo)
 #'
 #' # with all columns of original data
@@ -32,10 +32,10 @@
 #'
 #' # with a new dataset
 #' augment(lo, newdata = head(mtcars))
-#'
 #' @aliases loess_tidiers
 #' @export
-#' @seealso [augment()], [stats::loess()]
-augment.loess <- function(x, data = stats::model.frame(x), newdata, ...) {
-  augment_columns(x, data, newdata, se.fit = FALSE, se = TRUE, ...)
+#' @seealso [augment()], [stats::loess()], [stats::predict.loess()]
+augment.loess <- function(x, data = model.frame(x), newdata = NULL,
+                          se_fit = FALSE, ...) {
+  augment_newdata(x, data, newdata, se_fit, se = se_fit)
 }

@@ -20,21 +20,11 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A \link[tibble:tibble]{tibble::tibble} with columns
-
-\item{term}{Term within the model, or "Residuals"}
-\item{df}{Degrees of freedom used by this term in the model}
-\item{sumsq}{Sum of squares explained by this term}
-\item{meansq}{Mean of sum of squares among degrees of freedom}
-\item{statistic}{F statistic}
-\item{p.value}{P-value from F test}
-}
 \description{
 Tidy summarizes information about the components of a model.
 A model component might be a single term in a regression, a single
 hypothesis, a cluster, or a class. Exactly what tidy considers to be a
-model component varies cross models but is usually self-evident.
+model component varies across models but is usually self-evident.
 If a model has several distinct types of components, you will need to
 specify which components to return.
 }
@@ -44,17 +34,28 @@ trailing whitespace, which this tidying method trims.
 }
 \examples{
 
-a <- a <- aov(mpg ~ wt + qsec + disp, mtcars)
-tidy(a)
-
+a <- lm(mpg ~ wt + qsec + disp, mtcars)
+b <- lm(mpg ~ wt + qsec, mtcars)
+tidy(anova(a, b))
 }
 \seealso{
 \code{\link[=tidy]{tidy()}}, \code{\link[stats:anova]{stats::anova()}}, \code{\link[car:Anova]{car::Anova()}}
 
 Other anova tidiers: 
+\code{\link{glance.aov}()},
 \code{\link{tidy.TukeyHSD}()},
 \code{\link{tidy.aovlist}()},
 \code{\link{tidy.aov}()},
 \code{\link{tidy.manova}()}
 }
 \concept{anova tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{df}{Degrees of freedom used by this term in the model.}
+  \item{meansq}{Mean sum of squares. Equal to total sum of squares divided by degrees of freedom.}
+  \item{p.value}{The two-sided p-value associated with the observed statistic.}
+  \item{statistic}{The value of a T-statistic to use in a hypothesis that the regression term is non-zero.}
+  \item{sumsq}{Sum of squares explained by this term.}
+  \item{term}{The name of the regression term.}
+
+}

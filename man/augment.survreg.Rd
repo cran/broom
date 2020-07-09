@@ -16,7 +16,7 @@
 \arguments{
 \item{x}{An \code{survreg} object returned from \code{\link[survival:survreg]{survival::survreg()}}.}
 
-\item{data}{A \code{\link[=data.frame]{data.frame()}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing the original
+\item{data}{A \link[base:data.frame]{base::data.frame} or \code{\link[tibble:tibble]{tibble::tibble()}} containing the original
 data that was used to produce the object \code{x}. Defaults to
 \code{stats::model.frame(x)} so that \code{augment(my_fit)} returns the augmented
 original data. \strong{Do not} pass new data to the \code{data} argument.
@@ -24,7 +24,7 @@ Augment will report information such as influence and cooks distance for
 data passed to the \code{data} argument. These measures are only defined for
 the original training data.}
 
-\item{newdata}{A \code{\link[=data.frame]{data.frame()}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing all
+\item{newdata}{A \code{\link[base:data.frame]{base::data.frame()}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing all
 the original predictors used to create \code{x}. Defaults to \code{NULL}, indicating
 that nothing has been passed to \code{newdata}. If \code{newdata} is specified,
 the \code{data} argument will be ignored.}
@@ -49,13 +49,6 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A \link[tibble:tibble]{tibble::tibble} with the passed data and additional columns:
-
-\item{.fitted}{Fitted values of model}
-\item{.se.fit}{Standard errors of fitted values}
-\item{.resid}{Residuals}
-}
 \description{
 Augment accepts a model object and a dataset and adds
 information about each observation in the dataset. Most commonly, this
@@ -71,15 +64,15 @@ object. Pass datasets to \code{newdata} to augment data that was not used
 during model fitting. This still requires that all columns used to fit
 the model are present.
 
-Augment will often behavior different depending on whether \code{data} or
-\code{newdata} is specified. This is because there is often information
+Augment will often behave differently depending on whether \code{data} or
+\code{newdata} is given. This is because there is often information
 associated with training observations (such as influences or related)
 measures that is not meaningfully defined for new observations.
 
 For convenience, many augment methods provide default \code{data} arguments,
 so that \code{augment(fit)} will return the augmented training data. In these
-cases augment tries to reconstruct the original data based on the model
-object, with some varying degrees of success.
+cases, augment tries to reconstruct the original data based on the model
+object with varying degrees of success.
 
 The augmented dataset is always returned as a \link[tibble:tibble]{tibble::tibble} with the
 \strong{same number of rows} as the passed dataset. This means that the
@@ -92,22 +85,32 @@ encounter errors, try explicitly passing a tibble, or fitting the original
 model on data in a tibble.
 
 We are in the process of defining behaviors for models fit with various
-\link{na.action} arguments, but make no guarantees about behavior when data is
+\code{na.action} arguments, but make no guarantees about behavior when data is
 missing at this time.
 }
-\details{
-When the modeling was performed with \code{na.action = "na.omit"}
-(as is the typical default), rows with NA in the initial data are omitted
-entirely from the augmented data frame. When the modeling was performed
-with \code{na.action = "na.exclude"}, one should provide the original data
-as a second argument, at which point the augmented data will contain those
-rows (typically with NAs in place of the new columns). If the original data
-is not provided to \code{\link[=augment]{augment()}} and \code{na.action = "na.exclude"}, a
-warning is raised and the incomplete rows are dropped.
+\examples{
+
+library(survival)
+
+sr <- survreg(
+  Surv(futime, fustat) ~ ecog.ps + rx,
+  ovarian,
+  dist = "exponential"
+)
+
+tidy(sr)
+augment(sr, ovarian)
+glance(sr)
+
+# coefficient plot
+td <- tidy(sr, conf.int = TRUE)
+library(ggplot2)
+ggplot(td, aes(estimate, term)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0) +
+  geom_vline(xintercept = 0)
 }
 \seealso{
-\link{na.action}
-
 \code{\link[=augment]{augment()}}, \code{\link[survival:survreg]{survival::survreg()}}
 
 Other survreg tidiers: 
@@ -135,3 +138,10 @@ Other survival tidiers:
 }
 \concept{survival tidiers}
 \concept{survreg tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{.fitted}{Fitted or predicted value.}
+  \item{.resid}{The difference between observed and fitted values.}
+  \item{.se.fit}{Standard errors of fitted values.}
+
+}

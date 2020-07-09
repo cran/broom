@@ -1,16 +1,13 @@
 #' @templateVar class ridgelm
 #' @template title_desc_tidy
-#' 
+#'
 #' @param x A `ridgelm` object returned from [MASS::lm.ridge()].
 #' @template param_unused_dots
-#' 
-#' @return A [tibble::tibble] with one row for each combination of lambda and
-#'   a term in the formula, with columns:
-#'   \item{lambda}{choice of lambda}
-#'   \item{GCV}{generalized cross validation value for this lambda}
-#'   \item{term}{the term in the ridge regression model being estimated}
-#'   \item{estimate}{estimate of scaled coefficient using this lambda}
-#'   \item{scale}{Scaling factor of estimated coefficient}
+#'
+#' @evalRd return_tidy("lambda", "GCV", "term",
+#'   estimate = "estimate of scaled coefficient using this lambda",
+#'   scale = "Scaling factor of estimated coefficient"
+#' )
 #'
 #' @examples
 #'
@@ -32,10 +29,9 @@
 #'   geom_line()
 #'
 #' # add line for the GCV minimizing estimate
-#' ggplot(td2, aes(lambda, GCV)) + 
+#' ggplot(td2, aes(lambda, GCV)) +
 #'   geom_line() +
 #'   geom_vline(xintercept = g2$lambdaGCV, col = "red", lty = 2)
-#'
 #' @export
 #' @aliases ridgelm_tidiers
 #' @family ridgelm tidiers
@@ -45,10 +41,10 @@ tidy.ridgelm <- function(x, ...) {
     # only one choice of lambda
     ret <- tibble(
       lambda = x$lambda,
+      GCV = unname(x$GCV),
       term = names(x$coef),
       estimate = x$coef,
-      scale = x$scales,
-      xm = x$xm
+      scale = x$scales
     )
     return(ret)
   }
@@ -58,7 +54,12 @@ tidy.ridgelm <- function(x, ...) {
     lambda = x$lambda,
     GCV = unname(x$GCV)
   ) %>%
-    tidyr::gather(term, estimate, -lambda, -GCV) %>%
+    pivot_longer(
+      cols = c(dplyr::everything(), -lambda, -GCV),
+      names_to = "term",
+      values_to = "estimate"
+    ) %>%
+    as.data.frame() %>%
     mutate(term = as.character(term)) %>%
     mutate(scale = x$scales[term])
 
@@ -68,13 +69,14 @@ tidy.ridgelm <- function(x, ...) {
 
 #' @templateVar class ridgelm
 #' @template title_desc_glance
-#' 
-#' @inheritParams tidy.ridgelm
 #'
-#' @return A one-row [tibble::tibble] with columns:
-#'   \item{kHKB}{modified HKB estimate of the ridge constant}
-#'   \item{kLW}{modified L-W estimate of the ridge constant}
-#'   \item{lambdaGCV}{choice of lambda that minimizes GCV}
+#' @inherit tidy.ridgelm params examples
+#'
+#' @evalRd return_glance(
+#'   kHKB = "modified HKB estimate of the ridge constant",
+#'   kLW = "modified L-W estimate of the ridge constant",
+#'   lambdaGCV = "choice of lambda that minimizes GCV"
+#' )
 #'
 #' @details This is similar to the output of `select.ridgelm`, but it is
 #'   returned rather than printed.
@@ -83,9 +85,10 @@ tidy.ridgelm <- function(x, ...) {
 #' @family ridgelm tidiers
 #' @seealso [glance()], [MASS::select.ridgelm()], [MASS::lm.ridge()]
 glance.ridgelm <- function(x, ...) {
-  tibble(
-    kHKB = x$kHKB, 
+  as_glance_tibble(
+    kHKB = x$kHKB,
     kLW = x$kLW,
-    lambdaGCV = x$lambda[which.min(x$GCV)]
+    lambdaGCV = x$lambda[which.min(x$GCV)],
+    na_types = "rrr"
   )
 }

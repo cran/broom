@@ -3,36 +3,37 @@
 #'
 #' @param x An `aareg` object returned from [survival::aareg()].
 #' @template param_unused_dots
-#' 
-#' @return A [tibble::tibble] with one row for each coefficient and columns:
-#' 
-#'   \item{term}{name of coefficient}
-#'   \item{estimate}{estimate of the slope}
-#'   \item{statistic}{test statistic for coefficient}
-#'   \item{std.error}{standard error of statistic}
-#'   \item{robust.se}{robust version of standard error estimate (only when
-#'     `x` was called with `dfbeta = TRUE`)}
-#'   \item{z}{z score}
-#'   \item{p.value}{p-value}
+#'
+#' @evalRd return_tidy(
+#'   "term",
+#'   "estimate",
+#'   "statistic",
+#'   "std.error",
+#'   "robust.se",
+#'   "z",
+#'   "p.value"
+#' )
+#'
+#' @details `robust.se` is only present when `x` was created with
+#'   `dfbeta = TRUE`.
 #'
 #' @examples
 #'
 #' library(survival)
-#' 
+#'
 #' afit <- aareg(
 #'   Surv(time, status) ~ age + sex + ph.ecog,
 #'   data = lung,
 #'   dfbeta = TRUE
 #' )
-#' 
-#' tidy(afit) 
 #'
+#' tidy(afit)
 #' @aliases aareg_tidiers
 #' @export
 #' @seealso [tidy()], [survival::aareg()]
 #' @family aareg tidiers
 #' @family survival tidiers
-#' 
+#'
 tidy.aareg <- function(x, ...) {
   if (is.null(x$dfbeta)) {
     nn <- c("estimate", "statistic", "std.error", "statistic.z", "p.value")
@@ -42,19 +43,19 @@ tidy.aareg <- function(x, ...) {
       "statistic.z", "p.value"
     )
   }
-  fix_data_frame(summary(x)$table, nn)
+  
+  as_tidy_tibble(
+    summary(x)$table, 
+    new_names = nn
+  )
 }
 
 #' @templateVar class aareg
 #' @template title_desc_glance
-#' 
-#' @inheritParams tidy.aareg
-#' 
-#' @return A one-row [tibble::tibble] with columns:
-#' 
-#'   \item{statistic}{chi-squared statistic}
-#'   \item{p.value}{p-value based on chi-squared statistic}
-#'   \item{df}{degrees of freedom used by coefficients}
+#'
+#' @inherit tidy.aareg params examples
+#'
+#' @evalRd return_glance("statistic", "p.value", "df", "nobs")
 #'
 #' @export
 #' @seealso [glance()], [survival::aareg()]
@@ -64,10 +65,12 @@ glance.aareg <- function(x, ...) {
   s <- summary(x)
   chi <- as.numeric(s$chisq)
   df <- length(s$test.statistic) - 1
-  
-  tibble(
+
+  as_glance_tibble(
     statistic = chi,
     p.value = as.numeric(1 - stats::pchisq(chi, df)),
-    df = df
+    df = df,
+    nobs = stats::nobs(x),
+    na_types = "rrii"
   )
 }

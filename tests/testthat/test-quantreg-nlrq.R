@@ -1,5 +1,10 @@
 context("quantreg-nlrq")
 
+skip_on_cran()
+
+skip_if_not_installed("modeltests")
+library(modeltests)
+
 skip_if_not_installed("quantreg")
 library(quantreg)
 
@@ -12,8 +17,8 @@ df <- tibble::tibble(
 
 fit <- nlrq(
   y ~ SSlogis(x, Asym, mid, scal),
-  data = df, 
-  tau = 0.5, 
+  data = df,
+  tau = 0.5,
   trace = FALSE
 )
 
@@ -24,11 +29,10 @@ test_that("quantreg::nlrq tidier arguments", {
 })
 
 test_that("tidy.nlrq", {
-  
   td <- tidy(fit)
   td_iid <- tidy(fit, se.type = "iid")
   tdci <- tidy(fit, conf.int = TRUE)
-  
+
   check_tidy_output(td)
   check_tidy_output(td_iid)
   check_tidy_output(tdci)
@@ -40,10 +44,9 @@ test_that("glance.nlrq", {
 })
 
 test_that("augment.nlrq", {
-  
   au <- augment(fit)
-  check_tibble(au, method = "augment")
-  
+  check_tibble(au, method = "augment", strict = FALSE)
+
   check_augment_function(
     aug = augment.nlrq,
     model = fit,

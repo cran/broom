@@ -8,7 +8,7 @@ an augment call}
 augment_columns(
   x,
   data,
-  newdata,
+  newdata = NULL,
   type,
   type.predict = type,
   type.residuals = type,

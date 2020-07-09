@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{An \code{nls} object returned from \code{\link[stats:nls]{stats::nls()}}.}
 
-\item{data}{A \code{\link[=data.frame]{data.frame()}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing the original
+\item{data}{A \link[base:data.frame]{base::data.frame} or \code{\link[tibble:tibble]{tibble::tibble()}} containing the original
 data that was used to produce the object \code{x}. Defaults to
 \code{stats::model.frame(x)} so that \code{augment(my_fit)} returns the augmented
 original data. \strong{Do not} pass new data to the \code{data} argument.
@@ -17,7 +17,7 @@ Augment will report information such as influence and cooks distance for
 data passed to the \code{data} argument. These measures are only defined for
 the original training data.}
 
-\item{newdata}{A \code{\link[=data.frame]{data.frame()}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing all
+\item{newdata}{A \code{\link[base:data.frame]{base::data.frame()}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing all
 the original predictors used to create \code{x}. Defaults to \code{NULL}, indicating
 that nothing has been passed to \code{newdata}. If \code{newdata} is specified,
 the \code{data} argument will be ignored.}
@@ -31,14 +31,6 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 \code{newdata = my_tibble} to an \code{\link[=augment]{augment()}} method that does not
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
-}
-\value{
-A \code{\link[tibble:tibble]{tibble::tibble()}} containing the data passed to \code{augment},
-and \strong{additional} columns:
-
-\item{.fitted}{The predicted response for that observation.}
-\item{.resid}{The residual for a particular point. Present only when
-data has been passed to \code{augment} via the \code{data} argument.}
 }
 \description{
 Augment accepts a model object and a dataset and adds
@@ -55,15 +47,15 @@ object. Pass datasets to \code{newdata} to augment data that was not used
 during model fitting. This still requires that all columns used to fit
 the model are present.
 
-Augment will often behavior different depending on whether \code{data} or
-\code{newdata} is specified. This is because there is often information
+Augment will often behave differently depending on whether \code{data} or
+\code{newdata} is given. This is because there is often information
 associated with training observations (such as influences or related)
 measures that is not meaningfully defined for new observations.
 
 For convenience, many augment methods provide default \code{data} arguments,
 so that \code{augment(fit)} will return the augmented training data. In these
-cases augment tries to reconstruct the original data based on the model
-object, with some varying degrees of success.
+cases, augment tries to reconstruct the original data based on the model
+object with varying degrees of success.
 
 The augmented dataset is always returned as a \link[tibble:tibble]{tibble::tibble} with the
 \strong{same number of rows} as the passed dataset. This means that the
@@ -76,8 +68,29 @@ encounter errors, try explicitly passing a tibble, or fitting the original
 model on data in a tibble.
 
 We are in the process of defining behaviors for models fit with various
-\link{na.action} arguments, but make no guarantees about behavior when data is
+\code{na.action} arguments, but make no guarantees about behavior when data is
 missing at this time.
+}
+\details{
+augment.nls does not currently support confidence intervals due to
+a lack of support in stats::predict.nls().
+}
+\examples{
+
+n <- nls(mpg ~ k * e^wt, data = mtcars, start = list(k = 1, e = 2))
+
+tidy(n)
+augment(n)
+glance(n)
+
+library(ggplot2)
+ggplot(augment(n), aes(wt, mpg)) +
+  geom_point() +
+  geom_line(aes(y = .fitted))
+
+newdata <- head(mtcars)
+newdata$wt <- newdata$wt + 1
+augment(n, newdata = newdata)
 }
 \seealso{
 \link{tidy}, \code{\link[stats:nls]{stats::nls()}}, \code{\link[stats:predict.nls]{stats::predict.nls()}}
@@ -87,3 +100,9 @@ Other nls tidiers:
 \code{\link{tidy.nls}()}
 }
 \concept{nls tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{.fitted}{Fitted or predicted value.}
+  \item{.resid}{The difference between observed and fitted values.}
+
+}

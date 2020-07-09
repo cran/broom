@@ -16,7 +16,7 @@
 \arguments{
 \item{x}{A \code{coxph} object returned from \code{\link[survival:coxph]{survival::coxph()}}.}
 
-\item{data}{A \code{\link[=data.frame]{data.frame()}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing the original
+\item{data}{A \link[base:data.frame]{base::data.frame} or \code{\link[tibble:tibble]{tibble::tibble()}} containing the original
 data that was used to produce the object \code{x}. Defaults to
 \code{stats::model.frame(x)} so that \code{augment(my_fit)} returns the augmented
 original data. \strong{Do not} pass new data to the \code{data} argument.
@@ -24,7 +24,7 @@ Augment will report information such as influence and cooks distance for
 data passed to the \code{data} argument. These measures are only defined for
 the original training data.}
 
-\item{newdata}{A \code{\link[=data.frame]{data.frame()}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing all
+\item{newdata}{A \code{\link[base:data.frame]{base::data.frame()}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing all
 the original predictors used to create \code{x}. Defaults to \code{NULL}, indicating
 that nothing has been passed to \code{newdata}. If \code{newdata} is specified,
 the \code{data} argument will be ignored.}
@@ -49,13 +49,6 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A \link[tibble:tibble]{tibble::tibble} with the passed data and additional columns:
-
-\item{.fitted}{Fitted values of model}
-\item{.se.fit}{Standard errors of fitted values}
-\item{.resid}{Residuals (not present if \code{newdata} specified.)}
-}
 \description{
 Augment accepts a model object and a dataset and adds
 information about each observation in the dataset. Most commonly, this
@@ -71,15 +64,15 @@ object. Pass datasets to \code{newdata} to augment data that was not used
 during model fitting. This still requires that all columns used to fit
 the model are present.
 
-Augment will often behavior different depending on whether \code{data} or
-\code{newdata} is specified. This is because there is often information
+Augment will often behave differently depending on whether \code{data} or
+\code{newdata} is given. This is because there is often information
 associated with training observations (such as influences or related)
 measures that is not meaningfully defined for new observations.
 
 For convenience, many augment methods provide default \code{data} arguments,
 so that \code{augment(fit)} will return the augmented training data. In these
-cases augment tries to reconstruct the original data based on the model
-object, with some varying degrees of success.
+cases, augment tries to reconstruct the original data based on the model
+object with varying degrees of success.
 
 The augmented dataset is always returned as a \link[tibble:tibble]{tibble::tibble} with the
 \strong{same number of rows} as the passed dataset. This means that the
@@ -92,7 +85,7 @@ encounter errors, try explicitly passing a tibble, or fitting the original
 model on data in a tibble.
 
 We are in the process of defining behaviors for models fit with various
-\link{na.action} arguments, but make no guarantees about behavior when data is
+\code{na.action} arguments, but make no guarantees about behavior when data is
 missing at this time.
 }
 \details{
@@ -105,8 +98,50 @@ rows (typically with NAs in place of the new columns). If the original data
 is not provided to \code{\link[=augment]{augment()}} and \code{na.action = "na.exclude"}, a
 warning is raised and the incomplete rows are dropped.
 }
+\examples{
+
+library(survival)
+
+cfit <- coxph(Surv(time, status) ~ age + sex, lung)
+
+tidy(cfit)
+tidy(cfit, exponentiate = TRUE)
+
+lp <- augment(cfit, lung)
+risks <- augment(cfit, lung, type.predict = "risk")
+expected <- augment(cfit, lung, type.predict = "expected")
+
+glance(cfit)
+
+# also works on clogit models
+resp <- levels(logan$occupation)
+n <- nrow(logan)
+indx <- rep(1:n, length(resp))
+logan2 <- data.frame(
+  logan[indx, ],
+  id = indx,
+  tocc = factor(rep(resp, each = n))
+)
+
+logan2$case <- (logan2$occupation == logan2$tocc)
+
+cl <- clogit(case ~ tocc + tocc:education + strata(id), logan2)
+tidy(cl)
+glance(cl)
+
+library(ggplot2)
+
+ggplot(lp, aes(age, .fitted, color = sex)) +
+  geom_point()
+
+ggplot(risks, aes(age, .fitted, color = sex)) +
+  geom_point()
+
+ggplot(expected, aes(time, .fitted, color = sex)) +
+  geom_point()
+}
 \seealso{
-\link{na.action}
+\link[stats:na.action]{stats::na.action}
 
 \code{\link[=augment]{augment()}}, \code{\link[survival:coxph]{survival::coxph()}}
 
@@ -135,3 +170,10 @@ Other survival tidiers:
 }
 \concept{coxph tidiers}
 \concept{survival tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{.fitted}{Fitted or predicted value.}
+  \item{.resid}{The difference between observed and fitted values.}
+  \item{.se.fit}{Standard errors of fitted values.}
+
+}

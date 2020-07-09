@@ -7,45 +7,32 @@
 #' @template param_confint
 #' @template param_exponentiate
 #' @template param_unused_dots
-#' 
-#' @return `tidy.multinom` returns one row for each coefficient at each
-#' level of the response variable, with six columns:
-#'   \item{y.value}{The response level}
-#'   \item{term}{The term in the model being estimated and tested}
-#'   \item{estimate}{The estimated coefficient}
-#'   \item{std.error}{The standard error from the linear model}
-#'   \item{statistic}{Wald z-statistic}
-#'   \item{p.value}{two-sided p-value}
 #'
-#' If `conf.int = TRUE`, also includes columns for `conf.low` and
-#' `conf.high`.
+#' @evalRd return_tidy("y.value", regression = TRUE)
 #'
 #' @examples
 #'
-#' if (require(nnet) & require(MASS)){
-#'   library(nnet)
-#'   library(MASS)
-#'   
-#'   example(birthwt)
-#'   bwt.mu <- multinom(low ~ ., bwt)
-#'   tidy(bwt.mu)
-#'   glance(bwt.mu)
+#' library(nnet)
+#' library(MASS)
 #'
-#'   #* This model is a truly terrible model
-#'   #* but it should show you what the output looks
-#'   #* like in a multinomial logistic regression
+#' example(birthwt)
+#' bwt.mu <- multinom(low ~ ., bwt)
+#' tidy(bwt.mu)
+#' glance(bwt.mu)
 #'
-#'   fit.gear <- multinom(gear ~ mpg + factor(am), data = mtcars)
-#'   tidy(fit.gear)
-#'   glance(fit.gear)
-#' }
+#' #* This model is a truly terrible model
+#' #* but it should show you what the output looks
+#' #* like in a multinomial logistic regression
 #'
+#' fit.gear <- multinom(gear ~ mpg + factor(am), data = mtcars)
+#' tidy(fit.gear)
+#' glance(fit.gear)
 #' @aliases multinom_tidiers nnet_tidiers
 #' @export
 #' @family multinom tidiers
 #' @seealso [tidy()], [nnet::multinom()]
 tidy.multinom <- function(x, conf.int = FALSE, conf.level = .95,
-                          exponentiate = TRUE, ...) {
+                          exponentiate = FALSE, ...) {
   col_names <- if (length(x$lev) > 2) colnames(coef(x)) else names(coef(x))
   s <- summary(x)
 
@@ -90,14 +77,12 @@ tidy.multinom <- function(x, conf.int = FALSE, conf.level = .95,
   }
 
   if (exponentiate) {
-    
     to_exp <- "estimate"
-    
+
     if (conf.int) {
       to_exp <- c(to_exp, "conf.low", "conf.high")
     }
-    
-    # TODO: use mutate_at
+
     ret[, to_exp] <- lapply(ret[, to_exp, drop = FALSE], exp)
   }
 
@@ -106,25 +91,19 @@ tidy.multinom <- function(x, conf.int = FALSE, conf.level = .95,
 
 #' @templateVar class multinom
 #' @template title_desc_glance
-#' 
-#' @inheritParams tidy.multinom
-#' 
-#' @return A one-row [tibble::tibble] with columns:
-#' 
-#'   \item{edf}{The effective degrees of freedom}
-#'   \item{deviance}{deviance}
-#'   \item{AIC}{the Akaike Information Criterion}
 #'
+#' @inherit tidy.multinom params examples
+#'
+#' @evalRd return_glance("edf", "deviance", "AIC", "nobs")
 #' @export
 #' @family multinom tidiers
 #' @seealso [glance()], [nnet::multinom()]
 glance.multinom <- function(x, ...) {
-  with(
-    x,
-    tibble(
-      edf = edf,
-      deviance = deviance,
-      AIC = AIC
-    )
+  as_glance_tibble(
+    edf = x$edf,
+    deviance = x$deviance,
+    AIC = x$AIC,
+    nobs = stats::nobs(x),
+    na_types = "irri"
   )
 }

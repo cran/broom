@@ -4,42 +4,58 @@
 \alias{augment.nlrq}
 \title{Tidy a(n) nlrq object}
 \usage{
-\method{augment}{nlrq}(x, ...)
+\method{augment}{nlrq}(x, data = NULL, newdata = NULL, ...)
 }
 \arguments{
 \item{x}{A \code{nlrq} object returned from \code{\link[quantreg:nlrq]{quantreg::nlrq()}}.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=augment.nls]{augment.nls}}
-  \describe{
-    \item{\code{data}}{A \code{\link[=data.frame]{data.frame()}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing the original
+\item{data}{A \link[base:data.frame]{base::data.frame} or \code{\link[tibble:tibble]{tibble::tibble()}} containing the original
 data that was used to produce the object \code{x}. Defaults to
 \code{stats::model.frame(x)} so that \code{augment(my_fit)} returns the augmented
 original data. \strong{Do not} pass new data to the \code{data} argument.
 Augment will report information such as influence and cooks distance for
 data passed to the \code{data} argument. These measures are only defined for
 the original training data.}
-    \item{\code{newdata}}{A \code{\link[=data.frame]{data.frame()}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing all
+
+\item{newdata}{A \code{\link[base:data.frame]{base::data.frame()}} or \code{\link[tibble:tibble]{tibble::tibble()}} containing all
 the original predictors used to create \code{x}. Defaults to \code{NULL}, indicating
 that nothing has been passed to \code{newdata}. If \code{newdata} is specified,
 the \code{data} argument will be ignored.}
-  }}
-}
-\value{
-A \code{\link[tibble:tibble]{tibble::tibble()}} containing the data passed to \code{augment},
-and \strong{additional} columns:
 
-\item{.fitted}{The predicted response for that observation.}
-\item{.resid}{The residual for a particular point. Present only when
-data has been passed to \code{augment} via the \code{data} argument.}
+\item{...}{Additional arguments. Not used. Needed to match generic
+signature only. \strong{Cautionary note:} Misspelled arguments will be
+absorbed in \code{...}, where they will be ignored. If the misspelled
+argument has a default value, the default value will be used.
+For example, if you pass \code{conf.lvel = 0.9}, all computation will
+proceed using \code{conf.level = 0.95}. Additionally, if you pass
+\code{newdata = my_tibble} to an \code{\link[=augment]{augment()}} method that does not
+accept a \code{newdata} argument, it will use the default value for
+the \code{data} argument.}
 }
 \description{
 Tidy summarizes information about the components of a model.
 A model component might be a single term in a regression, a single
 hypothesis, a cluster, or a class. Exactly what tidy considers to be a
-model component varies cross models but is usually self-evident.
+model component varies across models but is usually self-evident.
 If a model has several distinct types of components, you will need to
 specify which components to return.
+}
+\examples{
+
+n <- nls(mpg ~ k * e^wt, data = mtcars, start = list(k = 1, e = 2))
+
+tidy(n)
+augment(n)
+glance(n)
+
+library(ggplot2)
+ggplot(augment(n), aes(wt, mpg)) +
+  geom_point() +
+  geom_line(aes(y = .fitted))
+
+newdata <- head(mtcars)
+newdata$wt <- newdata$wt + 1
+augment(n, newdata = newdata)
 }
 \seealso{
 \code{\link[=augment]{augment()}}, \code{\link[quantreg:nlrq]{quantreg::nlrq()}}

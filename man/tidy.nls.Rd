@@ -5,7 +5,7 @@
 \alias{nls_tidiers}
 \title{Tidy a(n) nls object}
 \usage{
-\method{tidy}{nls}(x, conf.int = FALSE, conf.level = 0.95, quick = FALSE, ...)
+\method{tidy}{nls}(x, conf.int = FALSE, conf.level = 0.95, ...)
 }
 \arguments{
 \item{x}{An \code{nls} object returned from \code{\link[stats:nls]{stats::nls()}}.}
@@ -17,10 +17,6 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 if \code{conf.int = TRUE}. Must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
-\item{quick}{Logical indiciating if the only the \code{term} and \code{estimate}
-columns should be returned. Often useful to avoid time consuming
-covariance and standard error calculations. Defaults to \code{FALSE}.}
-
 \item{...}{Additional arguments. Not used. Needed to match generic
 signature only. \strong{Cautionary note:} Misspelled arguments will be
 absorbed in \code{...}, where they will be ignored. If the misspelled
@@ -31,33 +27,17 @@ proceed using \code{conf.level = 0.95}. Additionally, if you pass
 accept a \code{newdata} argument, it will use the default value for
 the \code{data} argument.}
 }
-\value{
-A \code{\link[tibble:tibble]{tibble::tibble()}} with one row for each term in the
-regression. The tibble has columns:
-
-\item{term}{The name of the regression term.}
-\item{estimate}{The estimated value of the regression term.}
-\item{std.error}{The standard error of the regression term.}
-\item{statistic}{The value of a statistic, almost always a T-statistic,
-to use in a hypothesis that the regression term is non-zero.}
-\item{p.value}{The two-sided p-value associated with the observed
-statistic.}
-\item{conf.low}{The low end of a confidence interval for the regression
-term. Included only if \code{conf.int = TRUE}.}
-\item{conf.high}{The high end of a confidence interval for the regression
-term. Included only if \code{conf.int = TRUE}.}
-}
 \description{
 Tidy summarizes information about the components of a model.
 A model component might be a single term in a regression, a single
 hypothesis, a cluster, or a class. Exactly what tidy considers to be a
-model component varies cross models but is usually self-evident.
+model component varies across models but is usually self-evident.
 If a model has several distinct types of components, you will need to
 specify which components to return.
 }
 \examples{
 
-n <- nls(mpg ~ k * e ^ wt, data = mtcars, start = list(k = 1, e = 2))
+n <- nls(mpg ~ k * e^wt, data = mtcars, start = list(k = 1, e = 2))
 
 tidy(n)
 augment(n)
@@ -71,7 +51,6 @@ ggplot(augment(n), aes(wt, mpg)) +
 newdata <- head(mtcars)
 newdata$wt <- newdata$wt + 1
 augment(n, newdata = newdata)
-
 }
 \seealso{
 \link{tidy}, \code{\link[stats:nls]{stats::nls()}}, \code{\link[stats:summary.nls]{stats::summary.nls()}}
@@ -81,3 +60,14 @@ Other nls tidiers:
 \code{\link{glance.nls}()}
 }
 \concept{nls tidiers}
+\value{
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
+  \item{conf.high}{Upper bound on the confidence interval for the estimate.}
+  \item{conf.low}{Lower bound on the confidence interval for the estimate.}
+  \item{estimate}{The estimated value of the regression term.}
+  \item{p.value}{The two-sided p-value associated with the observed statistic.}
+  \item{statistic}{The value of a T-statistic to use in a hypothesis that the regression term is non-zero.}
+  \item{std.error}{The standard error of the regression term.}
+  \item{term}{The name of the regression term.}
+
+}
