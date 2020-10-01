@@ -16,7 +16,7 @@ Wu-Hausman and Sargan diagnostic information.}
 signature only. \strong{Cautionary note:} Misspelled arguments will be
 absorbed in \code{...}, where they will be ignored. If the misspelled
 argument has a default value, the default value will be used.
-For example, if you pass \code{conf.lvel = 0.9}, all computation will
+For example, if you pass \code{conf.level = 0.9}, all computation will
 proceed using \code{conf.level = 0.95}. Additionally, if you pass
 \code{newdata = my_tibble} to an \code{\link[=augment]{augment()}} method that does not
 accept a \code{newdata} argument, it will use the default value for
@@ -41,6 +41,11 @@ Glance returns the same number of columns regardless of whether the
 model matrix is rank-deficient or not. If so, entries in columns
 that no longer have a well-defined value are filled in with an \code{NA}
 of the appropriate type.
+}
+\details{
+This tidier currently only supports \code{ivreg}-classed objects
+outputted by the \code{AER} package. The \code{ivreg} package also outputs
+objects of class \code{ivreg}, and will be supported in a later release.
 }
 \note{
 Beginning 0.7.0, \code{glance.ivreg} returns statistics for the

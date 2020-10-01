@@ -1,7 +1,7 @@
 Type: Package
 Package: broom
 Title: Convert Statistical Objects into Tidy Tibbles
-Version: 0.7.0
+Version: 0.7.1
 Authors@R: 
     c(person(given = "David",
              family = "Robinson",
@@ -486,7 +486,20 @@ Authors@R:
       person(given = "Matthieu",
              family = "Stigler",
              role = "ctb",
-             email = "Matthieu.Stigler@gmail.com"))
+             email = "Matthieu.Stigler@gmail.com"),
+      person(given = "Hugo",
+             family = "Tavares",
+             role = "ctb",
+             email = "hm533@cam.ac.uk",
+             comment = c(ORCID = "0000-0001-9373-2726")),
+	    person(given = "R. Willem",
+             family = "Vervoort",
+             role = "ctb",
+             email = "Willemvervoort@gmail.com"),
+         person(given = "Brenton M.",
+             family = "Wiernik",
+             role = "ctb",
+             email = "brenton@wiernik.org"))
 Description: Summarizes key information about statistical
     objects in tidy tibbles. This makes it easy to report results, create
     plots and consistently work with large numbers of models at once.
@@ -498,50 +511,52 @@ Description: Summarizes key information about statistical
     observations to a dataset, such as fitted values or influence
     measures.
 License: MIT + file LICENSE
-URL: https://broom.tidymodels.org/, http://github.com/tidymodels/broom
-BugReports: http://github.com/tidymodels/broom/issues
+URL: https://broom.tidymodels.org/, https://github.com/tidymodels/broom
+BugReports: https://github.com/tidymodels/broom/issues
 Depends: R (>= 3.1)
-Imports: backports, dplyr, ellipsis, generics (>= 0.0.2), glue,
-        methods, purrr, rlang, stringr, tibble (>= 3.0.0), tidyr
+Imports: backports, dplyr (>= 1.0.0), ellipsis, generics (>= 0.0.2),
+        glue, methods, purrr, rlang, stringr, tibble (>= 3.0.0), tidyr
+        (>= 1.0.0)
 Suggests: AER, akima, AUC, bbmle, betareg, biglm, binGroup, boot,
         btergm, car, caret, cluster, coda, covr, drc, e1071, emmeans,
-        epiR, ergm, fixest (>= 0.3.1), gam (>= 1.15), gamlss,
-        gamlss.data, gamlss.dist, gee, geepack, ggplot2, glmnet,
-        glmnetUtils, gmm, Hmisc, irlba, joineRML, Kendall, knitr, ks,
-        Lahman, lavaan, leaps, lfe, lm.beta, lme4, lmodel2, lmtest,
-        lsmeans, maps, maptools, MASS, Matrix, mclogit, mclust,
-        mediation, metafor, mfx, mgcv, modeldata, modeltests, muhaz,
-        multcomp, network, nnet, orcutt (>= 2.2), ordinal, plm, poLCA,
-        psych, quantreg, rgeos, rmarkdown, robust, robustbase, rsample,
-        sandwich, sp, spdep, spatialreg, speedglm, spelling,
-        statnet.common, survey, survival, systemfit, testthat (>=
-        2.1.0), tseries, zoo
+        epiR, ergm (>= 3.10.4), fixest (>= 0.5.0), gam (>= 1.15),
+        gamlss, gamlss.data, gamlss.dist, gee, geepack, ggplot2,
+        glmnet, glmnetUtils, gmm, Hmisc, irlba, joineRML, Kendall,
+        knitr, ks, Lahman, lavaan, leaps, lfe, lm.beta, lme4, lmodel2,
+        lmtest (>= 0.9.38), lsmeans, maps, maptools, margins, MASS,
+        Matrix, mclogit, mclust, mediation, metafor, mfx, mgcv, mlogit,
+        modeldata, modeltests, muhaz, multcomp, network, nnet, orcutt
+        (>= 2.2), ordinal, plm, poLCA, psych, quantreg, rgeos,
+        rmarkdown, robust, robustbase, rsample, sandwich, sp, spdep,
+        spatialreg, speedglm, spelling, survey, survival, systemfit,
+        testthat (>= 2.1.0), tseries, zoo
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.0.9000
+RoxygenNote: 7.1.1
 Language: en-US
 Collate: 'aaa-documentation-helper.R' 'null-and-default-tidiers.R'
         'aer-tidiers.R' 'auc-tidiers.R' 'base-tidiers.R'
         'bbmle-tidiers.R' 'betareg-tidiers.R' 'biglm-tidiers.R'
         'bingroup-tidiers.R' 'boot-tidiers.R' 'broom-package.R'
         'broom.R' 'btergm-tidiers.R' 'car-tidiers.R' 'caret-tidiers.R'
-        'data-frame-tidiers.R' 'deprecated-0-7-0.R' 'drc-tidiers.R'
-        'emmeans-tidiers.R' 'epiR-tidiers.R' 'ergm-tidiers.R'
-        'fixest-tidiers.R' 'gam-tidiers.R' 'gamlss-tidiers.R' 'gee.R'
-        'geepack-tidiers.R' 'glmnet-cv-glmnet-tidiers.R'
-        'glmnet-glmnet-tidiers.R' 'gmm-tidiers.R' 'hmisc-tidiers.R'
-        'joinerml-tidiers.R' 'kendall-tidiers.R' 'ks-tidiers.R'
-        'lavaan-tidiers.R' 'leaps.R' 'lfe-tidiers.R' 'list-irlba.R'
-        'list-optim-tidiers.R' 'list-svd-tidiers.R' 'list-tidiers.R'
-        'list-xyz-tidiers.R' 'lm-beta-tidiers.R' 'lmodel2-tidiers.R'
-        'lmtest-tidiers.R' 'maps-tidiers.R' 'mass-fitdistr-tidiers.R'
+        'data-frame-tidiers.R' 'deprecated-0-7-0.R'
+        'deprecated-0-7-1.R' 'drc-tidiers.R' 'emmeans-tidiers.R'
+        'epiR-tidiers.R' 'ergm-tidiers.R' 'fixest-tidiers.R'
+        'gam-tidiers.R' 'gee.R' 'geepack-tidiers.R'
+        'glmnet-cv-glmnet-tidiers.R' 'glmnet-glmnet-tidiers.R'
+        'gmm-tidiers.R' 'hmisc-tidiers.R' 'joinerml-tidiers.R'
+        'kendall-tidiers.R' 'ks-tidiers.R' 'lavaan-tidiers.R' 'leaps.R'
+        'lfe-tidiers.R' 'list-irlba.R' 'list-optim-tidiers.R'
+        'list-svd-tidiers.R' 'list-tidiers.R' 'list-xyz-tidiers.R'
+        'lm-beta-tidiers.R' 'lmodel2-tidiers.R' 'lmtest-tidiers.R'
+        'maps-tidiers.R' 'margins-tidiers.R' 'mass-fitdistr-tidiers.R'
         'mass-polr-tidiers.R' 'mass-ridgelm-tidiers.R'
         'stats-lm-tidiers.R' 'mass-rlm-tidiers.R' 'matrix-tidiers.R'
         'mclogit.R' 'mclust-tidiers.R' 'mediate-tidiers.R'
-        'mfx-tidiers.R' 'mgcv-tidiers.R' 'muhaz-tidiers.R'
-        'multcomp-tidiers.R' 'nnet-tidiers.R' 'nobs.R'
-        'orcutt-tidiers.R' 'ordinal-clm-tidiers.R'
+        'mfx-tidiers.R' 'mgcv-tidiers.R' 'mlogit-tidiers.R'
+        'muhaz-tidiers.R' 'multcomp-tidiers.R' 'nnet-tidiers.R'
+        'nobs.R' 'orcutt-tidiers.R' 'ordinal-clm-tidiers.R'
         'ordinal-clmm-tidiers.R' 'pam-tidiers.R' 'plm-tidiers.R'
         'polca-tidiers.R' 'psych-tidiers.R' 'stats-nls-tidiers.R'
         'quantreg-nlrq-tidiers.R' 'quantreg-rq-tidiers.R'
@@ -563,7 +578,7 @@ Collate: 'aaa-documentation-helper.R' 'null-and-default-tidiers.R'
         'survival-survreg-tidiers.R' 'systemfit-tidiers.R'
         'tseries-tidiers.R' 'utilities.R' 'zoo-tidiers.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2020-06-25 19:51:26 UTC; simonpcouch
+Packaged: 2020-09-29 03:51:07 UTC; simonpcouch
 Author: David Robinson [aut],
   Alex Hayes [aut, cre] (<https://orcid.org/0000-0002-4985-5160>),
   Simon Couch [aut],
@@ -682,7 +697,10 @@ Author: David Robinson [aut],
   Henrik Bengtsson [ctb],
   Eduard Szocs [ctb],
   David Hugh-Jones [ctb],
-  Matthieu Stigler [ctb]
+  Matthieu Stigler [ctb],
+  Hugo Tavares [ctb] (<https://orcid.org/0000-0001-9373-2726>),
+  R. Willem Vervoort [ctb],
+  Brenton M. Wiernik [ctb]
 Maintainer: Alex Hayes <alexpghayes@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-07-09 12:30:09 UTC
+Date/Publication: 2020-10-02 00:00:06 UTC

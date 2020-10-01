@@ -1,3 +1,56 @@
+# broom 0.7.1
+
+While broom 0.7.1 is a minor release, it includes a number of exciting new 
+features and bug fixes!
+
+#### New tidiers
+
+* Add tidiers for `margins` objects. (`#700` by `@grantmcdermott`)
+* Added tidier methods for `mlogit` objects (`#887` by `@gregmacfarlane`)
+* Add `glance.coeftest()` method (`#932` by `@grantmcdermott`)
+
+#### Improvements to existing tidiers
+
+One of the more major improvements in this release is the addition of the 
+`interval` argument to some `augment` methods for confidence, prediction, 
+and credible intervals. These columns will be consistently labeled `.lower` 
+and `.upper`! (`#908` by `@grantmcdermott`, `#925` by `@bwiernik`)
+
+In addition...
+
+* Extended the `glance.aov()` method to include an `r.squared` column!
+* `glance.survfit()` now passes `...` to `summary.survfit()` to allow for
+adjustment of RMST and other measures (`#880` by `@vincentarelbundock`)
+* Several unsupported model objects that subclass `glm` and `lm` now error 
+more informatively.
+* A number of improvements to documentation throughout the package.
+
+####  Bug fixes
+
+* Fixed `newdata` warning message in `augment.*()` output when the `newdata`
+didn't contain the response variable—augment methods no longer expect the 
+response variable in the supplied `newdata` argument. (`#897` by `@rudeboybert`)
+* Fixed a bug related to `tidy.geeglm()` not being sensitive to the
+`exponentiate` argument (`#867`)
+* Fixed `augment.fixest()` returning residuals in the `.fitted` column. The
+method also now takes a `type.residuals` argument and defaults to the same 
+`type.predict` argument as the `fixest` `predict()` method. (`#877` by `@karldw`)
+* Fix `tidy.felm` confidence interval bug. Replaces "robust" argument with 
+"se.type". (`#919` by `@grantmcdermott`; supersedes `#818` by `@kuriwaki`)
+* Fix a bug in `tidy.drc()` where some term labels would result
+in the overwriting of entries in the `curve` column (`#914`)
+* Fixed bug related to univariate zoo series in `tidy.zoo()` (`#916` by `@WillemVervoort`)
+* Fixed a bug related to `tidy.prcomp()` assigning the wrong PC labels from "loadings" 
+and "scores" matrices (`#910` by `@tavareshugo`)
+* Fixed `tidy.polr()` bug where p-values could only be returned if
+`exponentiate = FALSE`.
+
+#### Deprecations
+
+We followed through with the planned deprecation of character vector tidiers 
+in this release. Other vector tidiers that were soft-deprecated in 0.7.0 will 
+be fully deprecated in a later release.
+
 # broom 0.7.0
 
 `broom 0.7.0` is a major release with a large number of new tidiers,
@@ -124,9 +177,10 @@ and @petrhrobar)
 * `speedglm` objects from the `speedglm` package (#685)
 * `svyglm` objects from the `survey` package (#611)
 * `systemfit` objects from the `systemfit` package (by @jaspercooper)
-* We have restored a simplified version of `glance.aov()`, which now contains 
-  only the following columns: `logLik`, `AIC`, `BIC, deviance`, `df.residual`, 
-  `nobs` (see #212). Note that `tidy.aov()` gives more complete information about 
+* We have restored a simplified version of `glance.aov()`, which used to inherit
+  from the `glance.lm()` method and now contains only the following columns: 
+  `logLik`, `AIC`, `BIC, deviance`, `df.residual`, and `nobs`
+  (see #212). Note that `tidy.aov()` gives more complete information about 
   degrees of freedom in an `aov` object.
 
 ## Improvements to existing tidiers
@@ -357,7 +411,7 @@ Several old vignettes have also been updated:
 - Dataframe tidiers and rowwise dataframe tidiers have been deprecated
 
 - `bootstrap()` has been deprecated in favor of the
-  [`rsample`](https://tidymodels.github.io/rsample/)
+  [`rsample`](https://rsample.tidymodels.org/)
 
 - `inflate` has been removed from `broom`
 
@@ -717,7 +771,7 @@ See `?rowwise_df_tidiers` for more.
   consistent with broom's naming conventions for columns.
 
 * A function `bootstrap` has been added based on [this
-  example](https://github.com/hadley/dplyr/issues/269), to perform the common
+  example](https://github.com/tidyverse/dplyr/issues/269), to perform the common
   use case of bootstrapping models.
 
 # broom 0.2

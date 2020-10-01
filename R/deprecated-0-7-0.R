@@ -218,7 +218,7 @@ median_abs_dev <- function(x, na.rm = FALSE) {
 #'
 #' @details This code originates from Hadley Wickham (with a few small
 #' corrections) here:
-#' \url{https://github.com/hadley/dplyr/issues/269}
+#' \url{https://github.com/tidyverse/dplyr/issues/269}
 #'
 #' @export
 #' @family deprecated
@@ -471,14 +471,7 @@ tidy.numeric <- function(x, ...) {
 #' @export
 #' @rdname vector_tidiers
 #' @family deprecated
-tidy.character <- function(x, ...) {
-  .Deprecated()
-  if (!is.null(names(x))) {
-    dplyr::data_frame(names = names(x), x = unname(x))
-  } else {
-    dplyr::data_frame(x = x)
-  }
-}
+tidy.character <- tidy.default
 
 #' @export
 #' @rdname vector_tidiers

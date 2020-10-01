@@ -4,18 +4,24 @@
 \alias{augment.rma}
 \title{Augment data with information from a(n) rma object}
 \usage{
-\method{augment}{rma}(x, ...)
+\method{augment}{rma}(x, interval = c("prediction", "confidence"), ...)
 }
 \arguments{
 \item{x}{An \code{rma} object such as those created by \code{\link[metafor:rma.uni]{metafor::rma()}},
 \code{\link[metafor:rma.uni]{metafor::rma.uni()}}, \code{\link[metafor:rma.glmm]{metafor::rma.glmm()}}, \code{\link[metafor:rma.mh]{metafor::rma.mh()}},
 \code{\link[metafor:rma.mv]{metafor::rma.mv()}}, or \code{\link[metafor:rma.peto]{metafor::rma.peto()}}.}
 
+\item{interval}{For \code{rma.mv} models, should prediction intervals
+(\code{"prediction"}, default) or confidence intervals (\code{"confidence"})
+intervals be returned? For \code{rma.uni} models, prediction intervals are
+always returned. For \code{rma.mh} and \code{rma.peto} models, confidence intervals
+are always returned.}
+
 \item{...}{Additional arguments. Not used. Needed to match generic
 signature only. \strong{Cautionary note:} Misspelled arguments will be
 absorbed in \code{...}, where they will be ignored. If the misspelled
 argument has a default value, the default value will be used.
-For example, if you pass \code{conf.lvel = 0.9}, all computation will
+For example, if you pass \code{conf.level = 0.9}, all computation will
 proceed using \code{conf.level = 0.95}. Additionally, if you pass
 \code{newdata = my_tibble} to an \code{\link[=augment]{augment()}} method that does not
 accept a \code{newdata} argument, it will use the default value for
@@ -33,8 +39,10 @@ Users may pass data to augment via either the \code{data} argument or the
 \code{newdata} argument. If the user passes data to the \code{data} argument,
 it \strong{must} be exactly the data that was used to fit the model
 object. Pass datasets to \code{newdata} to augment data that was not used
-during model fitting. This still requires that all columns used to fit
-the model are present.
+during model fitting. This still requires that at least all predictor
+variable columns used to fit the model are present. If the original outcome
+variable used to fit the model is not included in \code{newdata}, then no
+\code{.resid} column will be included in the output.
 
 Augment will often behave differently depending on whether \code{data} or
 \code{newdata} is given. This is because there is often information
@@ -80,15 +88,13 @@ augment(meta_analysis)
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}} with columns:
-  \item{.conf.high}{Upper bound on confidence interval for fitted values.}
-  \item{.conf.low}{Lower bound on confidence interval for fitted values.}
-  \item{.cred.high}{Upper bound on credible interval for fitted values.}
-  \item{.cred.low}{Lower bound on credible interval for fitted values.}
   \item{.fitted}{Fitted or predicted value.}
+  \item{.lower}{Lower bound on interval for fitted values.}
   \item{.moderator}{In meta-analysis, the moderators used to calculate the predicted values.}
   \item{.moderator.level}{In meta-analysis, the level of the moderators used to calculate the predicted values.}
   \item{.resid}{The difference between observed and fitted values.}
   \item{.se.fit}{Standard errors of fitted values.}
+  \item{.upper}{Upper bound on interval for fitted values.}
   \item{.observed}{The observed values for the individual studies}
 
 }

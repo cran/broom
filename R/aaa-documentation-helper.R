@@ -42,16 +42,16 @@ return_evalrd <- function(..., .method, .pre = NULL, .post = NULL) {
       glos_env$column_glossary$column
     )
 
-    if (length(overwrite) > 0) {
-      overwritten <- paste(overwrite, collapse = ", ")
-      warning(
-        glue(
-          "Using provided documentation for column: {overwritten} rather than ",
-          "modeltest documentation",
-          call. = FALSE
-        )
-      )
-    }
+    # if (length(overwrite) > 0) {
+    #   overwritten <- paste(overwrite, collapse = ", ")
+    #   warning(
+    #     glue(
+    #       "Using provided documentation for column: {overwritten} rather than ",
+    #       "modeltest documentation",
+    #       call. = FALSE
+    #     )
+    #   )
+    # }
 
     custom_cols <- tibble(
       column = names(custom_doc),

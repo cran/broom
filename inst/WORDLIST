@@ -56,6 +56,7 @@ drc
 Dunkle
 Durbin
 durbinWatsonTest
+Eicker
 emm
 emmeans
 emmGrid
@@ -92,6 +93,7 @@ Hadley's
 Handcock
 Hausman
 HKB
+homoskedastic
 Hotelling
 htest
 https
@@ -117,6 +119,7 @@ lmodel
 lmrob
 lmRob
 lmtest
+loadings 
 loess
 logLik
 losts
@@ -134,13 +137,14 @@ mfx
 mgcv
 Michał
 miscellenea
-Mispecified
 misspecification
 misspecified
 Misspecified
 mjoint
 mle
 mlm
+mlogit
+mnl
 modelgenerics
 modelling
 modeltests
@@ -155,6 +159,7 @@ multiway
 na
 NA's
 newdata
+nl
 nlme
 nlrq
 nls
@@ -187,6 +192,7 @@ quantreg
 quartile
 rcorr
 README
+reprex
 regsubsets
 ridgelm
 rjags
@@ -195,6 +201,7 @@ rma
 RMA
 Rmd
 RMSEA
+RMST
 robustbase
 roc
 rowname
@@ -203,6 +210,7 @@ rq
 rqs
 rsample
 rscore
+RStudio
 Saldana
 sapharm
 sarlm
@@ -258,6 +266,7 @@ Walz
 Werner
 Wickham's
 Wickham’s
+Willem
 Wilk's
 Wilks
 xyz
