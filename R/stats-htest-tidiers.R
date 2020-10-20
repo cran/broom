@@ -62,15 +62,17 @@ tidy.htest <- function(x, ...) {
     if (is.null(names(x$parameter))) {
       warning("Multiple unnamed parameters in hypothesis test; dropping them")
     } else {
-      message(
-        "Multiple parameters; naming those columns ",
-        paste(make.names(names(x$parameter)), collapse = ", ")
-      )
       # rename num df to num.df and denom df to denom.df
       np <- names(x$parameter)
       np <- stringr::str_replace(np, "num df", "num.df")
       np <- stringr::str_replace(np, "denom df", "den.df")
       names(x$parameter) <- np
+      
+      message(
+        "Multiple parameters; naming those columns ",
+        paste(np, collapse = ", ")
+      )
+      
       ret <- append(ret, x$parameter, after = 1)
     }
   }
@@ -80,7 +82,7 @@ tidy.htest <- function(x, ...) {
     ret <- c(ret, conf.low = x$conf.int[1], conf.high = x$conf.int[2])
   }
   if (!is.null(x$method)) {
-    ret <- c(ret, method = as.character(x$method))
+    ret <- c(ret, method = trimws(as.character(x$method)))
   }
   if (!is.null(x$alternative)) {
     ret <- c(ret, alternative = as.character(x$alternative))
