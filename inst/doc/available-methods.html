@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2020-10-18" />
+<meta name="date" content="2020-12-16" />
 
 <title>Available methods</title>
 
@@ -31,6 +31,45 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -39,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
   div.column{display: inline-block; vertical-align: top; width: 50%;}
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
-      </style>
+    </style>
 
 
 
@@ -238,7 +277,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Available methods</h1>
-<h4 class="date">2020-10-18</h4>
+<h4 class="date">2020-12-16</h4>
 
 
 
@@ -536,52 +575,40 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <td align="left">x</td>
 </tr>
 <tr class="even">
-<td align="left">felm</td>
-<td align="left">x</td>
-<td align="left">x</td>
-<td align="left">x</td>
-</tr>
-<tr class="odd">
 <td align="left">fitdistr</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">fixest</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">ftable</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">gam</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">gamlss</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">garch</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">gee</td>
-<td align="left">x</td>
-<td align="left">x</td>
-<td align="left">x</td>
 </tr>
 <tr class="even">
 <td align="left">geeglm</td>
@@ -734,211 +761,199 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <td align="left">x</td>
 </tr>
 <tr class="odd">
-<td align="left">mclogit</td>
-<td align="left">x</td>
-<td align="left">x</td>
-<td align="left">x</td>
-</tr>
-<tr class="even">
 <td align="left">mediate</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">mfx</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">mjoint</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">mle2</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">mlm</td>
 <td align="left">x</td>
-<td align="left">x</td>
+<td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">mlogit</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">muhaz</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">multinom</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">negbinmfx</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">nlrq</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">nls</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">numeric</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">orcutt</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pairwise.htest</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pam</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">plm</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">poLCA</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">poissonmfx</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">polr</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">power.htest</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">prcomp</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">probitmfx</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pyears</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">rcorr</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">ref.grid</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">regsubsets</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">ridgelm</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">rlm</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">rma</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">roc</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">rq</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">rqs</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="even">
-<td align="left">sarlm</td>
-<td align="left">x</td>
-<td align="left">x</td>
-<td align="left">x</td>
-</tr>
 <tr class="odd">
-<td align="left">scam</td>
+<td align="left">sarlm</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
@@ -974,84 +989,90 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <td align="left"></td>
 </tr>
 <tr class="odd">
+<td align="left">summary.lm</td>
+<td align="left">x</td>
+<td align="left">x</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
 <td align="left">summary.plm</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">summaryDefault</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">summary_emm</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">survdiff</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">survexp</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">survfit</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">survreg</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left">x</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">svyglm</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">svyolr</td>
 <td align="left">x</td>
 <td align="left">x</td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">systemfit</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">table</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">tobit</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">ts</td>
 <td align="left">x</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">zoo</td>
 <td align="left">x</td>
 <td align="left"></td>
