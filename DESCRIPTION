@@ -1,7 +1,7 @@
 Type: Package
 Package: broom
 Title: Convert Statistical Objects into Tidy Tibbles
-Version: 0.7.6
+Version: 0.7.7
 Authors@R: 
     c(person(given = "David",
              family = "Robinson",
@@ -9,13 +9,14 @@ Authors@R:
              email = "admiral.david@gmail.com"),
       person(given = "Alex",
              family = "Hayes",
-             role = c("aut", "cre"),
+             role = "aut",
              email = "alexpghayes@gmail.com",
              comment = c(ORCID = "0000-0002-4985-5160")),
       person(given = "Simon",
              family = "Couch",
-             role = "aut",
-             email = "simonpatrickcouch@gmail.com"),
+             role = c("aut", "cre"),
+             email = "scouch2@jhu.edu",
+             comment = c(ORCID = "0000-0001-5676-5107")),
       person(given = "Indrajeet",
              family = "Patil",
              role = "ctb",
@@ -531,9 +532,9 @@ Suggests: AER, akima, AUC, bbmle, betareg, biglm, binGroup, boot,
         mfx, mgcv, mlogit, modeldata, modeltests, muhaz, multcomp,
         network, nnet, orcutt (>= 2.2), ordinal, plm, poLCA, psych,
         quantreg, Rchoice, rgeos, rmarkdown, robust, robustbase,
-        rsample, sandwich, sp, spdep, spatialreg, speedglm, spelling,
-        survey, survival, systemfit, testthat (>= 2.1.0), tseries,
-        vars, zoo
+        rsample, sandwich, sp, spdep (>= 1.1), spatialreg, speedglm,
+        spelling, survey, survival, systemfit, testthat (>= 2.1.0),
+        tseries, vars, zoo
 VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 7.1.1
@@ -582,10 +583,10 @@ Collate: 'aaa-documentation-helper.R' 'null-and-default-tidiers.R'
         'tseries-tidiers.R' 'utilities.R' 'vars-tidiers.R'
         'zoo-tidiers.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2021-04-05 19:38:38 UTC; simonpcouch
+Packaged: 2021-06-12 03:17:00 UTC; simonpcouch
 Author: David Robinson [aut],
-  Alex Hayes [aut, cre] (<https://orcid.org/0000-0002-4985-5160>),
-  Simon Couch [aut],
+  Alex Hayes [aut] (<https://orcid.org/0000-0002-4985-5160>),
+  Simon Couch [aut, cre] (<https://orcid.org/0000-0001-5676-5107>),
   Indrajeet Patil [ctb] (<https://orcid.org/0000-0003-1995-6531>),
   Derek Chiu [ctb],
   Matthieu Gomez [ctb],
@@ -706,6 +707,6 @@ Author: David Robinson [aut],
   R. Willem Vervoort [ctb],
   Brenton M. Wiernik [ctb],
   Josh Yamamoto [ctb]
-Maintainer: Alex Hayes <alexpghayes@gmail.com>
+Maintainer: Simon Couch <scouch2@jhu.edu>
 Repository: CRAN
-Date/Publication: 2021-04-05 20:30:02 UTC
+Date/Publication: 2021-06-13 04:40:17 UTC

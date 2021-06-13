@@ -1,3 +1,11 @@
+# broom 0.7.7
+
+* Fixed bug in `tidy.epi.2by2` that resulted in errors with new version of `epiR` (`#1028` by `@nt-williams`)
+* Added `exponentiate` argument to `tidy.gam()` tidier applicable for parametric terms (`#1013` by `@ddsjoberg`)
+* Added `exponentiate` argument to `tidy.negbin()` tidier (`#1011` by `@ddsjoberg`)
+* Fixed failures in `spdep` tidiers following breaking changes in the most recent release
+* Various bug fixes and improvements to documentation
+
 # broom 0.7.6
 
 * Fixed bug in `augment` tidiers resulting in `.fitted` and `.se.fit` array columns.
@@ -47,7 +55,7 @@ This release also restores tidiers for `felm` objects from the `lfe` package, wh
 In broom `0.7.0`, we introduced an error for model objects that subclassed
 `lm` and relied on `tidy.lm()`, or similarly for `tidy.glm()`. Tidiers for
 these objects were supported unintentionally, and we worried that tidiers for
-these objects would silently report innaccurate results.
+these objects would silently report inaccurate results.
 
 In hindsight, this change was unnecessarily abrupt. We've decided to roll back 
 this change, instead providing the following warning before allowing such 
