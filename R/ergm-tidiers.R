@@ -19,28 +19,6 @@
 #'   \item{std.error}{The standard error}
 #'   \item{mcmc.error}{The MCMC error}
 #'   \item{p.value}{The two-sided p-value}
-#' @examples
-#'
-#' library(ergm)
-#' # Using the same example as the ergm package
-#' # Load the Florentine marriage network data
-#' data(florentine)
-#'
-#' # Fit a model where the propensity to form ties between
-#' # families depends on the absolute difference in wealth
-#' gest <- ergm(flomarriage ~ edges + absdiff("wealth"))
-#'
-#' # Show terms, coefficient estimates and errors
-#' tidy(gest)
-#'
-#' # Show coefficients as odds ratios with a 99% CI
-#' tidy(gest, exponentiate = TRUE, conf.int = TRUE, conf.level = 0.99)
-#'
-#' # Take a look at likelihood measures and other
-#' # control parameters used during MCMC estimation
-#' glance(gest)
-#' glance(gest, deviance = TRUE)
-#' glance(gest, mcmc = TRUE)
 #' 
 #' @references Hunter DR, Handcock MS, Butts CT, Goodreau SM, Morris M (2008b).
 #'   \pkg{ergm}: A Package to Fit, Simulate and Diagnose Exponential-Family
@@ -152,6 +130,13 @@ glance.ergm <- function(x, deviance = FALSE, mcmc = FALSE, ...) {
   ret$BIC <- stats::BIC(x)
 
   if (mcmc) {
+    if (isTRUE(x$MPLE_is_MLE)) {
+      message(
+        "Though `glance` was supplied `mcmc = TRUE`, the model was not fitted",
+        "using MCMC, so the corresponding columns will be omitted."
+      )
+    }
+    
     ret$MCMC.interval <- x$control$MCMC.interval
     ret$MCMC.burnin <- x$control$MCMC.burnin
     ret$MCMC.samplesize <- x$control$MCMC.samplesize
