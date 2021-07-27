@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2021-06-23" />
+<meta name="date" content="2021-07-26" />
 
 <title>broom and dplyr</title>
 
@@ -139,7 +139,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">broom and dplyr</h1>
-<h4 class="date">2021-06-23</h4>
+<h4 class="date">2021-07-26</h4>
 
 
 
@@ -159,7 +159,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Orange <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(Orange)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>Orange</span></code></pre></div>
-<pre><code>## # A tibble: 35 x 3
+<pre><code>## # A tibble: 35 × 3
 ##    Tree    age circumference
 ##    &lt;ord&gt; &lt;dbl&gt;         &lt;dbl&gt;
 ##  1 1       118            30
@@ -183,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Orange <span class="sc">%&gt;%</span> </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Tree) <span class="sc">%&gt;%</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">correlation =</span> <span class="fu">cor</span>(age, circumference))</span></code></pre></div>
-<pre><code>## # A tibble: 5 x 2
+<pre><code>## # A tibble: 5 × 2
 ##   Tree  correlation
 ##   &lt;ord&gt;       &lt;dbl&gt;
 ## 1 3           0.988
@@ -208,7 +208,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 0.9135189</code></pre>
 <p>This contains multiple values we could want in our output. Some are vectors of length 1, such as the p-value and the estimate, and some are longer, such as the confidence interval. We can get this into a nicely organized tibble using the <code>tidy</code> function:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(ct)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 8
+<pre><code>## # A tibble: 1 × 8
 ##   estimate statistic  p.value parameter conf.low conf.high method    alternative
 ##      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;      
 ## 1    0.914      12.9 1.93e-14        33    0.834     0.956 Pearson&#39;… two.sided</code></pre>
@@ -218,7 +218,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Then we run a correlation test for each nested tibble using <code>purrr::map</code>:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>nested <span class="sc">%&gt;%</span> </span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(data, <span class="sc">~</span> <span class="fu">cor.test</span>(.x<span class="sc">$</span>age, .x<span class="sc">$</span>circumference)))</span></code></pre></div>
-<pre><code>## # A tibble: 5 x 3
+<pre><code>## # A tibble: 5 × 3
 ##   Tree  data             test   
 ##   &lt;ord&gt; &lt;list&gt;           &lt;list&gt; 
 ## 1 1     &lt;tibble [7 × 2]&gt; &lt;htest&gt;
@@ -232,7 +232,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">test =</span> <span class="fu">map</span>(data, <span class="sc">~</span> <span class="fu">cor.test</span>(.x<span class="sc">$</span>age, .x<span class="sc">$</span>circumference)), <span class="co"># S3 list-col</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">tidied =</span> <span class="fu">map</span>(test, tidy)</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
-<pre><code>## # A tibble: 5 x 4
+<pre><code>## # A tibble: 5 × 4
 ##   Tree  data             test    tidied          
 ##   &lt;ord&gt; &lt;list&gt;           &lt;list&gt;  &lt;list&gt;          
 ## 1 1     &lt;tibble [7 × 2]&gt; &lt;htest&gt; &lt;tibble [1 × 8]&gt;
@@ -248,7 +248,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">tidied =</span> <span class="fu">map</span>(test, tidy)</span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(tidied)</span></code></pre></div>
-<pre><code>## # A tibble: 5 x 11
+<pre><code>## # A tibble: 5 × 11
 ##   Tree  data      test   estimate statistic p.value parameter conf.low conf.high
 ##   &lt;ord&gt; &lt;list&gt;    &lt;list&gt;    &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 ## 1 1     &lt;tibble … &lt;htes…    0.985      13.0 4.85e-5         5    0.901     0.998
@@ -280,7 +280,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## F-statistic: 166.4 on 1 and 33 DF,  p-value: 1.931e-14</code></pre>
 <p>where we tidy these results, we get multiple rows of output for each model:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(lm_fit)</span></code></pre></div>
-<pre><code>## # A tibble: 2 x 5
+<pre><code>## # A tibble: 2 × 5
 ##   term          estimate std.error statistic  p.value
 ##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 (Intercept)      16.6     78.1       0.212 8.33e- 1
@@ -293,7 +293,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">tidied =</span> <span class="fu">map</span>(fit, tidy)</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(tidied)</span></code></pre></div>
-<pre><code>## # A tibble: 10 x 8
+<pre><code>## # A tibble: 10 × 8
 ##    Tree  data           fit    term        estimate std.error statistic  p.value
 ##    &lt;ord&gt; &lt;list&gt;         &lt;list&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
 ##  1 1     &lt;tibble [7 × … &lt;lm&gt;   (Intercept)  -265.      98.6      -2.68   4.36e-2
@@ -310,7 +310,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(mtcars)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>mtcars <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(mtcars)  <span class="co"># to play nicely with list-cols</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>mtcars</span></code></pre></div>
-<pre><code>## # A tibble: 32 x 11
+<pre><code>## # A tibble: 32 × 11
 ##      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
 ##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ##  1  21       6  160    110  3.9   2.62  16.5     0     1     4     4
@@ -331,7 +331,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">tidied =</span> <span class="fu">map</span>(fit, tidy)</span>
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
 <span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(tidied)</span></code></pre></div>
-<pre><code>## # A tibble: 8 x 8
+<pre><code>## # A tibble: 8 × 8
 ##      am data              fit    term       estimate std.error statistic p.value
 ##   &lt;dbl&gt; &lt;list&gt;            &lt;list&gt; &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
 ## 1     1 &lt;tibble [13 × 10… &lt;lm&gt;   (Intercep…   4.28      3.46      1.24   2.47e-1
@@ -354,7 +354,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>regressions <span class="sc">%&gt;%</span> </span>
 <span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(tidied)</span></code></pre></div>
-<pre><code>## # A tibble: 8 x 10
+<pre><code>## # A tibble: 8 × 10
 ##      am data  fit   term  estimate std.error statistic p.value glanced augmented
 ##   &lt;dbl&gt; &lt;lis&gt; &lt;lis&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;list&gt;  &lt;list&gt;   
 ## 1     1 &lt;tib… &lt;lm&gt;  (Int…   4.28      3.46      1.24   2.47e-1 &lt;tibbl… &lt;tibble …
@@ -367,7 +367,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 8     0 &lt;tib… &lt;lm&gt;  gear    0.147     0.368     0.398  6.96e-1 &lt;tibbl… &lt;tibble …</code></pre>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>regressions <span class="sc">%&gt;%</span> </span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(glanced)</span></code></pre></div>
-<pre><code>## # A tibble: 2 x 17
+<pre><code>## # A tibble: 2 × 17
 ##      am data  fit   tidied r.squared adj.r.squared sigma statistic p.value    df
 ##   &lt;dbl&gt; &lt;lis&gt; &lt;lis&gt; &lt;list&gt;     &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
 ## 1     1 &lt;tib… &lt;lm&gt;  &lt;tibb…     0.833         0.778 0.291     15.0  7.59e-4     3
@@ -376,7 +376,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## #   df.residual &lt;int&gt;, nobs &lt;int&gt;, augmented &lt;list&gt;</code></pre>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>regressions <span class="sc">%&gt;%</span> </span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(augmented)</span></code></pre></div>
-<pre><code>## # A tibble: 32 x 15
+<pre><code>## # A tibble: 32 × 15
 ##       am data    fit    tidied  glanced     wt   mpg  qsec  gear .fitted  .resid
 ##    &lt;dbl&gt; &lt;list&gt;  &lt;list&gt; &lt;list&gt;  &lt;list&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
 ##  1     1 &lt;tibbl… &lt;lm&gt;   &lt;tibbl… &lt;tibble…  2.62  21    16.5     4    2.73 -0.107 

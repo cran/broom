@@ -1,7 +1,7 @@
 Type: Package
 Package: broom
 Title: Convert Statistical Objects into Tidy Tibbles
-Version: 0.7.8
+Version: 0.7.9
 Authors@R: 
     c(person(given = "David",
              family = "Robinson",
@@ -504,7 +504,10 @@ Authors@R:
       person(given = "Josh",
              family = "Yamamoto",
              role = "ctb",
-             email = "joshuayamamoto5@gmail.com"))
+             email = "joshuayamamoto5@gmail.com"),
+      person(given = "Jasme",
+             family = "Lee",
+             role = "ctb"))
 Description: Summarizes key information about statistical
     objects in tidy tibbles. This makes it easy to report results, create
     plots and consistently work with large numbers of models at once.
@@ -531,10 +534,10 @@ Suggests: AER, akima, AUC, bbmle, betareg, biglm, binGroup, boot,
         maptools, margins, MASS, Matrix, mclust, mediation, metafor,
         mfx, mgcv, mlogit, modeldata, modeltests, muhaz, multcomp,
         network, nnet, orcutt (>= 2.2), ordinal, plm, poLCA, psych,
-        quantreg, Rchoice, rgeos, rmarkdown, robust, robustbase,
-        rsample, sandwich, sp, spdep (>= 1.1), spatialreg, speedglm,
-        spelling, survey, survival, systemfit, testthat (>= 2.1.0),
-        tseries, vars, zoo
+        quantreg, rgeos, rmarkdown, robust, robustbase, rsample,
+        sandwich, sp, spdep (>= 1.1), spatialreg, speedglm, spelling,
+        survey, survival, systemfit, testthat (>= 2.1.0), tseries,
+        vars, zoo
 VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 7.1.1
@@ -564,7 +567,7 @@ Collate: 'aaa-documentation-helper.R' 'null-and-default-tidiers.R'
         'ordinal-clmm-tidiers.R' 'pam-tidiers.R' 'plm-tidiers.R'
         'polca-tidiers.R' 'psych-tidiers.R' 'stats-nls-tidiers.R'
         'quantreg-nlrq-tidiers.R' 'quantreg-rq-tidiers.R'
-        'quantreg-rqs-tidiers.R' 'rchoice-tidiers.R' 'rma-tidiers.R'
+        'quantreg-rqs-tidiers.R' 'rma-tidiers.R'
         'robust-glmrob-tidiers.R' 'robust-lmrob-tidiers.R'
         'robustbase-glmrob-tidiers.R' 'robustbase-lmrob-tidiers.R'
         'sp-tidiers.R' 'spdep-tidiers.R' 'speedglm-speedglm-tidiers.R'
@@ -583,7 +586,7 @@ Collate: 'aaa-documentation-helper.R' 'null-and-default-tidiers.R'
         'tseries-tidiers.R' 'utilities.R' 'vars-tidiers.R'
         'zoo-tidiers.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2021-06-23 15:41:56 UTC; simonpcouch
+Packaged: 2021-07-26 21:07:38 UTC; simonpcouch
 Author: David Robinson [aut],
   Alex Hayes [aut] (<https://orcid.org/0000-0002-4985-5160>),
   Simon Couch [aut, cre] (<https://orcid.org/0000-0001-5676-5107>),
@@ -706,7 +709,8 @@ Author: David Robinson [aut],
   Hugo Tavares [ctb] (<https://orcid.org/0000-0001-9373-2726>),
   R. Willem Vervoort [ctb],
   Brenton M. Wiernik [ctb],
-  Josh Yamamoto [ctb]
+  Josh Yamamoto [ctb],
+  Jasme Lee [ctb]
 Maintainer: Simon Couch <scouch2@jhu.edu>
 Repository: CRAN
-Date/Publication: 2021-06-24 08:50:02 UTC
+Date/Publication: 2021-07-27 08:40:05 UTC

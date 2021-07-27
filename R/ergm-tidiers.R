@@ -20,6 +20,29 @@
 #'   \item{mcmc.error}{The MCMC error}
 #'   \item{p.value}{The two-sided p-value}
 #' 
+#' @examples
+#'
+#' library(ergm)
+#' # Using the same example as the ergm package
+#' # Load the Florentine marriage network data
+#' data(florentine)
+#'
+#' # Fit a model where the propensity to form ties between
+#' # families depends on the absolute difference in wealth
+#' gest <- ergm(flomarriage ~ edges + absdiff("wealth"))
+#'
+#' # Show terms, coefficient estimates and errors
+#' tidy(gest)
+#'
+#' # Show coefficients as odds ratios with a 99% CI
+#' tidy(gest, exponentiate = TRUE, conf.int = TRUE, conf.level = 0.99)
+#'
+#' # Take a look at likelihood measures and other
+#' # control parameters used during MCMC estimation
+#' glance(gest)
+#' glance(gest, deviance = TRUE)
+#' glance(gest, mcmc = TRUE)
+#' 
 #' @references Hunter DR, Handcock MS, Butts CT, Goodreau SM, Morris M (2008b).
 #'   \pkg{ergm}: A Package to Fit, Simulate and Diagnose Exponential-Family
 #'   Models for Networks. *Journal of Statistical Software*, 24(3).
@@ -39,10 +62,10 @@ tidy.ergm <- function(x, conf.int = FALSE, conf.level = 0.95,
   # in ergm 3.10 summary(x, ...)$coefs has columns:
   #   Estimate, Std. Error, MCMC %, z value, Pr(>|Z|)
 
-  ret <- summary(x, ...)$coefs %>%
-    tibble::rownames_to_column() %>%
+  ret <- summary(x, ...)$coefficients %>%
+    tibble::as_tibble(rownames = "term") %>%
     rename2(
-      term = "rowname",
+      term = "term",
       estimate = "Estimate",
       std.error = "Std. Error",
       mcmc.error = "MCMC %",

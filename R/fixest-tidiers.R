@@ -48,7 +48,7 @@
 #' tidy(gravity_summ, conf.int = TRUE)
 #' 
 #' # Approach (1) is preferred.
-#'
+#' 
 #' }
 #'
 #' @export

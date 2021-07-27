@@ -1,3 +1,9 @@
+# broom 0.7.9
+
+* Fixes confidence intervals in `tidy.crr()`, which were previously exponentiated when `exponentiate = FALSE` (`#1023` by `@leejasme`)
+* Deprecates `Rchoice` tidiers, as the newest 0.3-3 release requires R 4.0+ and does not re-export needed generics.
+* Updates to `ergm` tidiers in anticipation of changes in later releases. (`#1034` by `@krivit`)
+
 # broom 0.7.8
 
 * Fixed bug in `glance.ergm` related to handling of MCMC details.
