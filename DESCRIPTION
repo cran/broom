@@ -1,7 +1,7 @@
 Type: Package
 Package: broom
 Title: Convert Statistical Objects into Tidy Tibbles
-Version: 0.7.9
+Version: 0.7.10
 Authors@R: 
     c(person(given = "David",
              family = "Robinson",
@@ -507,7 +507,12 @@ Authors@R:
              email = "joshuayamamoto5@gmail.com"),
       person(given = "Jasme",
              family = "Lee",
-             role = "ctb"))
+             role = "ctb"),
+      person(given = "Taren",
+             family = "Sanders",
+             role = "ctb",
+             email = "taren.sanders@acu.edu.au",
+             comment = c(ORCID = "0000-0002-4504-6008")))
 Description: Summarizes key information about statistical
     objects in tidy tibbles. This makes it easy to report results, create
     plots and consistently work with large numbers of models at once.
@@ -524,13 +529,13 @@ BugReports: https://github.com/tidymodels/broom/issues
 Depends: R (>= 3.1)
 Imports: backports, dplyr (>= 1.0.0), ellipsis, generics (>= 0.0.2),
         glue, methods, purrr, rlang, stringr, tibble (>= 3.0.0), tidyr
-        (>= 1.0.0)
+        (>= 1.0.0), ggplot2
 Suggests: AER, akima, AUC, bbmle, betareg, biglm, binGroup, boot,
         btergm, car, caret, cluster, cmprsk, coda, covr, drc, e1071,
         emmeans, epiR, ergm (>= 3.10.4), fixest (>= 0.9.0), gam (>=
-        1.15), gee, geepack, ggplot2, glmnet, glmnetUtils, gmm, Hmisc,
-        irlba, joineRML, Kendall, knitr, ks, Lahman, lavaan, leaps,
-        lfe, lm.beta, lme4, lmodel2, lmtest (>= 0.9.38), lsmeans, maps,
+        1.15), gee, geepack, glmnet, glmnetUtils, gmm, Hmisc, irlba,
+        joineRML, Kendall, knitr, ks, Lahman, lavaan, leaps, lfe,
+        lm.beta, lme4, lmodel2, lmtest (>= 0.9.38), lsmeans, maps,
         maptools, margins, MASS, Matrix, mclust, mediation, metafor,
         mfx, mgcv, mlogit, modeldata, modeltests, muhaz, multcomp,
         network, nnet, orcutt (>= 2.2), ordinal, plm, poLCA, psych,
@@ -586,7 +591,7 @@ Collate: 'aaa-documentation-helper.R' 'null-and-default-tidiers.R'
         'tseries-tidiers.R' 'utilities.R' 'vars-tidiers.R'
         'zoo-tidiers.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2021-07-26 21:07:38 UTC; simonpcouch
+Packaged: 2021-10-31 20:52:27 UTC; simonpcouch
 Author: David Robinson [aut],
   Alex Hayes [aut] (<https://orcid.org/0000-0002-4985-5160>),
   Simon Couch [aut, cre] (<https://orcid.org/0000-0001-5676-5107>),
@@ -710,7 +715,8 @@ Author: David Robinson [aut],
   R. Willem Vervoort [ctb],
   Brenton M. Wiernik [ctb],
   Josh Yamamoto [ctb],
-  Jasme Lee [ctb]
+  Jasme Lee [ctb],
+  Taren Sanders [ctb] (<https://orcid.org/0000-0002-4504-6008>)
 Maintainer: Simon Couch <scouch2@jhu.edu>
 Repository: CRAN
-Date/Publication: 2021-07-27 08:40:05 UTC
+Date/Publication: 2021-10-31 21:40:02 UTC
