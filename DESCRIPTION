@@ -1,7 +1,7 @@
 Type: Package
 Package: broom
 Title: Convert Statistical Objects into Tidy Tibbles
-Version: 0.7.10
+Version: 0.7.11
 Authors@R: 
     c(person(given = "David",
              family = "Robinson",
@@ -512,7 +512,17 @@ Authors@R:
              family = "Sanders",
              role = "ctb",
              email = "taren.sanders@acu.edu.au",
-             comment = c(ORCID = "0000-0002-4504-6008")))
+             comment = c(ORCID = "0000-0002-4504-6008")),
+      person(given = "Ilaria",
+             family = "Prosdocimi",
+             role = "ctb",
+             email = "prosdocimi.ilaria@gmail.com",
+            comment = c(ORCID = "0000-0001-8565-094X")),
+      person(given = "Daniel D.",
+             family = "Sjoberg",
+             role = "ctb",
+             email = "danield.sjoberg@gmail.com",
+             comment = c(ORCID = "0000-0003-0862-2018")))
 Description: Summarizes key information about statistical
     objects in tidy tibbles. This makes it easy to report results, create
     plots and consistently work with large numbers of models at once.
@@ -544,6 +554,7 @@ Suggests: AER, akima, AUC, bbmle, betareg, biglm, binGroup, boot,
         survey, survival, systemfit, testthat (>= 2.1.0), tseries,
         vars, zoo
 VignetteBuilder: knitr
+Config/Needs/website: tidyverse/tidytemplate
 Encoding: UTF-8
 RoxygenNote: 7.1.1
 Language: en-US
@@ -591,7 +602,7 @@ Collate: 'aaa-documentation-helper.R' 'null-and-default-tidiers.R'
         'tseries-tidiers.R' 'utilities.R' 'vars-tidiers.R'
         'zoo-tidiers.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2021-10-31 20:52:27 UTC; simonpcouch
+Packaged: 2022-01-03 21:27:02 UTC; simonpcouch
 Author: David Robinson [aut],
   Alex Hayes [aut] (<https://orcid.org/0000-0002-4985-5160>),
   Simon Couch [aut, cre] (<https://orcid.org/0000-0001-5676-5107>),
@@ -716,7 +727,9 @@ Author: David Robinson [aut],
   Brenton M. Wiernik [ctb],
   Josh Yamamoto [ctb],
   Jasme Lee [ctb],
-  Taren Sanders [ctb] (<https://orcid.org/0000-0002-4504-6008>)
+  Taren Sanders [ctb] (<https://orcid.org/0000-0002-4504-6008>),
+  Ilaria Prosdocimi [ctb] (<https://orcid.org/0000-0001-8565-094X>),
+  Daniel D. Sjoberg [ctb] (<https://orcid.org/0000-0003-0862-2018>)
 Maintainer: Simon Couch <scouch2@jhu.edu>
 Repository: CRAN
-Date/Publication: 2021-10-31 21:40:02 UTC
+Date/Publication: 2022-01-03 22:30:02 UTC

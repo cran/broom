@@ -1,6 +1,11 @@
-# broom 0.7.10
+# broom 0.7.11
 
-To be released as broom 0.7.10.
+* Addressed issue with the ordering of original observations in `augment.rqs`. Now function preserves the original `data.frame` names also when the input `data.frame` only has one column (`#1052` by `@ilapros`).
+* Addressed warning from `tidy.rma` when `x$ddf` has length greater than 1 (`#1064` by `@wviechtb`).
+* Fix errors in `glance.lavaan` in anticipation of upcoming `tidyr` release (`#1067` by `@DavisVaughan`).
+* Corrected the confidence interval in `tidy.crr()`. The `tidy.crr(conf.level=)` argument was previously ignored (`#1068` by `@ddsjoberg`).
+
+# broom 0.7.10
 
 * Clarifies error when `pysch::mediate` output is dispatched to `tidy.mediate` (`#1037` by `@LukasWallrich`).
 * Allows user to specify confidence level for `tidy.rma` (`#1041` by `@TarenSanders`)

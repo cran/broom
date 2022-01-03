@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2021-10-31" />
+<meta name="date" content="2022-01-03" />
 
 <title>broom and dplyr</title>
 
@@ -139,7 +139,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">broom and dplyr</h1>
-<h4 class="date">2021-10-31</h4>
+<h4 class="date">2022-01-03</h4>
 
 
 
@@ -332,16 +332,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
 <span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(tidied)</span></code></pre></div>
 <pre><code>## # A tibble: 8 × 8
-##      am data               fit    term        estimate std.error statistic p.value
-##   &lt;dbl&gt; &lt;list&gt;             &lt;list&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1     1 &lt;tibble [13 × 10]&gt; &lt;lm&gt;   (Intercept)   4.28      3.46      1.24   2.47e-1
-## 2     1 &lt;tibble [13 × 10]&gt; &lt;lm&gt;   mpg          -0.101     0.0294   -3.43   7.50e-3
-## 3     1 &lt;tibble [13 × 10]&gt; &lt;lm&gt;   qsec          0.0398    0.151     0.264  7.98e-1
-## 4     1 &lt;tibble [13 × 10]&gt; &lt;lm&gt;   gear         -0.0229    0.349    -0.0656 9.49e-1
-## 5     0 &lt;tibble [19 × 10]&gt; &lt;lm&gt;   (Intercept)   4.92      1.40      3.52   3.09e-3
-## 6     0 &lt;tibble [19 × 10]&gt; &lt;lm&gt;   mpg          -0.192     0.0443   -4.33   5.91e-4
-## 7     0 &lt;tibble [19 × 10]&gt; &lt;lm&gt;   qsec          0.0919    0.0983    0.935  3.65e-1
-## 8     0 &lt;tibble [19 × 10]&gt; &lt;lm&gt;   gear          0.147     0.368     0.398  6.96e-1</code></pre>
+##      am data               fit    term      estimate std.error statistic p.value
+##   &lt;dbl&gt; &lt;list&gt;             &lt;list&gt; &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1     1 &lt;tibble [13 × 10]&gt; &lt;lm&gt;   (Interce…   4.28      3.46      1.24   2.47e-1
+## 2     1 &lt;tibble [13 × 10]&gt; &lt;lm&gt;   mpg        -0.101     0.0294   -3.43   7.50e-3
+## 3     1 &lt;tibble [13 × 10]&gt; &lt;lm&gt;   qsec        0.0398    0.151     0.264  7.98e-1
+## 4     1 &lt;tibble [13 × 10]&gt; &lt;lm&gt;   gear       -0.0229    0.349    -0.0656 9.49e-1
+## 5     0 &lt;tibble [19 × 10]&gt; &lt;lm&gt;   (Interce…   4.92      1.40      3.52   3.09e-3
+## 6     0 &lt;tibble [19 × 10]&gt; &lt;lm&gt;   mpg        -0.192     0.0443   -4.33   5.91e-4
+## 7     0 &lt;tibble [19 × 10]&gt; &lt;lm&gt;   qsec        0.0919    0.0983    0.935  3.65e-1
+## 8     0 &lt;tibble [19 × 10]&gt; &lt;lm&gt;   gear        0.147     0.368     0.398  6.96e-1</code></pre>
 <p>What if you want not just the <code>tidy</code> output, but the <code>augment</code> and <code>glance</code> outputs as well, while still performing each regression only once? Since we’re using list-columns, we can just fit the model once and use multiple list-columns to store the tidied, glanced and augmented outputs.</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>regressions <span class="ot">&lt;-</span> mtcars <span class="sc">%&gt;%</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>am) <span class="sc">%&gt;%</span> </span>
