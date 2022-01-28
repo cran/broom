@@ -1,7 +1,7 @@
 Type: Package
 Package: broom
 Title: Convert Statistical Objects into Tidy Tibbles
-Version: 0.7.11
+Version: 0.7.12
 Authors@R: 
     c(person(given = "David",
              family = "Robinson",
@@ -15,7 +15,7 @@ Authors@R:
       person(given = "Simon",
              family = "Couch",
              role = c("aut", "cre"),
-             email = "scouch2@jhu.edu",
+             email = "simonpatrickcouch@gmail.com",
              comment = c(ORCID = "0000-0001-5676-5107")),
       person(given = "Indrajeet",
              family = "Patil",
@@ -556,7 +556,7 @@ Suggests: AER, akima, AUC, bbmle, betareg, biglm, binGroup, boot,
 VignetteBuilder: knitr
 Config/Needs/website: tidyverse/tidytemplate
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Language: en-US
 Collate: 'aaa-documentation-helper.R' 'null-and-default-tidiers.R'
         'aer-tidiers.R' 'auc-tidiers.R' 'base-tidiers.R'
@@ -602,7 +602,7 @@ Collate: 'aaa-documentation-helper.R' 'null-and-default-tidiers.R'
         'tseries-tidiers.R' 'utilities.R' 'vars-tidiers.R'
         'zoo-tidiers.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2022-01-03 21:27:02 UTC; simonpcouch
+Packaged: 2022-01-28 19:57:56 UTC; simonpcouch
 Author: David Robinson [aut],
   Alex Hayes [aut] (<https://orcid.org/0000-0002-4985-5160>),
   Simon Couch [aut, cre] (<https://orcid.org/0000-0001-5676-5107>),
@@ -730,6 +730,6 @@ Author: David Robinson [aut],
   Taren Sanders [ctb] (<https://orcid.org/0000-0002-4504-6008>),
   Ilaria Prosdocimi [ctb] (<https://orcid.org/0000-0001-8565-094X>),
   Daniel D. Sjoberg [ctb] (<https://orcid.org/0000-0003-0862-2018>)
-Maintainer: Simon Couch <scouch2@jhu.edu>
+Maintainer: Simon Couch <simonpatrickcouch@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-01-03 22:30:02 UTC
+Date/Publication: 2022-01-28 23:30:05 UTC

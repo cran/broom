@@ -606,3 +606,7 @@ globalVariables(
     "z"
   )
 )
+
+load_ggplot <- function(){
+  ggplot2::ggplot
+}

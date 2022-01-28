@@ -33,7 +33,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Simon Couch \email{scouch2@jhu.edu} (\href{https://orcid.org/0000-0001-5676-5107}{ORCID})
+\strong{Maintainer}: Simon Couch \email{simonpatrickcouch@gmail.com} (\href{https://orcid.org/0000-0001-5676-5107}{ORCID})
 
 Authors:
 \itemize{
@@ -165,6 +165,8 @@ Other contributors:
   \item Josh Yamamoto \email{joshuayamamoto5@gmail.com} [contributor]
   \item Jasme Lee [contributor]
   \item Taren Sanders \email{taren.sanders@acu.edu.au} (\href{https://orcid.org/0000-0002-4504-6008}{ORCID}) [contributor]
+  \item Ilaria Prosdocimi \email{prosdocimi.ilaria@gmail.com} (\href{https://orcid.org/0000-0001-8565-094X}{ORCID}) [contributor]
+  \item Daniel D. Sjoberg \email{danield.sjoberg@gmail.com} (\href{https://orcid.org/0000-0003-0862-2018}{ORCID}) [contributor]
 }
 
 }
