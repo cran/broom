@@ -21,21 +21,29 @@
 #' @examples
 #'
 #' tt <- t.test(rnorm(10))
+#' 
 #' tidy(tt)
-#' glance(tt) # same output for all htests
+#' 
+#' # the glance output will be the same for each of the below tests
+#' glance(tt)
 #'
 #' tt <- t.test(mpg ~ am, data = mtcars)
+#' 
 #' tidy(tt)
 #'
 #' wt <- wilcox.test(mpg ~ am, data = mtcars, conf.int = TRUE, exact = FALSE)
+#' 
 #' tidy(wt)
 #'
 #' ct <- cor.test(mtcars$wt, mtcars$mpg)
+#' 
 #' tidy(ct)
 #'
 #' chit <- chisq.test(xtabs(Freq ~ Sex + Class, data = as.data.frame(Titanic)))
+#' 
 #' tidy(chit)
 #' augment(chit)
+#' 
 #' @aliases htest_tidiers
 #' @export
 #' @family htest tidiers
@@ -172,6 +180,10 @@ augment_chisq_test <- function(x, ...) {
 #'
 #' @examples
 #'
+#' # feel free to ignore the following line—it allows {broom} to supply 
+#' # examples without requiring the data-supplying package to be installed.
+#' if (requireNamespace("modeldata", quietly = TRUE)) {
+#'
 #' attach(airquality)
 #' Month <- factor(Month, labels = month.abb[5:9])
 #' ptt <- pairwise.t.test(Ozone, Month)
@@ -187,6 +199,9 @@ augment_chisq_test <- function(x, ...) {
 #' tidy(pairwise.t.test(compounds, class, alternative = "less"))
 #'
 #' tidy(pairwise.wilcox.test(compounds, class))
+#' 
+#' }
+#' 
 #' @export
 #' @seealso [stats::pairwise.t.test()], [stats::pairwise.wilcox.test()],
 #'   [tidy()]

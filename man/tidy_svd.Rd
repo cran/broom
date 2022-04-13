@@ -51,15 +51,15 @@ row in the tidied output corresponds to information about the principle
 components in the original space. The columns are:
 
 \item{\code{row}}{The variable labels (colnames) of the data set on
-which PCA was performed}
-\item{\code{PC}}{An integer vector indicating the principal component}
+which PCA was performed.}
+\item{\code{PC}}{An integer vector indicating the principal component.}
 \item{\code{value}}{The value of the eigenvector (axis score) on the
-indicated principal component}
+indicated principal component.}
 
 If \code{matrix} is \code{"d"}, \code{"eigenvalues"} or \code{"pcs"}, the columns are:
 
-\item{\code{PC}}{An integer vector indicating the principal component}
-\item{\code{std.dev}}{Standard deviation explained by this PC}
+\item{\code{PC}}{An integer vector indicating the principal component.}
+\item{\code{std.dev}}{Standard deviation explained by this PC.}
 \item{\code{percent}}{Fraction of variation explained by this component
 (a numeric value between 0 and 1).}
 \item{\code{cumulative}}{Cumulative fraction of variation explained by
@@ -75,10 +75,10 @@ dispatch.
 
 These functions look at the elements of a list and determine if there is
 an appropriate tidying method to apply to the list. Those tidiers are
-themselves are implemented as functions of the form \verb{tidy_<function>}
-or \verb{glance_<function>} and are not exported (but they are documented!).
+implemented as functions of the form \verb{tidy_<function>} or
+\verb{glance_<function>} and are not exported (but they are documented!).
 
-If no appropriate tidying method is found, throws an error.
+If no appropriate tidying method is found, they throw an error.
 }
 \details{
 See https://stats.stackexchange.com/questions/134282/relationship-between-svd-and-pca-how-to-use-svd-to-perform-pca
@@ -87,6 +87,8 @@ that SVD is only equivalent to PCA on centered data.
 }
 \examples{
 
+# feel free to ignore the following line—it allows {broom} to supply 
+# examples without requiring the data-supplying package to be installed.
 if (requireNamespace("modeldata", quietly = TRUE)) {
 
 library(modeldata)

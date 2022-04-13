@@ -30,6 +30,12 @@ test_that("fixest tidier arguments", {
   check_arguments(augment.fixest)
 })
 
+test_that("bug #1018: fixed effects but no regressors", {
+    mod <- fixest::feols(Sepal.Length ~ 1 | Species, data = iris)
+    check_tidy_output(tidy(mod))
+    check_glance_outputs(glance(mod))
+})
+
 test_that("tidy.fixest", {
   td <- tidy(fit)
   td2 <- tidy(fit2, conf.int = TRUE)
@@ -106,7 +112,7 @@ test_that("all other fixest estimators run", {
     glance(res_fepois)
   )
 
-  # Augment
+  # augment
   # Note this this causes warnings with strict=TRUE because
   # modeltests:::acceptable_augment_colnames calls model.frame, which doesn't
   # work for fixest models.

@@ -127,7 +127,7 @@ na_types_dict <- list("r" = NA_real_,
                       "c" = NA_character_,
                       "l" = rlang::na_lgl)
 
-# A function that converts a string to a vector of NA types.
+# a function that converts a string to a vector of NA types.
 # e.g. "rri" -> c(NA_real_, NA_real_, rlang::na_int)
 parse_na_types <- function(s) {
   
@@ -143,7 +143,7 @@ parse_na_types <- function(s) {
     unname()
 }
 
-# A function that, given named arguments, will make a one-row
+# a function that, given named arguments, will make a one-row
 # tibble, switching out NULLs for the appropriate NA type.
 as_glance_tibble <- function(..., na_types) {
   
@@ -282,7 +282,7 @@ augment_columns <- function(x, data, newdata = NULL, type, type.predict = type,
 
     original <- data
 
-    if (class(na_action) == "exclude") {
+    if (inherits(na_action, "exclude")) {
       # check if values are missing
       if (length(stats::residuals(x)) > nrow(data)) {
         warning(
@@ -300,7 +300,7 @@ augment_columns <- function(x, data, newdata = NULL, type, type.predict = type,
     # no NAs were left out; we can simply recombine
     original <- as_augment_tibble(original)
     return(as_tibble(cbind(original, ret)))
-  } else if (class(na_action) == "omit") {
+  } else if (inherits(na_action, "omit")) {
     # if the option is "omit", drop those rows from the data
     original <- as_augment_tibble(original)
     original <- original[-na_action, ]
@@ -479,21 +479,21 @@ broom_confint_terms <- function(x, ...) {
     rownames(ci) <- names(coef(x))[1]
   }
 
-  ci <- as_tibble(ci, rownames = "term")
+  ci <- as_tibble(ci, rownames = "term", .name_repair = "minimal")
   names(ci) <- c("term", "conf.low", "conf.high")
   ci
 }
 
 # warn when models subclasses glm/lm and do not have their own dedicated tidiers.
-warn_on_subclass <- function(x) {
+warn_on_subclass <- function(x, tidier) {
   if (length(class(x)) > 1 && class(x)[1] != "glm") {
     subclass <- class(x)[1]
     dispatched_method <- class(x)[class(x) %in% c("glm", "lm")][1]
     
     warning(
-      "Tidiers for objects of class ", 
+      "The `", tidier, "()` method for objects of class ", 
       subclass, 
-      " are not maintained by the broom team, and are only supported through ",
+      " is not maintained by the broom team, and is only supported through ",
       "the ", 
       dispatched_method, 
       " tidier method. Please be cautious in interpreting and reporting ",
@@ -606,7 +606,3 @@ globalVariables(
     "z"
   )
 )
-
-load_ggplot <- function(){
-  ggplot2::ggplot
-}
