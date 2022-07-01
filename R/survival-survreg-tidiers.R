@@ -7,12 +7,8 @@
 #'
 #' @evalRd return_tidy(regression = TRUE)
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("survival")
 #' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("survival", quietly = TRUE)) {
-#'
 #' # load libraries for models and data
 #' library(survival)
 #'
@@ -37,8 +33,6 @@
 #'   geom_point() +
 #'   geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0) +
 #'   geom_vline(xintercept = 0)
-#'   
-#' }
 #' 
 #' @aliases survreg_tidiers
 #' @export
@@ -47,6 +41,8 @@
 #' @family survival tidiers
 #'
 tidy.survreg <- function(x, conf.level = .95, conf.int = FALSE, ...) {
+  check_ellipses("exponentiate", "tidy", "survreg", ...)
+  
   s <- summary(x)$table
   # If the user requested robust SE in the survreg call, don't return naive SE
   # (The column is not present if robust=FALSE)

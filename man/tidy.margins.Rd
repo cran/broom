@@ -22,10 +22,13 @@ signature only. \strong{Cautionary note:} Misspelled arguments will be
 absorbed in \code{...}, where they will be ignored. If the misspelled
 argument has a default value, the default value will be used.
 For example, if you pass \code{conf.lvel = 0.9}, all computation will
-proceed using \code{conf.level = 0.95}. Additionally, if you pass
-\code{newdata = my_tibble} to an \code{\link[=augment]{augment()}} method that does not
-accept a \code{newdata} argument, it will use the default value for
-the \code{data} argument.}
+proceed using \code{conf.level = 0.95}. Two exceptions here are:
+\itemize{
+\item \code{tidy()} methods will warn when supplied an \code{exponentiate} argument if
+it will be ignored.
+\item \code{augment()} methods will warn when supplied a \code{newdata} argument if it
+will be ignored.
+}}
 }
 \description{
 Tidy summarizes information about the components of a model.
@@ -44,10 +47,7 @@ Similarly, an \code{augment.margins()} method is not currently supported, but
 users can simply run the underlying model to obtain the same information.
 }
 \examples{
-
-# feel free to ignore the following line—it allows {broom} to supply 
-# examples without requiring the model-supplying package to be installed.
-if (requireNamespace("margins", quietly = TRUE)) {
+\dontshow{if (rlang::is_installed("margins")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # load libraries for models and data
 library(margins)
@@ -98,9 +98,7 @@ marg_ie2 <- margins(mod_ie,
 
 # summarize model fit with tidiers
 tidy(marg_ie2)
-
-}
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=tidy]{tidy()}}, \code{\link[margins:margins]{margins::margins()}}

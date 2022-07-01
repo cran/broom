@@ -7,11 +7,7 @@
 #'
 #' @evalRd return_tidy(regression = TRUE)
 #'
-#' @examples
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("speedglm", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("speedglm")
 #'
 #' # load modeling library
 #' library(speedglm)
@@ -24,14 +20,14 @@
 #' glance(mod)
 #' augment(mod)
 #' 
-#' }
-#' 
 #' @aliases speedlm_tidiers
 #' @export
 #' @family speedlm tidiers
 #' @seealso [speedglm::speedlm()], [tidy.lm()]
 #' @include stats-lm-tidiers.R
 tidy.speedlm <- function(x, conf.int = FALSE, conf.level = 0.95, ...) {
+  check_ellipses("exponentiate", "tidy", "speedlm", ...)
+  
   ret <- as_tibble(summary(x)$coefficients, rownames = "term")
   colnames(ret) <- c("term", "estimate", "std.error", "statistic", "p.value")
 

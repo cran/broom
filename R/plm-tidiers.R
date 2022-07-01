@@ -7,11 +7,7 @@
 #'
 #' @evalRd return_tidy(regression = TRUE)
 #'
-#' @examples
-#'
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("plm", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("plm")
 #' 
 #' # load libraries for models and data
 #' library(plm)
@@ -34,13 +30,13 @@
 #' augment(zz)
 #' glance(zz)
 #' 
-#' }
-#' 
 #' @aliases plm_tidiers
 #' @export
 #' @seealso [tidy()], [plm::plm()], [tidy.lm()]
 #' @family plm tidiers
 tidy.plm <- function(x, conf.int = FALSE, conf.level = 0.95, ...) {
+  check_ellipses("exponentiate", "tidy", "plm", ...)
+  
   s <- summary(x)
 
   ret <- as_tibble(s$coefficients, rownames = "term")

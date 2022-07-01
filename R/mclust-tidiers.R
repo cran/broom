@@ -15,12 +15,8 @@
 #'     component",
 #'   component = "Cluster id as a factor."
 #' )
-#'
-#' @examples
 #' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("mclust", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("mclust")
 #' 
 #' # load library for models and data
 #' library(mclust)
@@ -59,7 +55,6 @@
 #' augment(m, points)
 #' glance(m)
 #' 
-#' }
 #' 
 #' @export
 #' @aliases mclust_tidiers
@@ -108,6 +103,8 @@ tidy.Mclust <- function(x, ...) {
 #' @family mclust tidiers
 #'
 augment.Mclust <- function(x, data = NULL, ...) {
+  check_ellipses("newdata", "augment", "Mclust", ...)
+  
   if (is.null(data)) {
     data <- x$data
   } else if (!(is.data.frame(data) || is.matrix(data))) {

@@ -8,12 +8,8 @@
 #'
 #' @evalRd return_tidy("size", "withinss", "cluster")
 #'
-#' @examples
-#'
-#' # feel free to ignore the following lines—they allow {broom} to supply 
-#' # examples without requiring the model/data-supplying package to be installed.
-#' if (requireNamespace("cluster", quietly = TRUE)) {
-#'   if (requireNamespace("modeldata", quietly = TRUE)) {
+# skip running examples - occasionally over CRAN check time limit
+#' @examplesIf (rlang::is_installed("cluster") & rlang::is_installed("modeldata") & FALSE)
 #'   
 #' library(cluster)
 #' library(modeldata)
@@ -28,10 +24,6 @@
 #' tidy(fit)
 #' glance(fit)
 #' augment(fit, x)
-#' 
-#'   }
-#' }
-#' @details For examples, see the kmeans vignette.
 #'
 #' @aliases kmeans_tidiers
 #' @export
@@ -66,6 +58,8 @@ tidy.kmeans <- function(x, col.names = colnames(x$centers), ...) {
 #' @seealso [augment()], [stats::kmeans()]
 #' @family kmeans tidiers
 augment.kmeans <- function(x, data, ...) {
+  
+  check_ellipses("newdata", "augment", "kmeans", ...)
   
   # kmeans allows for input matrices without column names,
   # so add them in the same way that fix_data_frame() would have

@@ -16,10 +16,13 @@ signature only. \strong{Cautionary note:} Misspelled arguments will be
 absorbed in \code{...}, where they will be ignored. If the misspelled
 argument has a default value, the default value will be used.
 For example, if you pass \code{conf.lvel = 0.9}, all computation will
-proceed using \code{conf.level = 0.95}. Additionally, if you pass
-\code{newdata = my_tibble} to an \code{\link[=augment]{augment()}} method that does not
-accept a \code{newdata} argument, it will use the default value for
-the \code{data} argument.}
+proceed using \code{conf.level = 0.95}. Two exceptions here are:
+\itemize{
+\item \code{tidy()} methods will warn when supplied an \code{exponentiate} argument if
+it will be ignored.
+\item \code{augment()} methods will warn when supplied a \code{newdata} argument if it
+will be ignored.
+}}
 }
 \value{
 A \link[tibble:tibble]{tibble::tibble} with columns depending on the component of
@@ -58,7 +61,7 @@ principle components up to this component (a numeric value between 0 and
 \description{
 Broom tidies a number of lists that are effectively S3
 objects without a class attribute. For example, \code{\link[stats:optim]{stats::optim()}},
-\link[base:svd]{svd()} and \code{\link[akima:interp]{akima::interp()}} produce consistent output, but
+\link[base:svd]{svd()} and \code{\link[interp:interp]{interp::interp()}} produce consistent output, but
 because they do not have a class attribute, they cannot be handled by S3
 dispatch.
 
@@ -73,10 +76,7 @@ If no appropriate tidying method is found, they throw an error.
 A very thin wrapper around \code{\link[=tidy_svd]{tidy_svd()}}.
 }
 \examples{
-
-# feel free to ignore the following line—it allows {broom} to supply 
-# examples without requiring the data-supplying package to be installed.
-if (requireNamespace("modeldata", quietly = TRUE)) {
+\dontshow{if (rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 library(modeldata)
 data(hpc_data)
@@ -105,9 +105,8 @@ tidy_u \%>\%
   ggplot(aes(class, value)) +
   geom_boxplot() +
   facet_wrap(~PC, scale = "free_y")
-  
-}
  
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=tidy]{tidy()}}, \code{\link[irlba:irlba]{irlba::irlba()}}

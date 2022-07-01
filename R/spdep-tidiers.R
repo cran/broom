@@ -10,12 +10,8 @@
 #' 
 #' @evalRd return_tidy(regression = TRUE)
 #' 
-#' @examples 
-#' 
-#' # feel free to ignore the following two lines—they allow {broom} to supply 
-#' # examples without requiring the model-supplying packages to be installed.
-#' if (requireNamespace("spdep", quietly = TRUE)) {
-#'   if (requireNamespace("spatialreg", quietly = TRUE)) {
+# skip running examples - occasionally over CRAN check time limit
+#' @examplesIf (rlang::is_installed("spdep") & rlang::is_installed("spatialreg") & FALSE)
 #' 
 #'       
 #' # load libraries for models and data      
@@ -58,15 +54,14 @@
 #' glance(crime_sac)
 #' augment(crime_sac)
 #' 
-#'   }
-#' }
-#' 
 #' @aliases spatialreg_tidiers
 #' @export
 #' @family spatialreg tidiers
 #' @seealso [tidy()], [spatialreg::lagsarlm()], [spatialreg::errorsarlm()], 
 #' [spatialreg::sacsarlm()]
 tidy.sarlm <- function(x, conf.int = FALSE, conf.level = .95, ...) {
+  check_ellipses("exponentiate", "tidy", "sarlm", ...)
+  
   # construct parameter table
   s <- summary(x)
   ret <- as_tidy_tibble(

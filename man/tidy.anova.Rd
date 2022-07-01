@@ -8,17 +8,20 @@
 }
 \arguments{
 \item{x}{An \code{anova} object, such as those created by \code{\link[stats:anova]{stats::anova()}},
-\code{\link[car:Anova]{car::Anova()}}, or \code{\link[car:leveneTest]{car::leveneTest()}}.}
+\code{\link[car:Anova]{car::Anova()}}, \code{\link[car:leveneTest]{car::leveneTest()}}, or \code{\link[car:linearHypothesis]{car::linearHypothesis()}}.}
 
 \item{...}{Additional arguments. Not used. Needed to match generic
 signature only. \strong{Cautionary note:} Misspelled arguments will be
 absorbed in \code{...}, where they will be ignored. If the misspelled
 argument has a default value, the default value will be used.
 For example, if you pass \code{conf.lvel = 0.9}, all computation will
-proceed using \code{conf.level = 0.95}. Additionally, if you pass
-\code{newdata = my_tibble} to an \code{\link[=augment]{augment()}} method that does not
-accept a \code{newdata} argument, it will use the default value for
-the \code{data} argument.}
+proceed using \code{conf.level = 0.95}. Two exceptions here are:
+\itemize{
+\item \code{tidy()} methods will warn when supplied an \code{exponentiate} argument if
+it will be ignored.
+\item \code{augment()} methods will warn when supplied a \code{newdata} argument if it
+will be ignored.
+}}
 }
 \description{
 Tidy summarizes information about the components of a model.
@@ -36,6 +39,7 @@ For documentation on the tidier for \code{\link[car:leveneTest]{car::leveneTest(
 \code{\link[=tidy.leveneTest]{tidy.leveneTest()}}
 }
 \examples{
+\dontshow{if (rlang::is_installed("car")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # fit models
 a <- lm(mpg ~ wt + qsec + disp, mtcars)
@@ -45,12 +49,20 @@ mod <- anova(a, b)
 
 # summarize model fit with tidiers
 tidy(mod)
+glance(mod)
 
+# car::linearHypothesis() example
+library(car)
+mod_lht <- linearHypothesis(a, "wt - disp")
+tidy(mod_lht)
+glance(mod_lht)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=tidy]{tidy()}}, \code{\link[stats:anova]{stats::anova()}}, \code{\link[car:Anova]{car::Anova()}}, \code{\link[car:leveneTest]{car::leveneTest()}}
 
 Other anova tidiers: 
+\code{\link{glance.anova}()},
 \code{\link{glance.aov}()},
 \code{\link{tidy.TukeyHSD}()},
 \code{\link{tidy.aovlist}()},

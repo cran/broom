@@ -20,11 +20,7 @@
 #'   confidence intervals for `varest` objects. Setting the `tidy` argument
 #'   `conf.int = TRUE` will return a warning.
 #'
-#' @examples
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("vars", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("vars")
 #' 
 #' # load libraries for models and data
 #' library(vars)
@@ -39,13 +35,12 @@
 #' tidy(mod)
 #' glance(mod)
 #' 
-#' }
-#' 
 #' @export
 #' @seealso [tidy()], [vars::VAR()]
 #' @family vars tidiers
 #' @aliases vars_tidiers
 tidy.varest <- function(x, conf.int = FALSE, conf.level = 0.95, ...) {
+  check_ellipses("exponentiate", "tidy", "varest", ...)
 
   # `vars` does not define a `confint` method and does not calculate CIs
   if (isTRUE(conf.int)) {

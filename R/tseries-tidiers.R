@@ -15,11 +15,7 @@
 #'   "conf.high"
 #' )
 #'
-#' @examples
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("tseries", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("tseries")
 #'
 #' # load libraries for models and data
 #' library(tseries)
@@ -36,13 +32,13 @@
 #' tidy(dax.garch)
 #' glance(dax.garch)
 #' 
-#' }
-#' 
 #' @aliases garch_tidiers
 #' @export
 #' @family garch tidiers
 #' @seealso [tidy()], [tseries::garch()]
 tidy.garch <- function(x, conf.int = FALSE, conf.level = 0.95, ...) {
+  check_ellipses("exponentiate", "tidy", "garch", ...)
+  
   s <- summary(x)
   co <- s$coef
   nn <- c("estimate", "std.error", "statistic", "p.value")

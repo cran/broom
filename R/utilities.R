@@ -12,8 +12,8 @@ rename2 <- function(.data, ...) {
   rename(.data, !!!present)
 }
 
-exponentiate <- function(data) {
-  data <- mutate_at(data, vars(estimate), exp)
+exponentiate <- function(data, col = "estimate") {
+  data <- mutate_at(data, vars(col), exp)
 
   if ("conf.low" %in% colnames(data)) {
     data <- mutate_at(data, vars(conf.low, conf.high), exp)
@@ -489,16 +489,19 @@ warn_on_subclass <- function(x, tidier) {
   if (length(class(x)) > 1 && class(x)[1] != "glm") {
     subclass <- class(x)[1]
     dispatched_method <- class(x)[class(x) %in% c("glm", "lm")][1]
-    
-    warning(
-      "The `", tidier, "()` method for objects of class ", 
-      subclass, 
-      " is not maintained by the broom team, and is only supported through ",
-      "the ", 
-      dispatched_method, 
-      " tidier method. Please be cautious in interpreting and reporting ",
-      "broom output.",
-      call. = FALSE
+      
+    rlang::warn(
+      paste0(
+        "The `", tidier, "()` method for objects of class `", 
+        subclass, 
+        "` is not maintained by the broom team, and is only supported through ",
+        "the `", 
+        dispatched_method, 
+        "` tidier method. Please be cautious in interpreting and reporting ",
+        "broom output.\n"
+      ),
+      .frequency = "once",
+      .frequency_id = subclass
     )
   }
 }
@@ -602,7 +605,24 @@ globalVariables(
     "variable",
     "wald.test",
     "weight",
+    "where",
     "y",
     "z"
   )
 )
+
+# a gentler version of dots checking that, given a dots entry to 
+# look for, will warn if that entry is in the dots.
+# in broom, this is used for exponentiate (in tidy) and newdata (in augment).
+check_ellipses <- function(arg, fn, cls, ...) {
+  dots <- rlang::enquos(...)
+
+  if (arg %in% names(dots)) {
+    rlang::warn(paste0(
+      "The `", arg, "` argument is not supported in the `", fn, 
+      "()` method for `", cls, "` objects and will be ignored."
+    ))
+  }
+
+  invisible(NULL)
+}

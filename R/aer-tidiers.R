@@ -22,11 +22,7 @@
 #'   regression = TRUE
 #' )
 #'
-#' @examples
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("AER", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("AER")
 #' 
 #' # load libraries for models and data
 #' library(AER)
@@ -52,8 +48,6 @@
 #'
 #' glance(ivr)
 #' 
-#' }
-#' 
 #' @export
 #' @seealso [tidy()], [AER::ivreg()]
 #' @family ivreg tidiers
@@ -63,6 +57,7 @@ tidy.ivreg <- function(x,
                        conf.level = 0.95,
                        instruments = FALSE,
                        ...) {
+  check_ellipses("exponentiate", "tidy", "ivreg", ...)
 
   # TODO: documentation on when you get what needs to be updated !!!
 

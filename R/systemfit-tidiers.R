@@ -17,11 +17,7 @@
 #' @details This tidy method works with any model objects of class `systemfit`.
 #'          Default returns a tibble of six columns.
 #'
-#' @examples
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("systemfit", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("systemfit")
 #'
 #' set.seed(27)
 #'
@@ -43,8 +39,6 @@
 #' tidy(fit)
 #' tidy(fit, conf.int = TRUE)
 #' 
-#' }
-#' 
 #' @export
 #' @seealso [tidy()], [systemfit::systemfit()]
 #'
@@ -52,6 +46,8 @@
 #' @aliases systemfit_tidiers
 #'
 tidy.systemfit <- function(x, conf.int = TRUE, conf.level = 0.95, ...) {
+  check_ellipses("exponentiate", "tidy", "systemfit", ...)
+  
   ret <- as_tibble(summary(x)$coefficients, rownames = "term")
   colnames(ret) <- c("term", "estimate", "std.error", "statistic", "p.value")
 

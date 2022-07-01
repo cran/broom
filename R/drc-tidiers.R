@@ -13,11 +13,7 @@
 #' @details The tibble has one row for each curve and term in the regression.
 #'   The `curveid` column indicates the curve.
 #'
-#' @examples
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("drc", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("drc")
 #'
 #' # load libraries for models and data
 #' library(drc)
@@ -35,13 +31,13 @@
 #'
 #' augment(mod, selenium)
 #' 
-#' } 
-#' 
 #' @export
 #' @seealso [tidy()], [drc::drm()]
 #' @family drc tidiers
 #' @aliases drc_tidiers
 tidy.drc <- function(x, conf.int = FALSE, conf.level = 0.95, ...) {
+  check_ellipses("exponentiate", "tidy", "drc", ...)
+  
   ret <- coef(summary(x))
   ret <- as_tibble(ret, rownames = "term")
   names(ret) <- c("term", "estimate", "std.error", "statistic", "p.value")

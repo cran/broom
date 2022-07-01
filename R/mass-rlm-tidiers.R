@@ -14,11 +14,7 @@
 #'   "nobs"
 #' )
 #'
-#' @examples
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("MASS", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("MASS")
 #'
 #' # load libraries for models and data
 #' library(MASS)
@@ -31,7 +27,6 @@
 #' augment(r)
 #' glance(r)
 #' 
-#' }
 #' @export
 #' @aliases rlm_tidiers
 #' @family rlm tidiers
@@ -64,6 +59,8 @@ confint.rlm <- confint.default
 #' @export
 #' @include stats-lm-tidiers.R
 tidy.rlm <- function(x, conf.int = FALSE, conf.level = .95, ...) {
+  check_ellipses("exponentiate", "tidy", "rlm", ...)
+  
   ret <- as_tibble(summary(x)$coefficients, rownames = "term")
   colnames(ret) <- c("term", "estimate", "std.error", "statistic")
 

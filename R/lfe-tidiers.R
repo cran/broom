@@ -15,12 +15,8 @@
 #'
 #' @evalRd return_tidy(regression = TRUE)
 #'
-#' @examples
-#'
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("lfe", quietly = TRUE)) {
-#'
+#' @examplesIf rlang::is_installed("lfe")
+#' 
 #' # load libraries for models and data
 #' library(lfe)
 #'
@@ -58,13 +54,13 @@
 #' tidy(est2, conf.int = TRUE, se.type = "robust")
 #' tidy(est2, conf.int = TRUE, se.type = "iid")
 #' 
-#' }
-#' 
 #' @export
 #' @aliases felm_tidiers lfe_tidiers
 #' @family felm tidiers
 #' @seealso [tidy()], [lfe::felm()]
 tidy.felm <- function(x, conf.int = FALSE, conf.level = .95, fe = FALSE, se.type = c("default", "iid", "robust", "cluster"), ...) {
+  check_ellipses("exponentiate", "tidy", "felm", ...)
+  
   has_multi_response <- length(x$lhs) > 1
   
   # warn users about deprecated "robust" argument
@@ -202,6 +198,8 @@ tidy.felm <- function(x, conf.int = FALSE, conf.level = .95, fe = FALSE, se.type
 #' @family felm tidiers
 #' @seealso [augment()], [lfe::felm()]
 augment.felm <- function(x, data = model.frame(x), ...) {
+  check_ellipses("newdata", "augment", "felm", ...)
+  
   has_multi_response <- length(x$lhs) > 1
 
   if (has_multi_response) {

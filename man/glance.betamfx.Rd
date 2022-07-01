@@ -14,10 +14,13 @@ signature only. \strong{Cautionary note:} Misspelled arguments will be
 absorbed in \code{...}, where they will be ignored. If the misspelled
 argument has a default value, the default value will be used.
 For example, if you pass \code{conf.lvel = 0.9}, all computation will
-proceed using \code{conf.level = 0.95}. Additionally, if you pass
-\code{newdata = my_tibble} to an \code{\link[=augment]{augment()}} method that does not
-accept a \code{newdata} argument, it will use the default value for
-the \code{data} argument.}
+proceed using \code{conf.level = 0.95}. Two exceptions here are:
+\itemize{
+\item \code{tidy()} methods will warn when supplied an \code{exponentiate} argument if
+it will be ignored.
+\item \code{augment()} methods will warn when supplied a \code{newdata} argument if it
+will be ignored.
+}}
 }
 \description{
 Glance accepts a model object and returns a \code{\link[tibble:tibble]{tibble::tibble()}}
@@ -43,9 +46,7 @@ of the appropriate type.
 This glance method wraps \code{\link[=glance.betareg]{glance.betareg()}} for \code{\link[mfx:betamfx]{mfx::betamfx()}} objects.
 }
 \examples{
-# feel free to ignore the following line—it allows {broom} to supply 
-# examples without requiring the model-supplying package to be installed.
-if (requireNamespace("mfx", quietly = TRUE)) {
+\dontshow{if (rlang::is_installed("mfx")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
  
 library(mfx)
 
@@ -69,7 +70,7 @@ tidy(mod_betamfx, conf.int = TRUE)
 
 augment(mod_betamfx)
 glance(mod_betamfx)
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=glance.betareg]{glance.betareg()}}, \code{\link[mfx:betamfx]{mfx::betamfx()}}

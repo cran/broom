@@ -14,10 +14,13 @@ signature only. \strong{Cautionary note:} Misspelled arguments will be
 absorbed in \code{...}, where they will be ignored. If the misspelled
 argument has a default value, the default value will be used.
 For example, if you pass \code{conf.lvel = 0.9}, all computation will
-proceed using \code{conf.level = 0.95}. Additionally, if you pass
-\code{newdata = my_tibble} to an \code{\link[=augment]{augment()}} method that does not
-accept a \code{newdata} argument, it will use the default value for
-the \code{data} argument.}
+proceed using \code{conf.level = 0.95}. Two exceptions here are:
+\itemize{
+\item \code{tidy()} methods will warn when supplied an \code{exponentiate} argument if
+it will be ignored.
+\item \code{augment()} methods will warn when supplied a \code{newdata} argument if it
+will be ignored.
+}}
 }
 \description{
 Glance accepts a model object and returns a \code{\link[tibble:tibble]{tibble::tibble()}}
@@ -40,18 +43,20 @@ that no longer have a well-defined value are filled in with an \code{NA}
 of the appropriate type.
 }
 \examples{
+\dontshow{if (rlang::is_installed("survey") && rlang::is_installed("MASS")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(broom)
+library(survey)
 
-if (requireNamespace("MASS", quietly = TRUE)) {
+data(api)
+dclus1 <- svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc)
+dclus1 <- update(dclus1, mealcat = cut(meals, c(0, 25, 50, 75, 100)))
 
-library(MASS)
+m <- svyolr(mealcat ~ avg.ed + mobility + stype, design = dclus1)
 
-fit <- polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+m
 
-tidy(fit, exponentiate = TRUE, conf.int = TRUE)
-glance(fit)
-
-}
-
+tidy(m, conf.int = TRUE)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \link{tidy}, \code{\link[survey:svyolr]{survey::svyolr()}}

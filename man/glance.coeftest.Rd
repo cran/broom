@@ -14,10 +14,13 @@ signature only. \strong{Cautionary note:} Misspelled arguments will be
 absorbed in \code{...}, where they will be ignored. If the misspelled
 argument has a default value, the default value will be used.
 For example, if you pass \code{conf.lvel = 0.9}, all computation will
-proceed using \code{conf.level = 0.95}. Additionally, if you pass
-\code{newdata = my_tibble} to an \code{\link[=augment]{augment()}} method that does not
-accept a \code{newdata} argument, it will use the default value for
-the \code{data} argument.}
+proceed using \code{conf.level = 0.95}. Two exceptions here are:
+\itemize{
+\item \code{tidy()} methods will warn when supplied an \code{exponentiate} argument if
+it will be ignored.
+\item \code{augment()} methods will warn when supplied a \code{newdata} argument if it
+will be ignored.
+}}
 }
 \description{
 Glance accepts a model object and returns a \code{\link[tibble:tibble]{tibble::tibble()}}
@@ -52,10 +55,7 @@ presence of heteroskedasticity. For further discussion see, e.g. chapter 8.1
 of Wooldridge (2016).
 }
 \examples{
-
-# feel free to ignore the following line—it allows {broom} to supply 
-# examples without requiring the model-supplying package to be installed.
-if (requireNamespace("lmtest", quietly = TRUE)) {
+\dontshow{if (rlang::is_installed("lmtest")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # load libraries for models and data
 library(lmtest)
@@ -86,9 +86,7 @@ tidy(coeftest(m, vcov = NeweyWest))
 # Users can control this with the "save = TRUE" argument of coeftest().
 glance(coeftest(m))
 glance(coeftest(m, save = TRUE))
-
-}
-
+\dontshow{\}) # examplesIf}
 }
 \references{
 Wooldridge, Jeffrey M. (2016) \cite{Introductory econometrics: A

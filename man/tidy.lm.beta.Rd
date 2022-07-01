@@ -21,10 +21,13 @@ signature only. \strong{Cautionary note:} Misspelled arguments will be
 absorbed in \code{...}, where they will be ignored. If the misspelled
 argument has a default value, the default value will be used.
 For example, if you pass \code{conf.lvel = 0.9}, all computation will
-proceed using \code{conf.level = 0.95}. Additionally, if you pass
-\code{newdata = my_tibble} to an \code{\link[=augment]{augment()}} method that does not
-accept a \code{newdata} argument, it will use the default value for
-the \code{data} argument.}
+proceed using \code{conf.level = 0.95}. Two exceptions here are:
+\itemize{
+\item \code{tidy()} methods will warn when supplied an \code{exponentiate} argument if
+it will be ignored.
+\item \code{augment()} methods will warn when supplied a \code{newdata} argument if it
+will be ignored.
+}}
 }
 \description{
 Tidy summarizes information about the components of a model.
@@ -42,10 +45,7 @@ If you have missing values in your model data, you may need to refit
 the model with \code{na.action = na.exclude}.
 }
 \examples{
-
-# feel free to ignore the following line—it allows {broom} to supply 
-# examples without requiring the model-supplying package to be installed.
-if (requireNamespace("lm.beta", quietly = TRUE)) {
+\dontshow{if (rlang::is_installed("lm.beta")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # load libraries for models and data
 library(lm.beta)
@@ -69,9 +69,7 @@ std2 <- lm.beta(mod2)
 
 # summarize model fit with tidiers
 tidy(std2, conf.int = TRUE)
-
-}
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other lm tidiers: 

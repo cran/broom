@@ -9,11 +9,7 @@
 #' 
 #' @evalRd return_tidy(regression = TRUE)
 #' 
-#' @examples
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("mlogit", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("mlogit")
 #' 
 #' # load libraries for models and data
 #' library(mlogit)
@@ -29,14 +25,13 @@
 #' augment(m)
 #' glance(m)
 #' 
-#' }
-#' 
 #' @aliases mlogit_tidiers
 #' @export
 #' @family mlogit tidiers
 #' @seealso [tidy()], [mlogit::mlogit()]
 #' 
 tidy.mlogit <- function(x, conf.int = FALSE, conf.level = 0.95, ...) {
+  check_ellipses("exponentiate", "tidy", "mlogit", ...)
   
   # construct parameter table
   s <- summary(x)
@@ -71,6 +66,7 @@ tidy.mlogit <- function(x, conf.int = FALSE, conf.level = 0.95, ...) {
 #' 
 #' 
 augment.mlogit <- function(x, data = x$model, ...) {
+  check_ellipses("newdata", "augment", "mlogit", ...)
   
   # the ID variables are really messed up, so we're going to do some 
   # retrofitting because this ends up being a pretty important element of

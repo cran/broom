@@ -7,11 +7,7 @@
 #'
 #' @evalRd return_tidy(regression = TRUE)
 #'
-#' @examples
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("lmtest", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("lmtest")
 #'
 #' # load libraries for models and data
 #' library(lmtest)
@@ -43,13 +39,13 @@
 #' glance(coeftest(m))
 #' glance(coeftest(m, save = TRUE))
 #' 
-#' }
-#' 
 #' @export
 #' @seealso [tidy()], [lmtest::coeftest()]
 #' @aliases lmtest_tidiers coeftest_tidiers
 #' @family coeftest tidiers
 tidy.coeftest <- function(x, conf.int = FALSE, conf.level = .95, ...) {
+  check_ellipses("exponentiate", "tidy", "coeftest", ...)
+  
   co <- as.data.frame(unclass(x))
   ret <- as_tidy_tibble(
     co, 

@@ -13,11 +13,7 @@
 #'   If you have missing values in your model data, you may need to refit
 #'   the model with `na.action = na.exclude`.
 #'
-#' @examples
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("lm.beta", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("lm.beta")
 #'
 #' # load libraries for models and data
 #' library(lm.beta)
@@ -42,11 +38,11 @@
 #' # summarize model fit with tidiers
 #' tidy(std2, conf.int = TRUE)
 #' 
-#' }
-#' 
 #' @export
 #' @family lm tidiers
 tidy.lm.beta <- function(x, conf.int = FALSE, conf.level = 0.95, ...) {
+  check_ellipses("exponentiate", "tidy", "lm.beta", ...)
+  
   ret <- as_tibble(summary(x)$coefficients, rownames = "term")
   colnames(ret) <- c(
     "term", "estimate", "std_estimate",

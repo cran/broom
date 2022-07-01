@@ -6,11 +6,7 @@
 #'
 #' @evalRd return_tidy("index", "series", "value")
 #'
-#' @examples
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("zoo", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("zoo")
 #'
 #' # load libraries for models and data
 #' library(zoo)
@@ -38,8 +34,6 @@
 #' ggplot(tidy(Zrolled), aes(index, value, color = series)) +
 #'   geom_line()
 #'   
-#' }
-#'   
 #' @aliases zoo_tidiers
 #' @export
 #' @seealso [tidy()], [zoo::zoo()]
@@ -49,7 +43,10 @@ tidy.zoo <- function(x, ...) {
   if (length(dim(x)) > 0) {
     ret <- data.frame(as.matrix(x), index = zoo::index(x))
     ret <- tibble::as_tibble(ret)
-    colnames(ret)[1:ncol(x)] <- colnames(x)
+    if (!is.null(colnames(x))) {
+      colnames(ret)[1:ncol(x)] <- colnames(x)
+    }
+    
     out <- pivot_longer(ret,
                         cols = c(dplyr::everything(), -index),
                         names_to = "series",

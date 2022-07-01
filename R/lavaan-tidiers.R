@@ -30,11 +30,7 @@
 #'     of both (continuous) observed and latent variables, but not the
 #'     variances of exogenous covariates.}
 #'
-#' @examples
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("lavaan", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("lavaan")
 #' 
 #' # load libraries for models and data
 #' library(lavaan)
@@ -45,14 +41,14 @@
 #'
 #' tidy(cfa.fit)
 #' 
-#' }
-#' 
 #' @export
 #' @aliases lavaan_tidiers sem_tidiers cfa_tidiers
 #' @family lavaan tidiers
 #' @seealso [tidy()], [lavaan::cfa()], [lavaan::sem()],
 #'   [lavaan::parameterEstimates()]
 tidy.lavaan <- function(x, conf.int = FALSE, conf.level = 0.95, ...) {
+  check_ellipses("exponentiate", "tidy", "lavaan", ...)
+  
   lavaan::parameterEstimates(x,
     ci = conf.int,
     level = conf.level,
@@ -106,11 +102,7 @@ tidy.lavaan <- function(x, conf.int = FALSE, conf.level = 0.95, ...) {
 #' structural equation modeling. Research in Social and Administrative 
 #' Pharmacy, 13(3), 634-643. https://doi.org/10.1016/j.sapharm.2016.06.006
 #'
-#' @examples
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("lavaan", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("lavaan")
 #' 
 #' library(lavaan)
 #'
@@ -122,8 +114,6 @@ tidy.lavaan <- function(x, conf.int = FALSE, conf.level = 0.95, ...) {
 #'
 #' # summarize model fit with tidiers
 #' glance(cfa.fit)
-#' 
-#' }
 #' 
 #' @export
 #' @family lavaan tidiers

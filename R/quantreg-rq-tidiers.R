@@ -22,11 +22,7 @@
 #' @seealso [tidy()], [quantreg::rq()]
 #' @family quantreg tidiers
 #' 
-#' @examples 
-#' 
-#' # feel free to ignore the following line—it allows {broom} to supply 
-#' # examples without requiring the model-supplying package to be installed.
-#' if (requireNamespace("quantreg", quietly = TRUE)) {
+#' @examplesIf rlang::is_installed("quantreg")
 #' 
 #' # load modeling library and data
 #' library(quantreg)
@@ -57,10 +53,9 @@
 #' # glance cannot handle rqs objects like `mod3`--use a purrr 
 #' # `map`-based workflow instead
 #' 
-#' }
-#' 
 tidy.rq <- function(x, se.type = NULL, conf.int = FALSE,
                     conf.level = 0.95, ...) {
+  check_ellipses("exponentiate", "tidy", "rq", ...)
 
   # specification for confidence level inverted for summary.rq
   alpha <- 1 - conf.level
