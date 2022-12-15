@@ -7,7 +7,7 @@
 #'
 #' @evalRd return_tidy(regression = TRUE)
 #'
-#' @examplesIf rlang::is_installed("survival")
+#' @examplesIf rlang::is_installed(c("survival", "ggplot2"))
 #' 
 #' # load libraries for models and data
 #' library(survival)
@@ -75,13 +75,9 @@ tidy.survreg <- function(x, conf.level = .95, conf.int = FALSE, ...) {
 #' @seealso [augment()], [survival::survreg()]
 #' @family survreg tidiers
 #' @family survival tidiers
-augment.survreg <- function(x, data = NULL, newdata = NULL,
+augment.survreg <- function(x, data = model.frame(x), newdata = NULL,
                             type.predict = "response",
                             type.residuals = "response", ...) {
-  if (is.null(data) && is.null(newdata)) {
-    stop("Must specify either `data` or `newdata` argument.", call. = FALSE)
-  }
-
   augment_columns(x, data, newdata,
     type.predict = type.predict,
     type.residuals = type.residuals

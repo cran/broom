@@ -1,3 +1,9 @@
+# broom 1.0.2
+
+* The default `data` argument for `augment.coxph()` and `augment.survreg()` has been transitioned from `NULL` to `model.frame(x)` (#1126 by `@capnrefsmmat`).
+* Migrated 'ggplot2' from strong to weak dependency, i.e. moved from `Imports` to `Suggests`.
+* Fixed a bug where `augment()` results would not include residuals when the response term included a function call (#1121, #946, #937, #124).
+
 # broom 1.0.1
 
 * Improves performance of `tidy.lm()` and `tidy.glm()` for full-rank fits (#1112 by `@capnrefsmmat`).

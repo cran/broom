@@ -78,14 +78,11 @@ cases, augment tries to reconstruct the original data based on the model
 object with varying degrees of success.
 
 The augmented dataset is always returned as a \link[tibble:tibble]{tibble::tibble} with the
-\strong{same number of rows} as the passed dataset. This means that the
-passed data must be coercible to a tibble. At this time, tibbles do not
-support matrix-columns. This means you should not specify a matrix
-of covariates in a model formula during the original model fitting
-process, and that \code{\link[splines:ns]{splines::ns()}}, \code{\link[stats:poly]{stats::poly()}} and
-\code{\link[survival:Surv]{survival::Surv()}} objects are not supported in input data. If you
-encounter errors, try explicitly passing a tibble, or fitting the original
-model on data in a tibble.
+\strong{same number of rows} as the passed dataset. This means that the passed
+data must be coercible to a tibble. If a predictor enters the model as part
+of a matrix of covariates, such as when the model formula uses
+\code{\link[splines:ns]{splines::ns()}}, \code{\link[stats:poly]{stats::poly()}}, or \code{\link[survival:Surv]{survival::Surv()}}, it is represented
+as a matrix column.
 
 We are in the process of defining behaviors for models fit with various
 \code{na.action} arguments, but make no guarantees about behavior when data is
@@ -108,6 +105,7 @@ When \code{newdata} is supplied, only returns \code{.fitted}, \code{.resid} and
 \code{.se.fit} columns.
 }
 \examples{
+\dontshow{if (rlang::is_installed("ggplot2")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 library(ggplot2)
 library(dplyr)
@@ -181,7 +179,7 @@ b <- a + rnorm(length(a))
 result <- lm(b ~ a)
 
 tidy(result)
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \link[stats:na.action]{stats::na.action}

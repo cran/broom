@@ -1,7 +1,7 @@
 Type: Package
 Package: broom
 Title: Convert Statistical Objects into Tidy Tibbles
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: 
     c(person(given = "David",
              family = "Robinson",
@@ -338,10 +338,6 @@ Authors@R:
              family = "Hester",
              role = "ctb",
              email = "jim.hester@rstudio.com"),
-      person(given = "Cory",
-             family = "Brunson",
-             role = "ctb",
-             email = "cornelioid@gmail.com"),
       person(given = "Ben",
              family = "Schneider",
              role = "ctb",
@@ -545,13 +541,13 @@ BugReports: https://github.com/tidymodels/broom/issues
 Depends: R (>= 3.1)
 Imports: backports, dplyr (>= 1.0.0), ellipsis, generics (>= 0.0.2),
         glue, purrr, rlang, stringr, tibble (>= 3.0.0), tidyr (>=
-        1.0.0), ggplot2
+        1.0.0)
 Suggests: AER, AUC, bbmle, betareg, biglm, binGroup, boot, btergm (>=
         1.10.6), car, carData, caret, cluster, cmprsk, coda, covr, drc,
         e1071, emmeans, epiR, ergm (>= 3.10.4), fixest (>= 0.9.0), gam
-        (>= 1.15), gee, geepack, glmnet, glmnetUtils, gmm, Hmisc,
-        irlba, interp, joineRML, Kendall, knitr, ks, Lahman, lavaan,
-        leaps, lfe, lm.beta, lme4, lmodel2, lmtest (>= 0.9.38),
+        (>= 1.15), gee, geepack, ggplot2, glmnet, glmnetUtils, gmm,
+        Hmisc, irlba, interp, joineRML, Kendall, knitr, ks, Lahman,
+        lavaan, leaps, lfe, lm.beta, lme4, lmodel2, lmtest (>= 0.9.38),
         lsmeans, maps, maptools, margins, MASS, mclust, mediation,
         metafor, mfx, mgcv, mlogit, modeldata, modeltests, muhaz,
         multcomp, network, nnet, orcutt (>= 2.2), ordinal, plm, poLCA,
@@ -608,7 +604,7 @@ Collate: 'aaa-documentation-helper.R' 'null-and-default-tidiers.R'
         'systemfit-tidiers.R' 'tseries-tidiers.R' 'utilities.R'
         'vars-tidiers.R' 'zoo-tidiers.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2022-08-29 19:41:53 UTC; simoncouch
+Packaged: 2022-12-14 15:57:36 UTC; simoncouch
 Author: David Robinson [aut],
   Alex Hayes [aut] (<https://orcid.org/0000-0002-4985-5160>),
   Simon Couch [aut, cre] (<https://orcid.org/0000-0001-5676-5107>),
@@ -691,7 +687,6 @@ Author: David Robinson [aut],
   Sergio Oller [ctb],
   Luke Sonnet [ctb],
   Jim Hester [ctb],
-  Cory Brunson [ctb],
   Ben Schneider [ctb],
   Bernie Gray [ctb] (<https://orcid.org/0000-0001-9190-6032>),
   Mara Averick [ctb],
@@ -740,4 +735,4 @@ Author: David Robinson [aut],
   Alex Reinhart [ctb] (<https://orcid.org/0000-0002-6658-514X>)
 Maintainer: Simon Couch <simonpatrickcouch@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-08-29 21:00:08 UTC
+Date/Publication: 2022-12-15 13:10:20 UTC

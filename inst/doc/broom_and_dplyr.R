@@ -1,6 +1,16 @@
 ## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 
+if (rlang::is_installed("ggplot2")) {
+  run <- TRUE
+} else {
+  run <- FALSE
+}
+
+knitr::opts_chunk$set(
+  eval = run
+)
+
 ## -----------------------------------------------------------------------------
 library(broom)
 library(tibble)
