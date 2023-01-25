@@ -1,7 +1,7 @@
 Type: Package
 Package: broom
 Title: Convert Statistical Objects into Tidy Tibbles
-Version: 1.0.2
+Version: 1.0.3
 Authors@R: 
     c(person(given = "David",
              family = "Robinson",
@@ -604,7 +604,7 @@ Collate: 'aaa-documentation-helper.R' 'null-and-default-tidiers.R'
         'systemfit-tidiers.R' 'tseries-tidiers.R' 'utilities.R'
         'vars-tidiers.R' 'zoo-tidiers.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2022-12-14 15:57:36 UTC; simoncouch
+Packaged: 2023-01-24 18:55:15 UTC; simoncouch
 Author: David Robinson [aut],
   Alex Hayes [aut] (<https://orcid.org/0000-0002-4985-5160>),
   Simon Couch [aut, cre] (<https://orcid.org/0000-0001-5676-5107>),
@@ -735,4 +735,4 @@ Author: David Robinson [aut],
   Alex Reinhart [ctb] (<https://orcid.org/0000-0002-6658-514X>)
 Maintainer: Simon Couch <simonpatrickcouch@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-12-15 13:10:20 UTC
+Date/Publication: 2023-01-25 08:00:16 UTC
