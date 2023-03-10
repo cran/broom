@@ -15,8 +15,8 @@ fit3 <- survdiff(
   data = lung
 )
 
-expect <- survexp(
-  futime ~ ratetable(
+expect <- survexp(futime ~ 1,
+  rmap = list(
     age = (accept.dt - birth.dt),
     sex = 1,
     year = accept.dt,

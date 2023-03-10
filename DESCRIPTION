@@ -1,7 +1,7 @@
 Type: Package
 Package: broom
 Title: Convert Statistical Objects into Tidy Tibbles
-Version: 1.0.3
+Version: 1.0.4
 Authors@R: 
     c(person(given = "David",
              family = "Robinson",
@@ -15,9 +15,9 @@ Authors@R:
       person(given = "Simon",
              family = "Couch",
              role = c("aut", "cre"),
-             email = "simonpatrickcouch@gmail.com",
+             email = "simon.couch@posit.co",
              comment = c(ORCID = "0000-0001-5676-5107")),
-      person("RStudio", role = c("cph", "fnd")),
+      person(given = "Posit Software, PBC", role = c("cph", "fnd")),
       person(given = "Indrajeet",
              family = "Patil",
              role = "ctb",
@@ -82,7 +82,7 @@ Authors@R:
       person(given = "Hadley",
              family = "Wickham",
              role = "ctb",
-             email = "hadley@rstudio.com"),
+             email = "hadley@posit.co"),
       person(given = "Matthew",
              family = "Lincoln",
              role = "ctb",
@@ -314,7 +314,7 @@ Authors@R:
       person(given = "Max",
              family = "Kuhn",
              role = "ctb",
-             email = "max@rstudio.com"),
+             email = "max@posit.co"),
       person(given = "Michal",
              family = "Bojanowski",
              role = "ctb",
@@ -337,7 +337,7 @@ Authors@R:
       person(given = "Jim",
              family = "Hester",
              role = "ctb",
-             email = "jim.hester@rstudio.com"),
+             email = "jim.hester@posit.co"),
       person(given = "Ben",
              family = "Schneider",
              role = "ctb",
@@ -350,7 +350,7 @@ Authors@R:
       person(given = "Mara",
              family = "Averick",
              role = "ctb",
-             email = "mara@rstudio.com"),
+             email = "mara@posit.co"),
       person(given = "Aaron",
              family = "Jacobs",
              role = "ctb",
@@ -440,7 +440,7 @@ Authors@R:
       person(given = "Jenny",
              family = "Bryan",
              role = "ctb",
-             email = "jenny@rstudio.com"),
+             email = "jenny@posit.co"),
       person(given = "Chris",
              family = "Jarvis",
              role = "ctb",
@@ -538,10 +538,10 @@ Description: Summarizes key information about statistical
 License: MIT + file LICENSE
 URL: https://broom.tidymodels.org/, https://github.com/tidymodels/broom
 BugReports: https://github.com/tidymodels/broom/issues
-Depends: R (>= 3.1)
+Depends: R (>= 3.5)
 Imports: backports, dplyr (>= 1.0.0), ellipsis, generics (>= 0.0.2),
-        glue, purrr, rlang, stringr, tibble (>= 3.0.0), tidyr (>=
-        1.0.0)
+        glue, lifecycle, purrr, rlang, stringr, tibble (>= 3.0.0),
+        tidyr (>= 1.0.0)
 Suggests: AER, AUC, bbmle, betareg, biglm, binGroup, boot, btergm (>=
         1.10.6), car, carData, caret, cluster, cmprsk, coda, covr, drc,
         e1071, emmeans, epiR, ergm (>= 3.10.4), fixest (>= 0.9.0), gam
@@ -558,7 +558,7 @@ Suggests: AER, AUC, bbmle, betareg, biglm, binGroup, boot, btergm (>=
 VignetteBuilder: knitr
 Config/Needs/website: tidyverse/tidytemplate
 Encoding: UTF-8
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Language: en-US
 Collate: 'aaa-documentation-helper.R' 'null-and-default-tidiers.R'
         'aer-tidiers.R' 'auc-tidiers.R' 'base-tidiers.R'
@@ -604,11 +604,11 @@ Collate: 'aaa-documentation-helper.R' 'null-and-default-tidiers.R'
         'systemfit-tidiers.R' 'tseries-tidiers.R' 'utilities.R'
         'vars-tidiers.R' 'zoo-tidiers.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2023-01-24 18:55:15 UTC; simoncouch
+Packaged: 2023-03-08 19:44:52 UTC; simoncouch
 Author: David Robinson [aut],
   Alex Hayes [aut] (<https://orcid.org/0000-0002-4985-5160>),
   Simon Couch [aut, cre] (<https://orcid.org/0000-0001-5676-5107>),
-  RStudio [cph, fnd],
+  Posit Software, PBC [cph, fnd],
   Indrajeet Patil [ctb] (<https://orcid.org/0000-0003-1995-6531>),
   Derek Chiu [ctb],
   Matthieu Gomez [ctb],
@@ -733,6 +733,6 @@ Author: David Robinson [aut],
   Ilaria Prosdocimi [ctb] (<https://orcid.org/0000-0001-8565-094X>),
   Daniel D. Sjoberg [ctb] (<https://orcid.org/0000-0003-0862-2018>),
   Alex Reinhart [ctb] (<https://orcid.org/0000-0002-6658-514X>)
-Maintainer: Simon Couch <simonpatrickcouch@gmail.com>
+Maintainer: Simon Couch <simon.couch@posit.co>
 Repository: CRAN
-Date/Publication: 2023-01-25 08:00:16 UTC
+Date/Publication: 2023-03-11 00:10:08 UTC

@@ -7,8 +7,6 @@
 
 [![R build
 status](https://github.com/tidymodels/broom/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/broom)
-[![Coverage
-status](https://codecov.io/gh/tidymodels/broom/branch/main/graph/badge.svg)](https://codecov.io/github/tidymodels/broom?branch=main)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/broom)](https://CRAN.R-project.org/package=broom)
 [![Downloads](https://cranlogs.r-pkg.org/badges/broom)](https://CRAN.R-project.org/package=broom)
@@ -45,8 +43,8 @@ install.packages("tidymodels")
 install.packages("broom")
 
 # to get the development version from GitHub:
-install.packages("devtools")
-devtools::install_github("tidymodels/broom")
+install.packages("pak")
+pak::pak("tidymodels/broom")
 ```
 
 If you find a bug, please file a minimal reproducible example in the
@@ -113,7 +111,7 @@ augment(fit, data = trees)
 We welcome contributions of all types\!
 
 For questions and discussions about tidymodels packages, modeling, and
-machine learning, please [post on RStudio
+machine learning, please [post on Posit
 Community](https://community.rstudio.com/new-topic?category_id=15https://rstd.io/tidymodels-communitytags=tidymodels,question). If you think you have
 encountered a bug, please [submit an
 issue](https://github.com/tidymodels/broom/issues). Either way, learn
