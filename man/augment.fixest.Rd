@@ -88,12 +88,12 @@ augment.fixest only works for \code{\link[fixest:feols]{fixest::feols()}}, \code
 \code{\link[fixest:femlm]{fixest::fenegbin()}}, \code{\link[fixest:feNmlm]{fixest::feNmlm()}}, or \code{\link[fixest:feglm]{fixest::fepois()}}.
 }
 \examples{
-\dontshow{if (rlang::is_installed("fixest")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("fixest") & !broom:::is_cran_check()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # load libraries for models and data
 library(fixest)
 
-gravity <- 
+gravity <-
   feols(
     log(Euros) ~ log(dist_km) | Origin + Destination + Product + Year, trade
   )
@@ -110,7 +110,7 @@ tidy(gravity, conf.int = TRUE, cluster = c("Product", "Year"))
 
 tidy(gravity, conf.int = TRUE, se = "threeway")
 
-# 2) or, feed tidy() a summary.fixest object that has already accepted 
+# 2) or, feed tidy() a summary.fixest object that has already accepted
 # these arguments
 
 gravity_summ <- summary(gravity, cluster = c("Product", "Year"))
