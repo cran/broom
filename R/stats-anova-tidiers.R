@@ -21,7 +21,9 @@
 #' For documentation on the tidier for [car::leveneTest()] output, see
 #' [tidy.leveneTest()]
 #'
-#' @examplesIf rlang::is_installed("car")
+# #' @examplesIf rlang::is_installed("car")
+# unreplicable error on R-devel 4.5 (#1205)
+#' @examplesIf FALSE
 #'
 #' # fit models
 #' a <- lm(mpg ~ wt + qsec + disp, mtcars)
@@ -113,7 +115,7 @@ tidy.anova <- function(x, ...) {
       # Drop unrestricted model (not interesting in linear hypothesis tests)
       # Use formula to subset if available (e.g. with car::linearHypothesis)
       if (length(mod_lines) != 0) {
-        idx <- sub(".*: ", "", strsplit(mod_lines, "\n")[[1]])
+        idx <- sub("Model \\d*: ", "", strsplit(mod_lines, "\\nModel \\d*: ")[[1]])
         idx <- idx != "restricted model"
         ret <- ret[idx, , drop = FALSE]
       }
