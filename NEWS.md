@@ -1,4 +1,29 @@
-# broom (development version)
+# broom 1.0.7
+
+* Corrected `nobs` entries in `glance.coxph()` output: the package used to 
+  return `length(object$linear.predictors)` (equal to `n` rather than `nevent`) 
+  and now uses survival's method (#1224).
+
+* Corrected confidence interval values in `tidy.boot()` and addressed errors
+  when bootstrapping confidence intervals for multiple terms (#1212).
+
+* Reverted deprecation of tidiers for objects from the margins package
+  now that the package is back on CRAN (#1220).
+
+* Addressed failure in `tidy.anova()` ahead of upcoming car
+  release (#1215).
+
+* Clarified documentation for a number of cases where dots were
+  documented as unused but actually passed to internal functions 
+  (#1214).
+
+* Addressed error in `augment.betareg()` and `augment.betamfx()` 
+  with `data = NULL` and non-null `newdata` (#1216, #1218).
+
+* `glance.lm()` now returns non-`NA` values for `statistic`, `p.value`, and `df` 
+  for models fitted with a single predictor and no intercept (@jrob95, #1209).
+
+# broom 1.0.6
 
 ## New Features
 
