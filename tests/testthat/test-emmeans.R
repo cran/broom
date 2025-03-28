@@ -1,18 +1,16 @@
-context("emmeans")
-
 skip_on_cran()
 
 # Matrix ABI version may differ (#1204)
-skip_if(paste0(R.Version()[c("major", "minor")], collapse = ".") < "4.4.0")
+skip_if_not_r_version("4.4.0")
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("lsmeans")
-library(lsmeans)
+suppressPackageStartupMessages(library(lsmeans))
 
 skip_if_not_installed("lme4")
-library(lme4)
+suppressPackageStartupMessages(library(lme4))
 
 fit <- lm(sales1 ~ price1 + price2 + day + store, data = oranges)
 rg <- ref.grid(fit)
@@ -101,7 +99,7 @@ test_that("tidy.ref.grid consistency with tidy.TukeyHSD", {
 
   expect_equal(
     as.data.frame(td_hsd),
-    as.data.frame(td_pairs),
+    as.data.frame(td_pairs)
   )
 })
 
@@ -148,7 +146,7 @@ test_that("tidy.emmGrid for combined contrasts", {
     method = "consec",
     simple = "each",
     combine = TRUE,
-    adjust = "mvt"
+    adjust = "dunnettx"
   )
   td_noise <- tidy(noise_c.s)
 

@@ -1,12 +1,10 @@
-context("speedglm")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("speedglm")
-library(speedglm)
+suppressPackageStartupMessages(library(speedglm))
 
 fit <- speedlm(mpg ~ wt, mtcars, fitted = TRUE)
 fit2 <- speedlm(mpg ~ wt + disp, mtcars, fitted = TRUE)
@@ -52,8 +50,5 @@ test_that("augment.speedlm", {
     newdata = mtcars
   )
 
-  expect_error(
-    augment(fit3),
-    "Must specify `data` argument or refit speedglm with `fitted = TRUE`."
-  )
+  expect_snapshot(error = TRUE, augment(fit3))
 })

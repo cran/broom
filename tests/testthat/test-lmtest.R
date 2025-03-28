@@ -1,15 +1,13 @@
-context("lmtest")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("lmtest")
-library(lmtest)
+suppressPackageStartupMessages(library(lmtest))
 
 skip_if_not_installed("sandwich")
-library(sandwich)
+suppressPackageStartupMessages(library(sandwich))
 
 m <- lm(dist ~ speed, data = cars)
 ct <- lmtest::coeftest(m)
@@ -50,4 +48,16 @@ test_that("glance.coeftest", {
 
   check_glance_outputs(gl, gl3)
   check_glance_outputs(gl2) # separately because save = TRUE adds cols
+})
+
+test_that("vcovCL.coeftest (#1227)", {
+  m <- lm(Wind ~ 1, data = airquality)
+  ct <- coeftest(m, vcovCL(m, cluster = ~Month))
+  ct_confint <- confint(ct, level = .9)
+  output <- tidy(ct, conf.int = TRUE, conf.level = .9)
+  expect_equal(
+    output[c("conf.low", "conf.high")],
+    as.data.frame(ct_confint),
+    ignore_attr = TRUE
+  )
 })

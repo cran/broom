@@ -1,12 +1,10 @@
-context("multcomp")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("multcomp")
-library(multcomp)
+suppressPackageStartupMessages(library(multcomp))
 
 amod <- aov(breaks ~ wool + tension, data = warpbreaks)
 wht <- glht(amod, linfct = mcp(tension = "Tukey"))
@@ -58,7 +56,7 @@ test_that("tidy.glht consistency with tidy.TukeyHSD", {
   expect_equal(
     as.data.frame(td_hsd),
     as.data.frame(td_glht),
-    check.attributes = FALSE,
+    ignore_attr = TRUE,
     tolerance = 0.001
   )
 })

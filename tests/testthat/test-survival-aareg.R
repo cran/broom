@@ -1,12 +1,10 @@
-context("survival-aareg")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("survival")
-library(survival)
+suppressPackageStartupMessages(library(survival))
 
 afit1 <- aareg(
   Surv(time, status) ~ age + sex + ph.ecog,

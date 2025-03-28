@@ -1,10 +1,8 @@
-context("survival-coxph")
-
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("survival")
-library(survival)
+suppressPackageStartupMessages(library(survival))
 
 fit <- coxph(Surv(time, status) ~ age + sex, lung)
 fit2 <- coxph(Surv(time, status) ~ age + sex, lung, robust = TRUE)

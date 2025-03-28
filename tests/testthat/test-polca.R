@@ -1,5 +1,3 @@
-context("polca")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
@@ -7,7 +5,7 @@ library(modeltests)
 
 skip_if_not_installed("poLCA")
 skip_if_not_installed("MASS")
-library(poLCA)
+suppressPackageStartupMessages(library(poLCA))
 
 data(values)
 fit <- poLCA(cbind(A, B, C, D) ~ 1, values, nclass = 2, verbose = FALSE)

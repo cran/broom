@@ -1,12 +1,10 @@
-context("aer")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("AER")
-library(AER)
+suppressPackageStartupMessages(library(AER))
 library(dplyr)
 library(modeltests)
 

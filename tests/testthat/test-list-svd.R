@@ -1,5 +1,3 @@
-context("list-svd")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
@@ -23,4 +21,8 @@ test_that("tidy_svd", {
   check_dims(tdu, 516, 3)
   check_dims(tdd, 12, 4)
   check_dims(tdv, 144, 3)
+})
+
+test_that("tidy_svd errors informatively", {
+  expect_snapshot(error = TRUE, tidy_svd(matrix = c("u", "v")))
 })

@@ -1,12 +1,10 @@
-context("mediate")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("mediation")
-library(mediation)
+suppressPackageStartupMessages(library(mediation))
 
 data(jobs)
 b <- lm(job_seek ~ treat + econ_hard + sex + age, data = jobs)
@@ -25,4 +23,10 @@ test_that("tidy.mediation", {
   check_tidy_output(td2)
 
   check_dims(td1, 4, 6)
+})
+
+test_that("tidy.mediate errors informatively", {
+  # Test error for psych package mediate object
+  psych_mediate <- structure(list(), class = c("mediate", "psych"))
+  expect_snapshot(error = TRUE, tidy(psych_mediate))
 })

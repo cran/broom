@@ -1,15 +1,13 @@
-context("joinerml")
-
 skip_on_cran()
 
 # Matrix ABI version may differ (#1204)
-skip_if(paste0(R.Version()[c("major", "minor")], collapse = ".") < "4.4.0")
+skip_if_not_r_version("4.4.0")
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("joineRML")
-library(joineRML)
+suppressPackageStartupMessages(library(joineRML))
 
 # NOTE: the models used in these tests are created in
 # `data-raw/fit_and_save_long_running_models.R`, and then are saved to
@@ -71,10 +69,7 @@ test_that("tidy.mjoint", {
   check_tidy_output(td2sbs)
   check_tidy_output(td2lbs)
 
-  expect_error(
-    tidy(mjoint_fit, boot_se = "cat"),
-    regexp = "`boot_se` argument must be a `bootSE` object."
-  )
+  expect_snapshot(error = TRUE, tidy(mjoint_fit, boot_se = "cat"))
 })
 
 
@@ -91,11 +86,8 @@ test_that("augment.mjoint", {
   au <- augment(mjoint_fit)
   au2 <- augment(mjoint_fit2)
 
-  expect_error(
-    augment(mjoint_fit, data = NULL),
-    regexp = "`data` argument is NULL. Try specifying `data` manually."
-  )
-
+  expect_snapshot(error = TRUE, augment(mjoint_fit, data = NULL))
+  
   check_tibble(au, method = "augment", strict = FALSE)
   check_tibble(au, method = "augment", strict = FALSE)
 })

@@ -1,12 +1,10 @@
-context("bingroup")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("binGroup")
-library(binGroup)
+suppressPackageStartupMessages(library(binGroup))
 
 bw <- binWidth(100, .1)
 bd <- binDesign(nmax = 300, delta = 0.06, p.hyp = 0.1, power = .8)

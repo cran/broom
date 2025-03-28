@@ -1,12 +1,10 @@
-context("test-speedglm-speedglm")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("speedglm")
-library(speedglm)
+suppressPackageStartupMessages(library(speedglm))
 
 clotting <- data.frame(
   u = c(5, 10, 15, 20, 30, 40, 60, 80, 100),
@@ -38,6 +36,5 @@ test_that("glance.speedglm", {
 test_that("augment.speedglm errors", {
   # speedglm sub-classes speedlm, and there's an augment.speedlm()
   # method we want to make sure isn't accidentally invoked
-
-  expect_error(augment(fit))
+  expect_snapshot(error = TRUE, augment(fit))
 })

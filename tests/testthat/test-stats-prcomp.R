@@ -1,5 +1,3 @@
-context("stats-prcomp")
-
 skip_if_not_installed("modeltests")
 library(modeltests)
 
@@ -41,14 +39,11 @@ test_that("tidy.prcomp", {
   expect_identical(tidy(pc, matrix = "samples"), td3)
   expect_identical(tidy(pc, matrix = "scores"), td3)
 
-  expect_error(
-    tidy(pc, matrix = c("d", "u")),
-    regexp = "Must select a single matrix to tidy."
-  )
-
+  expect_snapshot(error = TRUE, tidy(pc, matrix = c("d", "u")))
+  
   no_row_nm <- as.data.frame(matrix(1:9, ncol = 3) + rnorm(n = 9, sd = 0.25))
   pca <- prcomp(no_row_nm)
-  expect_error(tidy(pca, matrix = "u"), NA)
+  expect_no_error(tidy(pca, matrix = "u"))
 })
 
 test_that("augment.prcomp", {
@@ -62,7 +57,7 @@ test_that("augment.prcomp", {
 })
 
 test_that("augment.prcomp works with matrix objects", {
-  library(broom)
+suppressPackageStartupMessages(  library(broom))
   set.seed(17)
 
   # data
@@ -86,5 +81,5 @@ test_that("augment.prcomp works with matrix objects", {
   expect_equal(dim(df1), c(1000L, 15L))
   expect_equal(dim(df2), c(1000L, 47L))
   testthat::expect_equal(tibble::as_tibble(pred), df1[, -1])
-  expect_is(df1, "tbl_df")
+  expect_s3_class(df1, "tbl_df")
 })

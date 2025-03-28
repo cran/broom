@@ -1,12 +1,10 @@
-context("margins")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("margins")
-library(margins)
+suppressPackageStartupMessages(library(margins))
 
 fit1 <- glm(am ~ cyl + hp + wt, data = mtcars, family = binomial)
 marg1 <- margins(fit1)

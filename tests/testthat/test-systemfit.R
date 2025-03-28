@@ -1,12 +1,10 @@
-context("systemfit")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("systemfit")
-library(systemfit)
+suppressPackageStartupMessages(library(systemfit))
 
 # Testing using systemfit examples ----------------------------------------
 

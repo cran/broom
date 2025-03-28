@@ -1,12 +1,10 @@
-context("quantreg-nlrq")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("quantreg")
-library(quantreg)
+suppressPackageStartupMessages(library(quantreg))
 
 set.seed(27)
 

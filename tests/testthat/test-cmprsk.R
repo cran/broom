@@ -1,12 +1,10 @@
-context("cmprsk")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("cmprsk")
-library(cmprsk)
+suppressPackageStartupMessages(library(cmprsk))
 set.seed(2)
 
 # simulate data
@@ -48,6 +46,6 @@ test_that("tidy.cmprsk", {
     td3 %>%
       dplyr::select(conf.low, conf.high) %>%
       unclass() %>%
-      unname(),
+      unname()
   )
 })

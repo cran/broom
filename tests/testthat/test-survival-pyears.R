@@ -1,12 +1,10 @@
-context("survival-pyears")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("survival")
-library(survival)
+suppressPackageStartupMessages(library(survival))
 
 temp.yr <- tcut(mgus$dxyr, 55:92, labels = as.character(55:91))
 temp.age <- tcut(mgus$age, 34:101, labels = as.character(34:100))

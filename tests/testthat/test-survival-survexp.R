@@ -1,12 +1,10 @@
-context("survival-survexp")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("survival")
-library(survival)
+suppressPackageStartupMessages(library(survival))
 
 fit <- suppressWarnings(
   survexp(

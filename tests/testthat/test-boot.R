@@ -1,12 +1,10 @@
-context("boot")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("boot")
-library(boot)
+suppressPackageStartupMessages(library(boot))
 
 test_that("boot tidier arguments", {
   check_arguments(tidy.boot)

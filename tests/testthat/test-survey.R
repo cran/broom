@@ -1,12 +1,10 @@
-context("survey")
-
 skip_on_cran()
 
 skip_if_not_installed("modeltests")
 library(modeltests)
 
 skip_if_not_installed("survey")
-library(survey)
+suppressPackageStartupMessages(library(survey))
 
 skip_if_not_installed("MASS")
 
@@ -53,8 +51,5 @@ test_that("glance.svyglm: make sure `nobs` is there", {
 })
 
 test_that("conf.int merging regression test (#804)", {
-  expect_error(
-    tidy(fit_svyglm, conf.int = TRUE),
-    NA
-  )
+  expect_no_error(tidy(fit_svyglm, conf.int = TRUE))
 })
