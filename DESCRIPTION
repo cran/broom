@@ -1,7 +1,7 @@
 Type: Package
 Package: broom
 Title: Convert Statistical Objects into Tidy Tibbles
-Version: 1.0.9
+Version: 1.0.10
 Authors@R: c(
     person("David", "Robinson", , "admiral.david@gmail.com", role = "aut"),
     person("Alex", "Hayes", , "alexpghayes@gmail.com", role = "aut",
@@ -187,15 +187,15 @@ Suggests: AER, AUC, bbmle, betareg (>= 3.2-1), biglm, binGroup, boot,
         mgcv, mlogit, modeldata, modeltests (>= 0.1.6), muhaz,
         multcomp, network, nnet, ordinal, plm, poLCA, psych, quantreg,
         rmarkdown, robust, robustbase, rsample, sandwich, spatialreg,
-        spdep (>= 1.1), speedglm, spelling, survey, survival (>=
-        3.6-4), systemfit, testthat (>= 3.0.0), tseries, vars, zoo
+        spdep (>= 1.1), speedglm, spelling, stats4, survey, survival
+        (>= 3.6-4), systemfit, testthat (>= 3.0.0), tseries, vars, zoo
 VignetteBuilder: knitr
 Config/Needs/website: tidyverse/tidytemplate
 Config/testthat/edition: 3
 Config/usethis/last-upkeep: 2025-04-25
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Collate: 'aaa-documentation-helper.R' 'null-and-default.R' 'aer.R'
         'auc.R' 'base.R' 'bbmle.R' 'betareg.R' 'biglm.R' 'bingroup.R'
         'boot.R' 'broom-package.R' 'broom.R' 'btergm.R' 'car.R'
@@ -225,7 +225,7 @@ Collate: 'aaa-documentation-helper.R' 'null-and-default.R' 'aer.R'
         'survival-survfit.R' 'survival-survreg.R' 'systemfit.R'
         'tseries.R' 'utilities.R' 'vars.R' 'zoo.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2025-07-28 13:51:56 UTC; simoncouch
+Packaged: 2025-09-12 19:19:49 UTC; simoncouch
 Author: David Robinson [aut],
   Alex Hayes [aut] (ORCID: <https://orcid.org/0000-0002-4985-5160>),
   Simon Couch [aut, cre] (ORCID: <https://orcid.org/0000-0001-5676-5107>),
@@ -360,4 +360,4 @@ Author: David Robinson [aut],
   Alex Reinhart [ctb] (ORCID: <https://orcid.org/0000-0002-6658-514X>)
 Maintainer: Simon Couch <simon.couch@posit.co>
 Repository: CRAN
-Date/Publication: 2025-07-28 15:20:07 UTC
+Date/Publication: 2025-09-13 05:11:00 UTC
