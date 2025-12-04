@@ -1,3 +1,7 @@
+# broom 1.0.11
+
+* Transfer maintainership to @EmilHvitfeldt. (#1260)
+
 # broom 1.0.10
 
 * Resolves an R CMD check WARNING related to namespacing on 
@@ -5,7 +9,7 @@
 
 # broom 1.0.9
 
-* Increased minimum required R verison to 4.1.
+* Increased minimum required R version to 4.1.
 
 * Resolved errors with the 2.0.85 update of the epiR package.
 

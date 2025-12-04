@@ -1,13 +1,15 @@
 Type: Package
 Package: broom
 Title: Convert Statistical Objects into Tidy Tibbles
-Version: 1.0.10
+Version: 1.0.11
 Authors@R: c(
     person("David", "Robinson", , "admiral.david@gmail.com", role = "aut"),
     person("Alex", "Hayes", , "alexpghayes@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0002-4985-5160")),
-    person("Simon", "Couch", , "simon.couch@posit.co", role = c("aut", "cre"),
+    person("Simon", "Couch", , "simon.couch@posit.co", role = c("aut"),
            comment = c(ORCID = "0000-0001-5676-5107")),
+    person("Emil", "Hvitfeldt", , "emil.hvitfeldt@posit.co", role = c("aut", "cre"), 
+           comment = c(ORCID = "0000-0002-0679-1945")),
     person("Posit Software, PBC", role = c("cph", "fnd"),
            comment = c(ROR = "03wc8by49")),
     person("Indrajeet", "Patil", , "patilindrajeet.science@gmail.com", role = "ctb",
@@ -225,10 +227,12 @@ Collate: 'aaa-documentation-helper.R' 'null-and-default.R' 'aer.R'
         'survival-survfit.R' 'survival-survreg.R' 'systemfit.R'
         'tseries.R' 'utilities.R' 'vars.R' 'zoo.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2025-09-12 19:19:49 UTC; simoncouch
+Packaged: 2025-12-03 20:26:44 UTC; emilhvitfeldt
 Author: David Robinson [aut],
   Alex Hayes [aut] (ORCID: <https://orcid.org/0000-0002-4985-5160>),
-  Simon Couch [aut, cre] (ORCID: <https://orcid.org/0000-0001-5676-5107>),
+  Simon Couch [aut] (ORCID: <https://orcid.org/0000-0001-5676-5107>),
+  Emil Hvitfeldt [aut, cre] (ORCID:
+    <https://orcid.org/0000-0002-0679-1945>),
   Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>),
   Indrajeet Patil [ctb] (ORCID: <https://orcid.org/0000-0003-1995-6531>),
   Derek Chiu [ctb],
@@ -358,6 +362,6 @@ Author: David Robinson [aut],
   Daniel D. Sjoberg [ctb] (ORCID:
     <https://orcid.org/0000-0003-0862-2018>),
   Alex Reinhart [ctb] (ORCID: <https://orcid.org/0000-0002-6658-514X>)
-Maintainer: Simon Couch <simon.couch@posit.co>
+Maintainer: Emil Hvitfeldt <emil.hvitfeldt@posit.co>
 Repository: CRAN
-Date/Publication: 2025-09-13 05:11:00 UTC
+Date/Publication: 2025-12-04 12:00:09 UTC
